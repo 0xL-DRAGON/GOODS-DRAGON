@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.asc
+*.gpg
+.DS_Store
+*.log
+reports/
+*.json
+*.html
+*.md
+*.txt
