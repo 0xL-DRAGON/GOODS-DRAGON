@@ -1,12 +1,19 @@
+# Reports - may contain sensitive target data
+reports/
+
+# Logs - activity history
+logs/
+
+# Feedback and custom data
+feedback.log
+custom_report.txt
+hackerone_report.md
+
+# Python cache
 __pycache__/
 *.pyc
 *.pyo
-*.asc
-*.gpg
+
+# OS files
 .DS_Store
-*.log
-reports/
-*.json
-*.html
-*.md
-*.txt
+Thumbs.db

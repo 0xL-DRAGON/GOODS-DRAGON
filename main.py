@@ -27,6 +27,8 @@ def show_banner():
     print(banner)
     print(f"{'='*50}")
     print(f"    Author : zeus (z4)")
+    print(f"    Owner  : REULASSASSIN")
+    print(f"    Repo   : github.com/REULASSASSIN/GOODS-DRAGON")
     print(f"    Telegram : @iM_z4")
     print(f"{'='*50}\n")
 
