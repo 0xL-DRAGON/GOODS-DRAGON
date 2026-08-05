@@ -145,7 +145,7 @@ class AutoScanner:
         log_success(f"Auto-scan report saved to {self.output}")
 
     def run(self):
-        log_info(f"🐉 Dragon Eye Auto-Scanner started on: {self.target}")
+        log_info(f"🐉 GOODS-DRAGON Auto-Scanner started on: {self.target}")
         log_info(f"Threads: {self.threads} | Verbose: {self.verbose}")
         
         try:

@@ -1,9 +1,3 @@
-# ============================================================
-# Dragon Eye - Advanced Pentesting & Bug Bounty Tool
-# Copyright (c) 2026 zeus (z4). All rights reserved.
-# This software is proprietary and confidential.
-# Unauthorized copying, distribution, or use is strictly prohibited.
-# ============================================================
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -11,18 +5,24 @@ import argparse
 import sys
 import json
 import os
+from core.animations import HackerUI, ProgressBar
 from core.logger import log_info, log_error, log_success, log_warning
 
-# ------- Dragon Eye Banner -------
+# ------- GOODS-DRAGON Banner -------
 def show_banner():
     banner = r"""
-    ██████╗ ██████╗  █████╗  ██████╗  ██████╗ ███╗   ██╗
-    ██╔══██╗██╔══██╗██╔══██╗██╔═══██╗██╔═══██╗████╗  ██║
-    ██║  ██║██████╔╝███████║██║   ██║██║   ██║██╔██╗ ██║
-    ██║  ██║██╔══██╗██╔══██║██║   ██║██║   ██║██║╚██╗██║
-    ██████╔╝██║  ██║██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║
-    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝
-                        EYE v1.0
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║                                                               ║
+    ║    ██████╗ ██████╗  █████╗  ██████╗  ██████╗ ███╗   ██╗    ║
+    ║    ██╔══██╗██╔══██╗██╔══██╗██╔═══██╗██╔═══██╗████╗  ██║    ║
+    ║    ██║  ██║██████╔╝███████║██║   ██║██║   ██║██╔██╗ ██║    ║
+    ║    ██║  ██║██╔══██╗██╔══██║██║   ██║██║   ██║██║╚██╗██║    ║
+    ║    ██████╔╝██║  ██║██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║    ║
+    ║    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝    ║
+    ║                                                               ║
+    ║                   🐉 GOODS-DRAGON v1.1.0 🐉                    ║
+    ║                                                               ║
+    ╚═══════════════════════════════════════════════════════════════╝
     """
     print(banner)
     print(f"{'='*50}")
@@ -30,162 +30,118 @@ def show_banner():
     print(f"    Telegram : @iM_z4")
     print(f"{'='*50}\n")
 
-# ------- Professional Interactive Menu -------
+# ------- Professional Graphical Menu -------
 def interactive_menu():
-    os.system('clear')
-    show_banner()
+    from rich.console import Console
+    from rich.table import Table
+    from rich.panel import Panel
+    console = Console()
     
-    print("""
-    ╔══════════════════════════════════════════════════════════╗
-    ║                    MAIN MENU                            ║
-    ╠══════════════════════════════════════════════════════════╣
-    ║  [1]  Reconnaissance (Subdomain, Wayback, Active)       ║
-    ║  [2]  Web Vulnerabilities (SQLi, XSS, CMS, CVE, etc)    ║
-    ║  [3]  Network Scan (Port, Host Discovery, SSL, S3)      ║
-    ║  [4]  Subdomain Takeover Check                          ║
-    ║  [5]  Cloud Enumeration (AWS, Azure, GCP)               ║
-    ║  [6]  Git Repository Scanner                            ║
-    ║  [7]  WAF Detection                                     ║
-    ║  [8]  Public Info (IP, Country, Domain)                 ║
-    ║  [9]  Phone Info (Mobile Number Lookup)                 ║
-    ║  [10] Brute Force (SSH/FTP/RDP)                         ║
-    ║  [11] IDOR Scanner                                      ║
-    ║  [12] SSTI Scanner                                      ║
-    ║  [13] SSRF Scanner                                      ║
-    ║  [14] LFI/RFI Scanner                                   ║
-    ║  [15] CORS Checker                                      ║
-    ║  [16] JWT Scanner                                       ║
-    ║  [17] Open Redirect Scanner                             ║
-    ║  [18] GraphQL Scanner                                   ║
-    ║  [19] Rate Limit Checker                                ║
-    ║  [20] 2FA Bypass Checker                                ║
-    ║  [21] Parameter Discovery                               ║
-    ║  [22] Exploit Module (Metasploit Style)                 ║
-    ║  [23] Nikto-style Scanner                               ║
-    ║  [24] Auto-Scanner (Run All Modules)                    ║
-    ║  [25] Blind XSS Collaborator                            ║
-    ║  [26] Secret Scanner (API Keys, Tokens)                 ║
-    ║  [27] Version Scanner                                   ║
-    ║  [28] Broken Link Checker                               ║
-    ║  [29] Smart Fuzzing                                     ║
-    ║  [30] Business Logic Checker                            ║
-    ║  [31] Race Condition Detector                           ║
-    ║  [32] Chained Attack Scanner                            ║
-    ║  [33] Static Analysis (Code Review)                     ║
-    ║  [34] Shodan Integration                                ║
-    ║  [35] Censys Integration                                ║
-    ║  [36] Generate HackerOne Report                         ║
-    ║  [37] Generate Report from JSON                         ║
-    ║  [0]  Exit                                              ║
-    ╚══════════════════════════════════════════════════════════╝
-    """)
+    console.clear()
     
-    choice = input("Select an option [0-37] > ").strip()
+    banner = r"""
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║                                                               ║
+    ║    ██████╗ ██████╗  █████╗  ██████╗  ██████╗ ███╗   ██╗    ║
+    ║    ██╔══██╗██╔══██╗██╔══██╗██╔═══██╗██╔═══██╗████╗  ██║    ║
+    ║    ██║  ██║██████╔╝███████║██║   ██║██║   ██║██╔██╗ ██║    ║
+    ║    ██║  ██║██╔══██╗██╔══██║██║   ██║██║   ██║██║╚██╗██║    ║
+    ║    ██████╔╝██║  ██║██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║    ║
+    ║    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝    ║
+    ║                                                               ║
+    ║                   🐉 GOODS-DRAGON v1.1.0 🐉                    ║
+    ║                                                               ║
+    ╚═══════════════════════════════════════════════════════════════╝
+    """
+    console.print(Panel(banner, border_style="cyan", padding=(1, 2)))
+    
+    console.print(Panel.fit(
+        "[bold yellow]Author: zeus (z4)[/bold yellow]  |  [bold cyan]Telegram: @iM_z4[/bold cyan]",
+        border_style="blue"
+    ))
+    
+    table = Table(show_header=True, header_style="bold magenta", title="[bold green]⚡ MAIN MENU ⚡[/bold green]")
+    table.add_column("Option", style="bold cyan", no_wrap=True)
+    table.add_column("Module", style="bold white")
+    table.add_column("Description", style="dim")
+    
+    table.add_row("[bold green]1[/bold green]", "Reconnaissance", "Subdomain, Wayback, Active, Takeover, Cloud, OSINT, Email Harvest, AD Enum, Social Eng, Threat Intel, Dark Web, Payload Manager")
+    table.add_row("[bold green]2[/bold green]", "Web Vulnerabilities", "SQLi, XSS, CMS, CVE, Headers, JS, Tech, Git, WAF, IDOR, SSTI, SSRF, LFI, CORS, JWT, Open Redirect, GraphQL, Rate Limit, 2FA, Param Discovery, Blind XSS, Secret, Version, Broken Link, Fuzz, Business Logic, Race Condition, Chained Attack, Static Analysis, API Scanner, RCE, Directory Traversal, API Key Scan, JWT/OAuth, Mobile Security, SSRF, SSTI, Login Bypass, Dir Bruteforce")
+    table.add_row("[bold green]3[/bold green]", "Network Scan", "Port, Host Discovery, SSL, S3, Brute Force, Password Crack, Exploit Dev")
+    table.add_row("[bold green]4[/bold green]", "Smart Scan", "Auto-detect rate limit and suggest optimal settings")
+    table.add_row("[bold green]5[/bold green]", "Stealth Mode", "Proxy, random User-Agent, random delays")
+    table.add_row("[bold green]6[/bold green]", "Stealth Pro", "Advanced stealth with cloudscraper and proxy rotation")
+    table.add_row("[bold green]7[/bold green]", "WAF Bypass", "Advanced WAF bypass with random headers, proxies, and delays")
+    table.add_row("[bold green]8[/bold green]", "Browser Emulator", "Full browser emulation with Selenium and JS execution")
+    table.add_row("[bold green]9[/bold green]", "Cloud Scanner", "AWS S3, GCP, Azure Blob discovery")
+    table.add_row("[bold green]10[/bold green]", "Auto Proxy", "Automatic proxy rotation from public APIs")
+    table.add_row("[bold green]11[/bold green]", "AI Scanner", "AI-powered scanning with smart payload selection")
+    table.add_row("[bold green]12[/bold green]", "Dark Web", "Dark web monitoring for leaked data")
+    table.add_row("[bold green]13[/bold green]", "Exploit Dev", "Exploit development and PoC generation")
+    table.add_row("[bold green]14[/bold green]", "Payload Manager", "Centralized payload database management")
+    table.add_row("[bold green]15[/bold green]", "Reports", "Generate HTML, Markdown, HackerOne, PDF, CSV, JSON, Advanced")
+    table.add_row("[bold red]0[/bold red]", "Exit", "Quit GOODS-DRAGON")
+    
+    console.print(table)
+    console.print(Panel.fit("[bold cyan]Enter target and select an option[/bold cyan]", border_style="blue"))
+    
+    choice = input("[bold yellow]Select an option [0-16]: [/bold yellow]").strip()
     
     if choice == "0":
-        log_info("Exiting Dragon Eye. Stay secure!")
+        log_info("Exiting GOODS-DRAGON. Stay secure!")
         sys.exit(0)
     
-    target = input("Enter target (domain/IP/Phone) > ").strip()
+    target = input("[bold yellow]Enter target (domain/IP/Phone): [/bold yellow]").strip()
     if not target:
         log_error("Target cannot be empty.")
         return
     
-    threads = input("Threads (default 30) > ").strip()
+    threads = input("[bold yellow]Threads (default 30): [/bold yellow]").strip()
     threads = int(threads) if threads.isdigit() else 30
-    verbose = input("Verbose mode? (y/n) > ").strip().lower() == 'y'
-    report = input("Generate HTML report? (y/n) > ").strip().lower() == 'y'
+    verbose = input("[bold yellow]Verbose mode? (y/n): [/bold yellow]").strip().lower() == 'y'
+    report = input("[bold yellow]Generate HTML report? (y/n): [/bold yellow]").strip().lower() == 'y'
     
     cmd = "python main.py "
     
     if choice == "1":
-        cmd += f"recon -t {target} --active-scan --wayback -th {threads}"
+        cmd += f"recon -t {target} --active-scan --wayback --takeover --cloud-enum --osint --email-harvest --ad-enum --social-eng --threat-intel -th {threads}"
     elif choice == "2":
-        cmd += f"web -t {target} --sqli --xss --cms-detect --cve-scan --headers-check --js-deps --tech-detect -th {threads}"
+        cmd += f"web -t {target} --sqli --xss --cms-detect --cve-scan --headers-check --js-deps --tech-detect --git-scan --waf-detect --idor-scan --ssti-scan --ssrf-scan --lfi-scan --cors-check --jwt-scan --open-redirect --graphql-scan --rate-limit --2fa-bypass --param-discovery --blind-xss --secret-scan --version-scan --broken-link --fuzz --business-logic --race-condition --chained-attack --static-analysis --api-scanner --rce-scan --dir-traversal --api-key-scan --jwt-oauth --mobile-security --login-bypass --dir-bruteforce -th {threads}"
     elif choice == "3":
-        cmd += f"scan -t {target} --ssl-check -th {threads}"
+        cmd += f"scan -t {target} --ssl-check -b --password-crack -th {threads}"
     elif choice == "4":
-        cmd += f"recon -t {target} --takeover -th {threads}"
+        cmd += f"web -t {target} --smart-scan -th {threads}"
     elif choice == "5":
-        cmd += f"recon -t {target} --cloud-enum -th {threads}"
+        cmd += f"web -t {target} --stealth -th {threads}"
     elif choice == "6":
-        cmd += f"web -t {target} --git-scan -th {threads}"
+        cmd += f"web -t {target} --stealth-pro -th {threads}"
     elif choice == "7":
-        cmd += f"web -t {target} --waf-detect -th {threads}"
+        cmd += f"web -t {target} --waf-bypass -th {threads}"
     elif choice == "8":
-        cmd += f"recon -t {target} --public-info -th {threads}"
+        cmd += f"web -t {target} --browser-emulator --headless -th {threads}"
     elif choice == "9":
-        cmd += f"recon -t {target} --phone-info -th {threads}"
+        cmd += f"recon -t {target} --cloud-scanner -th {threads}"
     elif choice == "10":
-        service = input("Service (ssh/ftp/rdp) [default: ssh] > ").strip() or "ssh"
-        userlist = input("Usernames (comma separated) [default: root,admin] > ").strip() or "root,admin"
-        passlist = input("Passwords (comma separated) [default: password,123456] > ").strip() or "password,123456"
-        cmd += f"scan -t {target} --bruteforce --service {service} --userlist {userlist} --passlist {passlist} -th {threads}"
+        cmd += f"web -t {target} --auto-proxy --proxy-interval 30 -th {threads}"
     elif choice == "11":
-        cmd += f"web -t {target} --idor-scan -th {threads}"
+        cmd += f"web -t {target} --ai-scan -th {threads}"
     elif choice == "12":
-        cmd += f"web -t {target} --ssti-scan -th {threads}"
+        cmd += f"recon -t {target} --dark-web -th {threads}"
     elif choice == "13":
-        cmd += f"web -t {target} --ssrf-scan -th {threads}"
+        cmd += f"scan -t {target} --exploit-dev -th {threads}"
     elif choice == "14":
-        cmd += f"web -t {target} --lfi-scan -th {threads}"
+        cmd += f"recon -t {target} --payload-manager -th {threads}"
     elif choice == "15":
-        cmd += f"web -t {target} --cors-check -th {threads}"
+        cmd += f"recon -t {target} --advanced-report -th {threads}"
     elif choice == "16":
-        cmd += f"web -t {target} --jwt-scan -th {threads}"
-    elif choice == "17":
-        cmd += f"web -t {target} --open-redirect -th {threads}"
-    elif choice == "18":
-        cmd += f"web -t {target} --graphql-scan -th {threads}"
-    elif choice == "19":
-        cmd += f"web -t {target} --rate-limit -th {threads}"
-    elif choice == "20":
-        cmd += f"web -t {target} --2fa-bypass -th {threads}"
-    elif choice == "21":
-        cmd += f"web -t {target} --param-discovery -th {threads}"
-    elif choice == "22":
-        cmd += f"web -t {target} --exploit -th {threads}"
-    elif choice == "23":
-        cmd += f"web -t {target} --nikto -th {threads}"
-    elif choice == "24":
-        cmd += f"recon -t {target} --auto -th {threads}"
-    elif choice == "25":
-        cmd += f"web -t {target} --blind-xss -th {threads}"
-    elif choice == "26":
-        cmd += f"web -t {target} --secret-scan -th {threads}"
-    elif choice == "27":
-        cmd += f"web -t {target} --version-scan -th {threads}"
-    elif choice == "28":
-        cmd += f"web -t {target} --broken-link -th {threads}"
-    elif choice == "29":
-        cmd += f"web -t {target} --fuzz --fuzz-depth 50 -th {threads}"
-    elif choice == "30":
-        cmd += f"web -t {target} --business-logic -th {threads}"
-    elif choice == "31":
-        cmd += f"web -t {target} --race-condition -th {threads}"
-    elif choice == "32":
-        cmd += f"web -t {target} --chained-attack -th {threads}"
-    elif choice == "33":
-        cmd += f"web -t {target} --static-analysis -th {threads}"
-    elif choice == "34":
-        key = input("Enter Shodan API Key > ").strip()
-        cmd += f"recon -t {target} --shodan --shodan-key {key} -th {threads}"
-    elif choice == "35":
-        cid = input("Enter Censys API ID > ").strip()
-        secret = input("Enter Censys API Secret > ").strip()
-        cmd += f"recon -t {target} --censys --censys-id {cid} --censys-secret {secret} -th {threads}"
-    elif choice == "36":
-        cmd += f"recon -t {target} --h1-report -th {threads}"
-    elif choice == "37":
-        json_file = input("Enter JSON file path [reports/recon_output.json] > ").strip() or "reports/recon_output.json"
-        cmd = f"python main.py --report {json_file}"
+        return
     else:
         log_error("Invalid choice.")
         return
     
     if verbose:
         cmd += " -v"
-    if report and choice not in ["34", "35", "36", "37"]:
+    if report and choice not in ["5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]:
         cmd += " --report"
     
     log_info(f"Executing: {cmd}")
@@ -193,20 +149,32 @@ def interactive_menu():
 
 # ------- Main Entry -------
 def main():
+    # Check for --update before anything else
+    if "--version" in sys.argv or "-V" in sys.argv:
+        show_banner()
+        sys.exit(0)
+
+    if "--update" in sys.argv:
+        from modules.core.updater import SelfUpdater
+        log_info("=== Starting Self-Updater ===")
+        updater = SelfUpdater()
+        updater.run()
+        sys.exit(0)
+
     if len(sys.argv) == 1:
         interactive_menu()
         return
 
     parser = argparse.ArgumentParser(
-        description="Dragon Eye - Advanced Pentesting & Bug Bounty Tool (Created by zeus @iM_z4)",
+        description="GOODS-DRAGON - Advanced Pentesting & Bug Bounty Tool (Created by zeus @iM_z4)",
         epilog="For more info, contact @iM_z4 on Telegram"
     )
     
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # ----- Subcommand: recon -----
-    recon_parser = subparsers.add_parser("recon", help="Reconnaissance: Subdomains, Wayback, Active Scan, Takeover, Cloud Enum, Public Info, Phone Info, Auto-Scan, Shodan, Censys, HackerOne Report")
-    recon_parser.add_argument("-t", "--target", required=True, help="Target domain (e.g. example.com) or IP or country code or phone number")
+    recon_parser = subparsers.add_parser("recon", help="Reconnaissance: Subdomains, Wayback, Active Scan, Takeover, Cloud Enum, Public Info, Phone Info, Auto-Scan, Shodan, Censys, Cloud Scanner, OSINT, Email Harvest, AD Enum, Social Eng, Threat Intel, Dark Web, Payload Manager")
+    recon_parser.add_argument("-t", "--target", required=False, help="Target domain (e.g. example.com) or IP or country code or phone number")
     recon_parser.add_argument("-w", "--wordlist", default="wordlists/subdomains.txt", help="Wordlist path")
     recon_parser.add_argument("--wayback", action="store_true", help="Fetch historical URLs from Wayback Machine")
     recon_parser.add_argument("--active-scan", action="store_true", help="Active subdomain scan with HTTP/HTTPS checks")
@@ -221,20 +189,40 @@ def main():
     recon_parser.add_argument("--censys", action="store_true", help="Censys integration")
     recon_parser.add_argument("--censys-id", help="Censys API ID")
     recon_parser.add_argument("--censys-secret", help="Censys API secret")
+    recon_parser.add_argument("--cloud-scanner", action="store_true", help="Scan for cloud resources (AWS S3, GCP, Azure)")
+    recon_parser.add_argument("--osint", action="store_true", help="OSINT: Email, Phone, Social Media search")
+    recon_parser.add_argument("--email-harvest", action="store_true", help="Harvest emails from Google, GitHub, and web")
+    recon_parser.add_argument("--cloud-exploit", action="store_true", help="Check AWS S3, GCP, Azure for open buckets")
+    recon_parser.add_argument("--ad-enum", action="store_true", help="Active Directory enumeration (DC, users, shares)")
+    recon_parser.add_argument("--takeover-advanced", action="store_true", help="Advanced subdomain takeover check")
+    recon_parser.add_argument("--social-eng", action="store_true", help="Social engineering: phishing links, leaked emails")
+    recon_parser.add_argument("--threat-intel", action="store_true", help="Threat intelligence from VirusTotal, Shodan, AbuseIPDB")
+    recon_parser.add_argument("--threat-intel-key", help="Comma-separated API keys: virustotal,shodan,abuseipdb")
+    recon_parser.add_argument("--dark-web", action="store_true", help="Dark web monitoring for leaked data")
+    recon_parser.add_argument("--payload-manager", action="store_true", help="Manage payloads database")
+    recon_parser.add_argument("--payload-update", action="store_true", help="Update payloads from remote repository")
+    recon_parser.add_argument("--payload-export", help="Export payloads to file (json/csv/txt)")
+    recon_parser.add_argument("--payload-category", help="Filter payloads by category")
+    recon_parser.add_argument("--payload-tag", help="Filter payloads by tag")
+    recon_parser.add_argument("--payload-search", help="Search payloads by keyword")
+    recon_parser.add_argument("--payload-add", help="Add payload to database (category:value)")
+    recon_parser.add_argument("--payload-remove", help="Remove payload by ID")
     recon_parser.add_argument("--h1-report", action="store_true", help="Generate HackerOne format report")
-    recon_parser.add_argument("--report", action="store_true", help="Generate HTML report from JSON output")
+    recon_parser.add_argument("--report", action="store_true", help="Generate HTML report")
+    recon_parser.add_argument("--report-all", action="store_true", help="Generate all report formats (HTML, PDF, DOCX, JSON, CSV)")
+    recon_parser.add_argument("--advanced-report", action="store_true", help="Generate advanced HTML and PDF reports")
     recon_parser.add_argument("-th", "--threads", type=int, default=30, help="Number of threads")
     recon_parser.add_argument("-v", "--verbose", action="store_true", help="Show detailed logs")
     recon_parser.add_argument("-o", "--output", default="reports/recon_output.json", help="Output file path")
 
     # ----- Subcommand: web -----
-    web_parser = subparsers.add_parser("web", help="Web vulnerabilities: SQLi, XSS, CMS, CVE, Headers, JS, Tech, Git, WAF, IDOR, SSTI, SSRF, LFI, CORS, JWT, Open Redirect, GraphQL, Rate Limit, 2FA, Param Discovery, Blind XSS, Secret Scanner, Version Scanner, Broken Link, Proxy, Exploit, Nikto, Smart Fuzzing, Business Logic, Race Condition, Chained Attack, Static Analysis")
+    web_parser = subparsers.add_parser("web", help="Web vulnerabilities: SQLi, XSS, CMS, CVE, Headers, JS, Tech, Git, WAF, IDOR, SSTI, SSRF, LFI, CORS, JWT, Open Redirect, GraphQL, Rate Limit, 2FA, Param Discovery, Blind XSS, Secret Scanner, Version Scanner, Broken Link, Proxy, Exploit, Nikto, Smart Fuzzing, Business Logic, Race Condition, Chained Attack, Static Analysis, Smart Scan, Advanced Auto, Stealth Mode, Stealth Pro, WAF Bypass, Browser Emulator, Auto Proxy, API Scanner, AI Scanner, RCE Scanner, Directory Traversal, API Key Scanner, JWT/OAuth, Mobile Security, Login Bypass, Dir Bruteforce")
     web_parser.add_argument("-t", "--target", required=True, help="Target URL (e.g. http://testphp.vulnweb.com)")
     web_parser.add_argument("--sqli", action="store_true", help="Enable SQL Injection scan")
     web_parser.add_argument("--xss", action="store_true", help="Enable XSS scan")
     web_parser.add_argument("--log-check", action="store_true", help="Check for sensitive files (.env, .git, logs)")
     web_parser.add_argument("--login-bypass", action="store_true", help="Test login form bypass")
-    web_parser.add_argument("--dir-bruteforce", action="store_true", help="Bruteforce hidden directories")
+    web_parser.add_argument("--dir-bruteforce", action="store_true", help="Bruteforce hidden directories and files")
     web_parser.add_argument("--cms-detect", action="store_true", help="Detect CMS (WordPress, Joomla, Drupal, etc.)")
     web_parser.add_argument("--cve-scan", action="store_true", help="Check for known CVEs in detected technologies")
     web_parser.add_argument("--js-deps", action="store_true", help="Scan for vulnerable JavaScript libraries")
@@ -249,8 +237,8 @@ def main():
     web_parser.add_argument("--cors-check", action="store_true", help="Check for CORS misconfigurations")
     web_parser.add_argument("--jwt-scan", action="store_true", help="Scan for JWT tokens")
     web_parser.add_argument("--open-redirect", action="store_true", help="Scan for Open Redirect vulnerabilities")
-    web_parser.add_argument("--graphql-scan", action="store_true", help="Scan for GraphQL endpoints")
-    web_parser.add_argument("--rate-limit", action="store_true", help="Check for rate limiting")
+    web_parser.add_argument("--graphql-scan", action="store_true", help="Scan for GraphQL endpoints and vulnerabilities")
+    web_parser.add_argument("--rate-limit", action="store_true", help="Check for rate limiting and bypass techniques")
     web_parser.add_argument("--2fa-bypass", action="store_true", help="Check for 2FA implementation")
     web_parser.add_argument("--param-discovery", action="store_true", help="Discover hidden parameters in URLs")
     web_parser.add_argument("--blind-xss", action="store_true", help="Test for Blind XSS vulnerabilities")
@@ -263,33 +251,58 @@ def main():
     web_parser.add_argument("--race-condition", action="store_true", help="Detect race conditions")
     web_parser.add_argument("--chained-attack", action="store_true", help="Scan for chained attacks")
     web_parser.add_argument("--static-analysis", action="store_true", help="Static code analysis")
+    web_parser.add_argument("--api-scanner", action="store_true", help="Scan for API vulnerabilities (Swagger, GraphQL, CORS)")
+    web_parser.add_argument("--rce-scan", action="store_true", help="Remote Code Execution vulnerability scan")
+    web_parser.add_argument("--dir-traversal", action="store_true", help="Test for directory traversal vulnerabilities")
+    web_parser.add_argument("--api-key-scan", action="store_true", help="Scan for exposed API keys and tokens")
+    web_parser.add_argument("--jwt-oauth", action="store_true", help="Test JWT tokens and OAuth endpoints")
+    web_parser.add_argument("--mobile-security", action="store_true", help="Mobile security testing (API endpoints)")
+    web_parser.add_argument("--stealth", action="store_true", help="Enable stealth mode (proxy, random User-Agent, delays)")
+    web_parser.add_argument("--stealth-pro", action="store_true", help="Advanced stealth mode with cloudscraper and proxy rotation")
+    web_parser.add_argument("--waf-bypass", action="store_true", help="Advanced WAF bypass with random headers, proxies, and delays")
+    web_parser.add_argument("--browser-emulator", action="store_true", help="Full browser emulation with Selenium and JS execution")
+    web_parser.add_argument("--headless", action="store_true", help="Run browser in headless mode (for --browser-emulator)")
+    web_parser.add_argument("--auto-proxy", action="store_true", help="Enable automatic proxy rotation from public APIs")
+    web_parser.add_argument("--proxy-interval", type=int, default=30, help="Proxy rotation interval in seconds")
+    web_parser.add_argument("--ai-scan", action="store_true", help="AI-powered scanning with smart payload selection")
+    web_parser.add_argument("--proxy-list", help="Comma-separated list of proxies (e.g. http://proxy1:8080,http://proxy2:8080)")
     web_parser.add_argument("--proxy", action="store_true", help="Start proxy server (Burp Suite style)")
     web_parser.add_argument("--proxy-port", type=int, default=8080, help="Proxy port (default: 8080)")
     web_parser.add_argument("--exploit", action="store_true", help="Run exploit module (Metasploit style)")
     web_parser.add_argument("--nikto", action="store_true", help="Run Nikto-style vulnerability scanner")
-    web_parser.add_argument("--report", action="store_true", help="Generate HTML report from JSON output")
-    web_parser.add_argument("-w", "--wordlist", default="wordlists/dirs.txt", help="Wordlist for directory bruteforce")
+    web_parser.add_argument("--smart-scan", action="store_true", help="Auto-detect rate limit and suggest optimal threads/delay")
+    web_parser.add_argument("--auto-advanced", action="store_true", help="Advanced auto detection and smart scanning")
+    web_parser.add_argument("--wordlist", default="wordlists/dirs.txt", help="Wordlist for directory bruteforce")
+    web_parser.add_argument("--report", action="store_true", help="Generate HTML report")
+    web_parser.add_argument("--report-pdf", action="store_true", help="Generate PDF report")
+    web_parser.add_argument("--report-txt", action="store_true", help="Generate TXT report")
     web_parser.add_argument("-th", "--threads", type=int, default=30, help="Number of threads")
     web_parser.add_argument("-v", "--verbose", action="store_true", help="Show detailed logs")
     web_parser.add_argument("-o", "--output", default="reports/web_output.json", help="Output file path")
-    web_parser.add_argument("--script", help="Run a custom script (automate, exploits, report)")
+
     # ----- Subcommand: scan -----
-    scan_parser = subparsers.add_parser("scan", help="Network scanning: Port Scanner, Host Discovery, S3, SSL, Brute Force")
+    scan_parser = subparsers.add_parser("scan", help="Network scanning: Port Scanner, Host Discovery, S3, SSL, Brute Force, Password Cracking, Exploit Development")
     scan_parser.add_argument("-t", "--target", required=True, help="Target IP, domain, or subnet (e.g. 192.168.1.0/24)")
     scan_parser.add_argument("-p", "--ports", default="21,22,23,25,80,443,3306,3389,8080", help="Port range (e.g. 1-1000 or 80,443)")
     scan_parser.add_argument("--ping-sweep", action="store_true", help="Discover alive hosts on the network (subnet required)")
     scan_parser.add_argument("--s3-find", action="store_true", help="Search for open S3 buckets")
     scan_parser.add_argument("--ssl-check", action="store_true", help="Check SSL/TLS certificate validity")
     scan_parser.add_argument("--bruteforce", action="store_true", help="Brute force SSH/FTP/RDP credentials")
+    scan_parser.add_argument("--password-crack", action="store_true", help="Password cracking with dictionary")
+    scan_parser.add_argument("--exploit-dev", action="store_true", help="Exploit development and PoC generation")
     scan_parser.add_argument("--service", choices=["ssh", "ftp", "rdp"], default="ssh", help="Service to brute force")
     scan_parser.add_argument("--userlist", default="root,admin", help="List of usernames (comma separated)")
     scan_parser.add_argument("--passlist", default="password,123456,admin", help="List of passwords (comma separated)")
-    scan_parser.add_argument("--report", action="store_true", help="Generate HTML report from JSON output")
+    scan_parser.add_argument("--report", action="store_true", help="Generate HTML report")
     scan_parser.add_argument("-b", "--banner", action="store_true", help="Grab service banners")
     scan_parser.add_argument("-th", "--threads", type=int, default=50, help="Number of threads")
     scan_parser.add_argument("-v", "--verbose", action="store_true", help="Show detailed logs")
     scan_parser.add_argument("-o", "--output", default="reports/scan_output.json", help="Output file path")
 
+    # ----- Subcommand: webui -----
+    subparsers.add_parser("webui", help="Start the Web-based Control Panel")
+    
+    
     args = parser.parse_args()
 
     if not args.command:
@@ -297,7 +310,202 @@ def main():
         sys.exit(1)
 
     # ------- Execute recon -------
+    if args.command == "webui":
+        log_info("Starting Web Control Panel...")
+        log_info("Open http://localhost:5000 in your browser")
+        from webui import app
+        app.run(host='0.0.0.0', port=5000, debug=False)
+        sys.exit(0)
+
     if args.command == "recon":
+        # ----- Payload Manager (no target needed) -----
+        if args.payload_manager:
+            from modules.core.payload_manager import PayloadManager
+            log_info("=== Starting Payload Manager ===")
+            manager = PayloadManager(verbose=args.verbose)
+            
+            if args.payload_update:
+                log_info("Updating payloads from remote repository...")
+                manager.update_from_remote()
+                sys.exit(0)
+            
+            if args.payload_export:
+                log_info(f"Exporting payloads to: {args.payload_export}")
+                manager.export_payloads(args.payload_export)
+                sys.exit(0)
+            
+            if args.payload_search:
+                log_info(f"Searching for: {args.payload_search}")
+                results = manager.search_payloads(args.payload_search)
+                log_info(f"Found {len(results)} results:")
+                for r in results[:20]:
+                    log_info(f"  [{r.get('category', 'unknown')}] {r.get('id')}: {r.get('value', '')[:50]}...")
+                sys.exit(0)
+            
+            if args.payload_add:
+                if ':' in args.payload_add:
+                    category, value = args.payload_add.split(':', 1)
+                    payload = {"value": value, "type": "custom", "tags": ["user_added"], "severity": "medium"}
+                    manager.add_payload(category.strip(), payload)
+                sys.exit(0)
+            
+            if args.payload_remove:
+                for category in manager.payloads.keys():
+                    if manager.remove_payload(category, args.payload_remove):
+                        break
+                sys.exit(0)
+            
+            results = manager.run()
+            stats = results.get('stats', {})
+            log_info("=== Payload Database Statistics ===")
+            log_info(f"Version: {stats.get('version', 'unknown')}")
+            log_info(f"Last Updated: {stats.get('last_updated', 'never')}")
+            log_info(f"Total Payloads: {stats.get('total_payloads', 0)}")
+            log_info(f"Categories: {stats.get('categories', 0)}")
+            log_info("  Category Breakdown:")
+            for cat, count in stats.get('category_breakdown', {}).items():
+                log_info(f"    {cat}: {count}")
+            sys.exit(0)
+
+        # ----- All other recon modules require target -----
+        if not args.target:
+            parser.error("the following arguments are required for recon: -t/--target (unless using --payload-manager)")
+
+        # ----- Cloud Scanner -----
+        if args.cloud_scanner:
+            from modules.recon.cloud_scanner import CloudScanner
+            log_info("=== Starting Cloud Scanner ===")
+            scanner = CloudScanner(args.target, args.verbose)
+            results = scanner.run()
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            log_success(f"Results saved to {args.output}")
+            if args.report:
+                from modules.reporting.html_report import HTMLReport
+                report_name = args.output.replace('.json', '.html')
+                report = HTMLReport(args.output, report_name)
+                report.generate()
+            log_info("GOODS-DRAGON - Cloud Scanner completed.")
+            sys.exit(0)
+
+        # ----- OSINT -----
+        if args.osint:
+            from modules.recon.osint import OSINT
+            log_info("=== Starting OSINT ===")
+            osint = OSINT(args.target, args.verbose)
+            results = osint.run()
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            log_success(f"Results saved to {args.output}")
+            if args.report:
+                from modules.reporting.html_report import HTMLReport
+                report_name = args.output.replace('.json', '.html')
+                report = HTMLReport(args.output, report_name)
+                report.generate()
+            log_info("GOODS-DRAGON - OSINT completed.")
+            sys.exit(0)
+
+        # ----- Email Harvest -----
+        if args.email_harvest:
+            from modules.recon.email_harvester import EmailHarvester
+            log_info("=== Starting Email Harvest ===")
+            harvest = EmailHarvester(args.target, args.verbose)
+            results = harvest.run()
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            log_success(f"Results saved to {args.output}")
+            if args.report:
+                from modules.reporting.html_report import HTMLReport
+                report_name = args.output.replace('.json', '.html')
+                report = HTMLReport(args.output, report_name)
+                report.generate()
+            log_info("GOODS-DRAGON - Email Harvest completed.")
+            sys.exit(0)
+
+        # ----- AD Enum -----
+        if args.ad_enum:
+            from modules.recon.ad_enum import ADEnum
+            log_info("=== Starting AD Enum ===")
+            ad = ADEnum(args.target, args.verbose)
+            results = ad.run()
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            log_success(f"Results saved to {args.output}")
+            if args.report:
+                from modules.reporting.html_report import HTMLReport
+                report_name = args.output.replace('.json', '.html')
+                report = HTMLReport(args.output, report_name)
+                report.generate()
+            log_info("GOODS-DRAGON - AD Enum completed.")
+            sys.exit(0)
+
+        # ----- Social Engineering -----
+        if args.social_eng:
+            from modules.recon.social_eng import SocialEngineering
+            log_info("=== Starting Social Engineering ===")
+            social = SocialEngineering(args.target, args.verbose)
+            results = social.run()
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            log_success(f"Results saved to {args.output}")
+            if args.report:
+                from modules.reporting.html_report import HTMLReport
+                report_name = args.output.replace('.json', '.html')
+                report = HTMLReport(args.output, report_name)
+                report.generate()
+            log_info("GOODS-DRAGON - Social Engineering completed.")
+            sys.exit(0)
+
+        # ----- Threat Intelligence -----
+        if args.threat_intel:
+            from modules.recon.threat_intel import ThreatIntel
+            log_info("=== Starting Threat Intelligence ===")
+            api_keys = {}
+            if args.threat_intel_key:
+                keys = args.threat_intel_key.split(',')
+                for key in keys:
+                    if '=' in key:
+                        k, v = key.split('=', 1)
+                        api_keys[k.strip()] = v.strip()
+            threat = ThreatIntel(args.target, args.verbose, api_keys)
+            results = threat.run()
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            log_success(f"Results saved to {args.output}")
+            if args.report:
+                from modules.reporting.html_report import HTMLReport
+                report_name = args.output.replace('.json', '.html')
+                report = HTMLReport(args.output, report_name)
+                report.generate()
+            log_info("GOODS-DRAGON - Threat Intelligence completed.")
+            sys.exit(0)
+
+        # ----- Dark Web -----
+        if args.dark_web:
+            from modules.recon.dark_web import DarkWebMonitor
+            log_info("=== Starting Dark Web Monitoring ===")
+            dark = DarkWebMonitor(args.target, args.verbose)
+            results = dark.run()
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            log_success(f"Results saved to {args.output}")
+            if args.report:
+                from modules.reporting.html_report import HTMLReport
+                report_name = args.output.replace('.json', '.html')
+                report = HTMLReport(args.output, report_name)
+                report.generate()
+            log_info("GOODS-DRAGON - Dark Web completed.")
+            sys.exit(0)
+
+        # ----- Advanced Report -----
+        if args.advanced_report:
+            from modules.reporting.advanced_report import AdvancedReport
+            log_info("=== Generating Advanced Report ===")
+            report = AdvancedReport(args.output)
+            report.generate_all()
+            log_success("Advanced report generated successfully!")
+            sys.exit(0)
+
         # ----- Auto-Scanner -----
         if args.auto:
             from modules.web.auto_scanner import AutoScanner
@@ -317,7 +525,16 @@ def main():
                 report_name = args.output.replace('.json', '.html')
                 report = HTMLReport(args.output, report_name)
                 report.generate()
-            log_info("Dragon Eye - Auto-scan completed.")
+            log_info("GOODS-DRAGON - Auto-scan completed.")
+            sys.exit(0)
+
+        # ----- Dynamic Report -----
+        if args.report_all:
+            from modules.reporting.dynamic_report import DynamicReport
+            log_info("=== Generating All Reports ===")
+            report = DynamicReport(args.output)
+            report.generate_all()
+            log_success("All reports generated successfully!")
             sys.exit(0)
 
         # ----- HackerOne Report -----
@@ -326,7 +543,7 @@ def main():
             log_info("=== Generating HackerOne Report ===")
             report = HackerOneReport(args.output, "hackerone_report.md")
             report.generate()
-            log_info("Dragon Eye - HackerOne Report completed.")
+            log_info("GOODS-DRAGON - HackerOne Report completed.")
             sys.exit(0)
 
         # ----- Shodan Integration -----
@@ -343,7 +560,7 @@ def main():
                 report_name = args.output.replace('.json', '.html')
                 report = HTMLReport(args.output, report_name)
                 report.generate()
-            log_info("Dragon Eye - Shodan Integration completed.")
+            log_info("GOODS-DRAGON - Shodan Integration completed.")
             sys.exit(0)
 
         # ----- Censys Integration -----
@@ -360,13 +577,13 @@ def main():
                 report_name = args.output.replace('.json', '.html')
                 report = HTMLReport(args.output, report_name)
                 report.generate()
-            log_info("Dragon Eye - Censys Integration completed.")
+            log_info("GOODS-DRAGON - Censys Integration completed.")
             sys.exit(0)
 
-        # Check if public-info is requested
+        # ----- Public Info -----
         if args.public_info:
             from modules.recon.public_info import PublicInfo
-            log_info(f"Dragon Eye - Public Info gathering on: {args.target}")
+            log_info(f"GOODS-DRAGON - Public Info gathering on: {args.target}")
             pi = PublicInfo(args.target, args.verbose)
             results = pi.run()
             with open(args.output, "w", encoding="utf-8") as f:
@@ -377,13 +594,13 @@ def main():
                 report_name = args.output.replace('.json', '.html')
                 report = HTMLReport(args.output, report_name)
                 report.generate()
-            log_info("Dragon Eye - Public Info completed.")
+            log_info("GOODS-DRAGON - Public Info completed.")
             sys.exit(0)
 
-        # Check if phone-info is requested
+        # ----- Phone Info -----
         if args.phone_info:
             from modules.recon.phone_info import PhoneInfo
-            log_info(f"Dragon Eye - Phone Info gathering on: {args.target}")
+            log_info(f"GOODS-DRAGON - Phone Info gathering on: {args.target}")
             pi = PhoneInfo(args.target, args.verbose)
             results = pi.run()
             with open(args.output, "w", encoding="utf-8") as f:
@@ -394,17 +611,17 @@ def main():
                 report_name = args.output.replace('.json', '.html')
                 report = HTMLReport(args.output, report_name)
                 report.generate()
-            log_info("Dragon Eye - Phone Info completed.")
+            log_info("GOODS-DRAGON - Phone Info completed.")
             sys.exit(0)
 
         from modules.recon.subdomain import SubdomainFinder
         from modules.recon.wayback import WaybackScanner
         from modules.recon.active_scan import ActiveSubdomainScanner
         
-        log_info(f"Dragon Eye - Recon started on: {args.target}")
+        HackerUI.scan_header(args.target, "Reconnaissance Scanner")
+        log_info(f"GOODS-DRAGON - Recon started on: {args.target}")
         results = {}
         
-        # Subdomain Enumeration
         finder = SubdomainFinder(
             domain=args.target,
             wordlist_path=args.wordlist,
@@ -413,19 +630,16 @@ def main():
         )
         results["subdomains"] = finder.run()
         
-        # Wayback URLs
         if args.wayback:
             log_info("=== Starting Wayback URL Fetch ===")
             wayback = WaybackScanner(args.target, args.verbose)
             results["wayback"] = wayback.run()
         
-        # Active Subdomain Scan
         if args.active_scan:
             log_info("=== Starting Active Subdomain Scan ===")
             active = ActiveSubdomainScanner(args.target, args.wordlist, args.threads, args.verbose)
             results["active_scan"] = active.run()
         
-        # Subdomain Takeover
         if args.takeover:
             from modules.recon.takeover import SubdomainTakeover
             log_info("=== Starting Subdomain Takeover Check ===")
@@ -440,26 +654,31 @@ def main():
             else:
                 log_warning("Run subdomain enumeration first (--takeover needs subdomain list).")
         
-        # Cloud Enumeration
         if args.cloud_enum:
             from modules.recon.cloud_enum import CloudEnum
             log_info("=== Starting Cloud Enumeration ===")
             cloud = CloudEnum(args.target, args.threads, args.verbose)
             results["cloud_enum"] = cloud.run()
         
-        # Save results
         with open(args.output, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
         log_success(f"Results saved to {args.output}")
         
-        # Generate HTML report
         if args.report:
             from modules.reporting.html_report import HTMLReport
             report_name = args.output.replace('.json', '.html')
             report = HTMLReport(args.output, report_name)
             report.generate()
         
-        log_info("Dragon Eye - Recon completed. Stay secure!")
+        if hasattr(args, 'report_pdf') and args.report_pdf:
+            from modules.reporting.pdf_report import PDFReport
+            PDFReport(args.output).generate()
+        
+        if hasattr(args, 'report_txt') and args.report_txt:
+            from modules.reporting.pdf_report import TXTReport
+            TXTReport(args.output).generate()
+        
+        log_info("GOODS-DRAGON - Recon completed. Stay secure!")
 
     # ------- Execute web -------
     elif args.command == "web":
@@ -498,8 +717,21 @@ def main():
         from modules.web.race_condition import RaceConditionDetector
         from modules.web.chained_attack import ChainedAttackScanner
         from modules.web.static_analysis import StaticAnalysis
+        from modules.web.auto_throttle import AutoThrottle
+        from modules.web.auto_advanced import AdvancedAuto
+        from modules.web.api_scanner import APIScanner
+        from modules.web.rce_scanner import RCEScanner
+        from modules.web.dir_traversal import DirTraversal
+        from modules.web.api_key_scanner import APIKeyScanner
+        from modules.web.jwt_oauth import JWTOAuthTester
+        from modules.web.mobile_security import MobileSecurity
+        from modules.core.stealth import StealthMode
+        from modules.core.stealth_pro import StealthPro
+        from modules.core.waf_bypass import WAFBypass
+        from modules.core.browser_emulator import BrowserEmulator
+        from modules.core.proxy_manager import ProxyManager
+        from modules.core.ai_scanner import AIScanner
         
-        # ----- Proxy Server (standalone) -----
         if args.proxy:
             log_info("=== Starting Proxy Server ===")
             proxy = ProxyServer(port=args.proxy_port, verbose=args.verbose)
@@ -509,35 +741,67 @@ def main():
             except KeyboardInterrupt:
                 log_info("Proxy stopped")
             sys.exit(0)
-        
-        log_info(f"Dragon Eye - Web scanner started on: {args.target}")
+
+        if args.auto_proxy:
+            log_info("=== Starting Auto Proxy Manager ===")
+            proxy_manager = ProxyManager(verbose=args.verbose, auto_rotate=True, rotate_interval=args.proxy_interval)
+            results = proxy_manager.run()
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            log_success(f"Proxy Manager results saved to {args.output}")
+            log_info("Proxy manager is running in background. Starting scan...")
+            os.environ["HTTP_PROXY"] = proxy_manager.get_proxy() or ""
+            os.environ["HTTPS_PROXY"] = os.environ["HTTP_PROXY"]
+
+        if args.stealth_pro:
+            log_info("=== Starting Stealth Pro Mode ===")
+            proxy_list = args.proxy_list.split(',') if args.proxy_list else None
+            stealth = StealthPro(args.target, args.verbose, proxy_list, rotate_ua=True, use_cloudscraper=True)
+            results = stealth.run()
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            log_success(f"Stealth Pro results saved to {args.output}")
+            sys.exit(0)
+
+        if args.stealth:
+            proxy_list = args.proxy_list.split(',') if args.proxy_list else None
+            stealth = StealthMode(args.target, args.verbose, proxy_list)
+            results = stealth.run()
+            with open(args.output, "w", encoding="utf-8") as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            log_success(f"Stealth results saved to {args.output}")
+            sys.exit(0)
+
+        HackerUI.scan_header(args.target, "Web Vulnerability Scanner")
+        log_info(f"GOODS-DRAGON - Web scanner started on: {args.target}")
         results = {}
         
-        # Info Disclosure
         if args.log_check:
             log_info("=== Starting Info Disclosure Scan ===")
             disclosure = InfoDisclosureScanner(args.target, args.verbose)
             results["info_disclosure"] = disclosure.run()
         
-        # SQL Injection
         if args.sqli:
+            pb = ProgressBar(100, prefix="SQLi Scanner", length=25)
+            pb.start_animation()
             log_info("=== Starting SQL Injection Scan ===")
             sqli = SQLiScanner(args.target, args.verbose)
+            pb.stop(True)
             results["sqli"] = sqli.run()
         
-        # XSS Scanner
         if args.xss:
+            pb = ProgressBar(100, prefix="XSS Scanner", length=25)
+            pb.start_animation()
             log_info("=== Starting XSS Scan ===")
             xss = XSSScanner(args.target, args.verbose, args.threads)
+            pb.stop(True)
             results["xss"] = xss.run()
         
-        # Login Bypass
         if args.login_bypass:
             log_info("=== Starting Login Bypass Scan ===")
             login = LoginBypassScanner(args.target, args.verbose)
             results["login_bypass"] = login.run()
         
-        # Directory Bruteforce
         if args.dir_bruteforce:
             log_info("=== Starting Directory Bruteforce ===")
             dir_bf = DirBruteforce(
@@ -548,13 +812,11 @@ def main():
             )
             results["dir_bruteforce"] = dir_bf.run()
         
-        # CMS Detection
         if args.cms_detect:
             log_info("=== Starting CMS Detection ===")
             cms = CMSDetector(args.target, args.verbose)
             results["cms"] = cms.run()
         
-        # Technology Detector
         if args.tech_detect or (args.cve_scan and not args.tech_detect and not args.cms_detect):
             if not args.tech_detect and args.cve_scan:
                 log_info("Running Tech detection for CVE matching...")
@@ -566,13 +828,11 @@ def main():
             tech = TechnologyDetector(args.target, args.verbose)
             results["tech_detect"] = tech.run()
         
-        # CMS Detection for CVE
         if args.cve_scan and not args.cms_detect:
             log_info("Running CMS detection for CVE matching...")
             cms = CMSDetector(args.target, args.verbose)
             results["cms"] = cms.run()
         
-        # CVE Scan
         if args.cve_scan:
             log_info("=== Starting CVE Vulnerability Scan ===")
             cve_scanner = CVEScanner(
@@ -583,196 +843,212 @@ def main():
             )
             results["cve_scan"] = cve_scanner.run()
         
-        # JS Dependency Scanner
         if args.js_deps:
             log_info("=== Starting JS Dependency Scan ===")
             js = JSDependencyScanner(args.target, args.verbose)
             results["js_deps"] = js.run()
         
-        # Security Headers Checker
         if args.headers_check:
+            pb = ProgressBar(100, prefix="Headers Check", length=25)
+            pb.start_animation()
             log_info("=== Starting Security Headers Check ===")
             headers = SecurityHeadersChecker(args.target, args.verbose)
+            pb.stop(True)
             results["headers_check"] = headers.run()
         
-        # Git Scanner
         if args.git_scan:
             log_info("=== Starting Git Repository Scan ===")
             git = GitScanner(args.target, args.verbose)
             results["git_scan"] = git.run()
         
-        # WAF Detection
         if args.waf_detect:
             log_info("=== Starting WAF Detection ===")
             waf = WAFDetector(args.target, args.verbose)
             results["waf_detect"] = waf.run()
         
-        # IDOR Scanner
         if args.idor_scan:
             log_info("=== Starting IDOR Scan ===")
             idor = IDORScanner(args.target, args.verbose)
             results["idor"] = idor.run()
         
-        # SSTI Scanner
         if args.ssti_scan:
             log_info("=== Starting SSTI Scan ===")
             ssti = SSTIScanner(args.target, args.verbose)
             results["ssti"] = ssti.run()
         
-        # SSRF Scanner
         if args.ssrf_scan:
             log_info("=== Starting SSRF Scan ===")
             ssrf = SSRFScanner(args.target, args.verbose)
             results["ssrf"] = ssrf.run()
         
-        # LFI Scanner
         if args.lfi_scan:
             log_info("=== Starting LFI Scan ===")
             lfi = LFIScanner(args.target, args.verbose)
             results["lfi"] = lfi.run()
         
-        # CORS Checker
         if args.cors_check:
             log_info("=== Starting CORS Check ===")
             cors = CORSChecker(args.target, args.verbose)
             results["cors"] = cors.run()
         
-        # JWT Scanner
         if args.jwt_scan:
             log_info("=== Starting JWT Scan ===")
             jwt = JWTScanner(args.target, args.verbose)
             results["jwt"] = jwt.run()
         
-        # Open Redirect Scanner
         if args.open_redirect:
             log_info("=== Starting Open Redirect Scan ===")
             open_redirect = OpenRedirectScanner(args.target, args.verbose)
             results["open_redirect"] = open_redirect.run()
         
-        # GraphQL Scanner
         if args.graphql_scan:
             log_info("=== Starting GraphQL Scan ===")
             graphql = GraphQLScanner(args.target, args.verbose)
             results["graphql"] = graphql.run()
         
-        # Rate Limit Checker
         if args.rate_limit:
             log_info("=== Starting Rate Limit Check ===")
             rate_limit = RateLimitChecker(args.target, args.verbose)
             results["rate_limit"] = rate_limit.run()
         
-        # 2FA Bypass Checker
         if hasattr(args, 'twofa_bypass') and args.twofa_bypass:
             log_info("=== Starting 2FA Bypass Check ===")
             twofa = TwoFABypass(args.target, args.verbose)
             results["2fa_bypass"] = twofa.run()
         
-        # Parameter Discovery
         if args.param_discovery:
             log_info("=== Starting Parameter Discovery ===")
             param = ParameterDiscovery(args.target, args.verbose)
             results["param_discovery"] = param.run()
         
-        # Blind XSS
         if args.blind_xss:
             log_info("=== Starting Blind XSS Scan ===")
             blind_xss = BlindXSSCollaborator(args.target, args.verbose)
             results["blind_xss"] = blind_xss.run()
         
-        # Secret Scanner
         if args.secret_scan:
             log_info("=== Starting Secret Scanner ===")
             secret = SecretScanner(args.target, args.verbose)
             results["secret_scan"] = secret.run()
         
-        # Version Scanner
         if args.version_scan:
             log_info("=== Starting Version Scanner ===")
             version = VersionScanner(args.target, args.verbose)
             results["version_scan"] = version.run()
         
-        # Broken Link Checker
         if args.broken_link:
             log_info("=== Starting Broken Link Checker ===")
             broken = BrokenLinkChecker(args.target, args.threads, args.verbose)
             results["broken_link"] = broken.run()
         
-        # Smart Fuzzing
         if args.fuzz:
             log_info("=== Starting Smart Fuzzing ===")
             fuzz = SmartFuzzing(args.target, args.fuzz_depth, args.verbose)
             results["smart_fuzzing"] = fuzz.run()
         
-        # Business Logic Checker
         if args.business_logic:
             log_info("=== Starting Business Logic Check ===")
             biz = BusinessLogicChecker(args.target, args.verbose)
             results["business_logic"] = biz.run()
         
-        # Race Condition Detector
         if args.race_condition:
             log_info("=== Starting Race Condition Detection ===")
             race = RaceConditionDetector(args.target, args.threads, args.verbose)
             results["race_condition"] = race.run()
         
-        # Chained Attack Scanner
         if args.chained_attack:
             log_info("=== Starting Chained Attack Scanner ===")
             chain = ChainedAttackScanner(args.target, args.verbose)
             results["chained_attack"] = chain.run()
         
-        # Static Analysis
         if args.static_analysis:
             log_info("=== Starting Static Analysis ===")
             static = StaticAnalysis(args.target, args.verbose)
             results["static_analysis"] = static.run()
         
-        # Exploit Module
+        if args.api_scanner:
+            log_info("=== Starting API Scanner ===")
+            api = APIScanner(args.target, args.verbose)
+            results["api_scanner"] = api.run()
+        
+        if args.rce_scan:
+            log_info("=== Starting RCE Scanner ===")
+            rce = RCEScanner(args.target, args.verbose)
+            results["rce_scanner"] = rce.run()
+        
+        if args.dir_traversal:
+            log_info("=== Starting Directory Traversal ===")
+            traversal = DirTraversal(args.target, args.verbose)
+            results["dir_traversal"] = traversal.run()
+        
+        if args.api_key_scan:
+            log_info("=== Starting API Key Scanner ===")
+            api_key = APIKeyScanner(args.target, args.verbose)
+            results["api_key_scanner"] = api_key.run()
+        
+        if args.jwt_oauth:
+            log_info("=== Starting JWT OAuth ===")
+            jwt_oauth = JWTOAuthTester(args.target, args.verbose)
+            results["jwt_oauth"] = jwt_oauth.run()
+        
+        if args.mobile_security:
+            log_info("=== Starting Mobile Security ===")
+            mobile = MobileSecurity(args.target, args.verbose)
+            results["mobile_security"] = mobile.run()
+        
+        if args.ai_scan:
+            log_info("=== Starting AI Scanner ===")
+            ai = AIScanner(args.target, args.verbose)
+            results["ai_scanner"] = ai.run()
+            rec = results["ai_scanner"].get("results", {}).get("recommended_command", "")
+            if rec:
+                log_info(f"💡 {rec}")
+        
+        if args.smart_scan:
+            log_info("=== Starting Smart Scan (Auto Throttle) ===")
+            smart = AutoThrottle(args.target, args.verbose)
+            results["auto_throttle"] = smart.run()
+            rec = results["auto_throttle"].get("results", {})
+            log_info(f"💡 Recommended command: python main.py web -t {args.target} --sqli --xss --dir-bruteforce -th {rec.get('recommended_threads', 5)} -v")
+
+        if args.auto_advanced:
+            from modules.web.auto_advanced import AdvancedAuto
+            log_info("=== Starting Advanced Auto Mode ===")
+            smart = AdvancedAuto(args.target, args.verbose)
+            results["advanced_auto"] = smart.run()
+            rec = results["advanced_auto"]
+            log_info(f"💡 Detected Type: {rec.get('detected_type')}")
+            log_info(f"💡 Recommended: python main.py web -t {args.target} {' '.join(rec.get('recommended_modules', []))} -th {args.threads} -v")
+        
         if args.exploit:
             log_info("=== Starting Exploit Module ===")
             exploit = ExploitModule(args.target, args.verbose)
             results["exploit"] = exploit.run()
         
-        # Nikto-style Scanner
         if args.nikto:
             log_info("=== Starting Nikto-style Scan ===")
             nikto = NiktoStyleScanner(args.target, args.verbose)
             results["nikto_style"] = nikto.run()
         
-        # ----- Custom Scripts -----
-        if args.script:
-            if args.script == "automate":
-                from scripts.automate import AutoScript
-                script = AutoScript(args.target, args.verbose)
-                script.run()
-                sys.exit(0)
-            elif args.script == "exploits":
-                from scripts.exploits import ExploitScripts
-                script = ExploitScripts(args.target, args.verbose)
-                script.run()
-                sys.exit(0)
-            elif args.script == "report":
-                from scripts.report_gen import ReportGenerator
-                script = ReportGenerator(args.output, "custom_report.txt")
-                script.generate()
-                sys.exit(0)
-            else:
-                log_error(f"Unknown script: {args.script}")
-                sys.exit(1)
-        
-        # Save results
         with open(args.output, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
         log_success(f"All results saved to {args.output}")
         
-        # Generate HTML report
         if args.report:
             from modules.reporting.html_report import HTMLReport
             report_name = args.output.replace('.json', '.html')
             report = HTMLReport(args.output, report_name)
             report.generate()
         
-        log_info("Dragon Eye - Web scan completed. Stay secure!")
+        if hasattr(args, 'report_pdf') and args.report_pdf:
+            from modules.reporting.pdf_report import PDFReport
+            PDFReport(args.output).generate()
+        
+        if hasattr(args, 'report_txt') and args.report_txt:
+            from modules.reporting.pdf_report import TXTReport
+            TXTReport(args.output).generate()
+        
+        log_info("GOODS-DRAGON - Web scan completed. Stay secure!")
 
     # ------- Execute scan -------
     elif args.command == "scan":
@@ -780,17 +1056,18 @@ def main():
         from modules.scan.s3 import S3Finder
         from modules.scan.ssl_check import SSLChecker
         from modules.scan.host_discovery import HostDiscovery
+        from modules.scan.password_crack import PasswordCracker
+        from modules.exploit.dev import ExploitDev
         
-        log_info(f"Dragon Eye - Scan started on: {args.target}")
+        HackerUI.scan_header(args.target, "Network Scanner")
+        log_info(f"GOODS-DRAGON - Scan started on: {args.target}")
         results = {}
         
-        # Host Discovery
         if args.ping_sweep:
             log_info("=== Starting Host Discovery ===")
             discovery = HostDiscovery(args.target, args.threads, args.verbose)
             results["host_discovery"] = discovery.run()
         
-        # Port Scanner
         if not args.ping_sweep:
             log_info("=== Starting Port Scan ===")
             scanner = PortScanner(
@@ -802,19 +1079,16 @@ def main():
             )
             results["port_scan"] = scanner.run()
         
-        # S3 Bucket Finder
         if args.s3_find:
             log_info("=== Starting S3 Bucket Finder ===")
             s3 = S3Finder(args.target, args.threads, args.verbose)
             results["s3"] = s3.run()
         
-        # SSL/TLS Checker
         if args.ssl_check:
             log_info("=== Starting SSL/TLS Check ===")
             ssl_check = SSLChecker(args.target, args.verbose)
             results["ssl_check"] = ssl_check.run()
         
-        # Brute Force
         if args.bruteforce:
             from modules.scan.bruteforce import BruteForce
             log_info("=== Starting Brute Force ===")
@@ -829,19 +1103,35 @@ def main():
             )
             results["bruteforce"] = bf.run()
         
-        # Save results
+        if args.password_crack:
+            log_info("=== Starting Password Cracking ===")
+            crack = PasswordCracker(args.target, args.verbose)
+            results["password_crack"] = crack.run()
+        
+        if args.exploit_dev:
+            log_info("=== Starting Exploit Development ===")
+            dev = ExploitDev(args.target, args.verbose)
+            results["exploit_dev"] = dev.run()
+        
         with open(args.output, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
         log_success(f"Results saved to {args.output}")
         
-        # Generate HTML report
         if args.report:
             from modules.reporting.html_report import HTMLReport
             report_name = args.output.replace('.json', '.html')
             report = HTMLReport(args.output, report_name)
             report.generate()
         
-        log_info("Dragon Eye - Scan completed. Stay secure!")
+        if hasattr(args, 'report_pdf') and args.report_pdf:
+            from modules.reporting.pdf_report import PDFReport
+            PDFReport(args.output).generate()
+        
+        if hasattr(args, 'report_txt') and args.report_txt:
+            from modules.reporting.pdf_report import TXTReport
+            TXTReport(args.output).generate()
+        
+        log_info("GOODS-DRAGON - Scan completed. Stay secure!")
 
 if __name__ == "__main__":
     main()

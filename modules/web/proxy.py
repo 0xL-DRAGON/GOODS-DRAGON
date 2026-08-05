@@ -77,7 +77,7 @@ class ProxyServer:
                 return {"error": str(e)}, 500
 
     def run(self):
-        log_info(f"🐉 Dragon Eye Proxy started on port {self.port}")
+        log_info(f"🐉 GOODS-DRAGON Proxy started on port {self.port}")
         log_info(f"Set browser proxy to: http://localhost:{self.port}")
         log_info(f"Use header X-Target-URL: https://example.com or ?target=https://example.com")
         self.app.run(host='0.0.0.0', port=self.port, threaded=True)

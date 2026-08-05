@@ -1,65 +1,129 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
-from core.logger import log_info, log_success, log_debug, log_error, log_warning
+from modules.core.http_client import HTTPClient
+from core.logger import log_info, log_success, log_warning, log_error, log_debug
 
 class SecurityHeadersChecker:
     def __init__(self, target, verbose=False):
         self.target = target.rstrip('/')
         self.verbose = verbose
-        self.headers_status = []
+        self.client = HTTPClient(timeout=15, retries=3, verbose=verbose)
 
     def run(self):
         log_info(f"Starting Security Headers Check on: {self.target}")
-        try:
-            resp = requests.get(self.target, timeout=10, headers={"User-Agent": "Mozilla/5.0"})
-            if resp.status_code not in [200, 301, 302]:
-                log_error(f"Cannot fetch page. Status: {resp.status_code}")
-                return {"target": self.target, "scan_type": "headers_check", "headers": []}
-
-            headers = resp.headers
-            security_headers = {
-                "Content-Security-Policy": "CSP",
-                "X-Frame-Options": "XFO",
-                "X-Content-Type-Options": "XCTO",
-                "Strict-Transport-Security": "HSTS",
-                "Referrer-Policy": "Referrer",
-                "X-XSS-Protection": "XXP",
-                "Permissions-Policy": "Permissions",
-                "Feature-Policy": "Feature"
+        resp = self.client.get(self.target)
+        
+        if not resp:
+            log_error(f"Cannot fetch page.")
+            return {
+                "target": self.target,
+                "scan_type": "headers_check",
+                "total_checked": 0,
+                "present_count": 0,
+                "headers": [],
+                "error": "Failed to fetch page"
             }
 
-            log_info("Checking security headers:")
-            for header, short_name in security_headers.items():
-                if header in headers:
-                    self.headers_status.append({
-                        "header": header,
-                        "short": short_name,
-                        "present": True,
-                        "value": headers[header]
-                    })
-                    log_success(f"✅ {header}: {headers[header]}")
-                else:
-                    self.headers_status.append({
-                        "header": header,
-                        "short": short_name,
-                        "present": False,
-                        "value": None
-                    })
-                    log_warning(f"❌ {header} is missing")
+        headers = resp.headers
+        
+        # لیست کامل هدرهای امنیتی به همراه توضیحات
+        security_headers = {
+            "Content-Security-Policy": {
+                "short": "CSP",
+                "description": "ممانعت از حملات XSS و تزریق کد"
+            },
+            "X-Frame-Options": {
+                "short": "XFO",
+                "description": "جلوگیری از Clickjacking"
+            },
+            "X-Content-Type-Options": {
+                "short": "XCTO",
+                "description": "جلوگیری از MIME Sniffing"
+            },
+            "Strict-Transport-Security": {
+                "short": "HSTS",
+                "description": "اجبار به استفاده از HTTPS"
+            },
+            "Referrer-Policy": {
+                "short": "Referrer",
+                "description": "مدیریت ارسال Referrer"
+            },
+            "X-XSS-Protection": {
+                "short": "XXP",
+                "description": "محافظت در برابر XSS (قدیمی)"
+            },
+            "Permissions-Policy": {
+                "short": "Permissions",
+                "description": "مدیریت دسترسی‌های مرورگر"
+            },
+            "Feature-Policy": {
+                "short": "Feature",
+                "description": "مدیریت ویژگی‌های مرورگر (قدیمی)"
+            },
+            "Cross-Origin-Embedder-Policy": {
+                "short": "COEP",
+                "description": "مدیریت Cross-Origin Embedding"
+            },
+            "Cross-Origin-Opener-Policy": {
+                "short": "COOP",
+                "description": "مدیریت Cross-Origin Opener"
+            },
+            "Cross-Origin-Resource-Policy": {
+                "short": "CORP",
+                "description": "مدیریت Cross-Origin Resource"
+            }
+        }
 
-            # Summary
-            present_count = len([h for h in self.headers_status if h["present"]])
-            log_success(f"Security Headers Check completed. {present_count}/{len(self.headers_status)} headers present.")
+        results = []
+        log_info("Checking security headers...")
+        
+        for header, info in security_headers.items():
+            if header in headers:
+                results.append({
+                    "header": header,
+                    "short": info["short"],
+                    "present": True,
+                    "value": headers[header],
+                    "description": info["description"]
+                })
+                log_success(f"✅ {header}: {headers[header]}")
+            else:
+                results.append({
+                    "header": header,
+                    "short": info["short"],
+                    "present": False,
+                    "value": None,
+                    "description": info["description"]
+                })
+                log_warning(f"❌ {header} is missing ({info['description']})")
 
-        except Exception as e:
-            log_error(f"Error: {e}")
+        present_count = len([h for h in results if h["present"]])
+        total_headers = len(results)
+        
+        log_success(f"Security Headers Check completed. {present_count}/{total_headers} headers present.")
+        
+        # رتبه‌بندی امنیت بر اساس تعداد هدرهای موجود
+        security_score = "Unknown"
+        if present_count >= 8:
+            security_score = "Excellent"
+        elif present_count >= 6:
+            security_score = "Good"
+        elif present_count >= 4:
+            security_score = "Moderate"
+        elif present_count >= 2:
+            security_score = "Weak"
+        else:
+            security_score = "Poor"
+        
+        log_info(f"Security Score: {security_score} ({present_count}/{total_headers})")
 
         return {
             "target": self.target,
             "scan_type": "headers_check",
-            "total_checked": len(self.headers_status),
-            "present_count": len([h for h in self.headers_status if h["present"]]),
-            "headers": self.headers_status
+            "total_checked": total_headers,
+            "present_count": present_count,
+            "security_score": security_score,
+            "headers": results,
+            "raw_headers": dict(headers)
         }
