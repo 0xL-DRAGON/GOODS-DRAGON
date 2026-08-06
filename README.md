@@ -50,7 +50,7 @@ Forked or modified versions may contain malicious code.
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/GOODS-DRAGON.git
+git clone https://github.com/0xL-DRAGON/GOODS-DRAGON.git
 cd GOODS-DRAGON
 pip install -r requirements.txt
 python main.py
