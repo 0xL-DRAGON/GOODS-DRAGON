@@ -35,7 +35,7 @@ class PayloadManager:
     """
 
     VERSION = "1.0.0"
-    DATABASE_URL = "https://raw.githubusercontent.com/REULASSASSIN/GOODS-DRAGON/main/payloads/payloads.json"
+    DATABASE_URL = "https://raw.githubusercontent.com/0xL-DRAGON/GOODS-DRAGON/main/payloads/payloads.json"
     LOCAL_DB_PATH = "payloads/payloads.json"
     LOCAL_DB_DIR = "payloads"
 

@@ -24,8 +24,8 @@
 
 **This tool is protected by GPL v3 license.**
 
-- **Official Repository:** [github.com/REULASSASSIN/GOODS-DRAGON](https://github.com/REULASSASSIN/GOODS-DRAGON)
-- **Owner:** REULASSASSIN (zeus/z4)
+- **Official Repository:** [github.com/0xL-DRAGON/GOODS-DRAGON](https://github.com/0xL-DRAGON/GOODS-DRAGON)
+- **Owner:** 0xL-DRAGON (zeus/z4)
 - **Updates:** Only the owner can push official updates
 - **Verification:** Run `python main.py --security` to verify authenticity
 

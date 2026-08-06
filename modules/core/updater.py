@@ -9,7 +9,7 @@ import subprocess
 from core.logger import log_info, log_success, log_warning, log_error
 
 class SelfUpdater:
-    def __init__(self, repo_owner="REULASSASSIN", repo_name="GOODS-DRAGON", current_version="1.1.0"):
+    def __init__(self, repo_owner="0xL-DRAGON", repo_name="GOODS-DRAGON", current_version="1.1.0"):
         self.repo_owner = repo_owner
         self.repo_name = repo_name
         self.current_version = current_version
