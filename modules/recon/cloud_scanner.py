@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
 import dns.resolver
-from core.logger import log_info, log_success, log_warning, log_error
+import requests
+
+from core.logger import log_error, log_info, log_success, log_warning
+
 
 class CloudScanner:
     def __init__(self, domain, verbose=False):
@@ -14,18 +16,22 @@ class CloudScanner:
     def check_s3_bucket(self, bucket):
         urls = [
             f"https://{bucket}.s3.amazonaws.com",
-            f"https://s3.amazonaws.com/{bucket}"
+            f"https://s3.amazonaws.com/{bucket}",
         ]
         for url in urls:
             try:
                 resp = requests.get(url, timeout=5)
                 if resp.status_code == 200 and "ListBucketResult" in resp.text:
                     log_success(f"Found open S3 bucket: {bucket}")
-                    self.results.append({"type": "S3", "name": bucket, "url": url, "status": "public"})
+                    self.results.append(
+                        {"type": "S3", "name": bucket, "url": url, "status": "public"}
+                    )
                     return
                 elif resp.status_code == 403:
                     log_info(f"Bucket {bucket} exists but is private")
-                    self.results.append({"type": "S3", "name": bucket, "url": url, "status": "private"})
+                    self.results.append(
+                        {"type": "S3", "name": bucket, "url": url, "status": "private"}
+                    )
             except:
                 pass
 
@@ -35,9 +41,13 @@ class CloudScanner:
             resp = requests.get(url, timeout=5)
             if resp.status_code == 200:
                 log_success(f"Found open GCP bucket: {bucket}")
-                self.results.append({"type": "GCP", "name": bucket, "url": url, "status": "public"})
+                self.results.append(
+                    {"type": "GCP", "name": bucket, "url": url, "status": "public"}
+                )
             elif resp.status_code == 403:
-                self.results.append({"type": "GCP", "name": bucket, "url": url, "status": "private"})
+                self.results.append(
+                    {"type": "GCP", "name": bucket, "url": url, "status": "private"}
+                )
         except:
             pass
 
@@ -47,13 +57,15 @@ class CloudScanner:
             resp = requests.get(url, timeout=5)
             if resp.status_code == 200 or resp.status_code == 404:
                 log_success(f"Found Azure blob: {blob}")
-                self.results.append({"type": "Azure", "name": blob, "url": url, "status": "exists"})
+                self.results.append(
+                    {"type": "Azure", "name": blob, "url": url, "status": "exists"}
+                )
         except:
             pass
 
     def scan_buckets(self):
         log_info(f"Scanning cloud resources for {self.domain}...")
-        
+
         # S3 patterns
         patterns = [
             self.domain,
@@ -62,9 +74,9 @@ class CloudScanner:
             f"{self.domain}-assets",
             f"{self.domain}-media",
             f"cdn-{self.domain}",
-            f"media-{self.domain}"
+            f"media-{self.domain}",
         ]
-        
+
         for pattern in patterns:
             self.check_s3_bucket(pattern)
             self.check_gcp_bucket(pattern)
@@ -78,5 +90,5 @@ class CloudScanner:
             "target": self.domain,
             "scan_type": "cloud_scanner",
             "total_found": len(self.results),
-            "resources": self.results
+            "resources": self.results,
         }

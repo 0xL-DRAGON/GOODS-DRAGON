@@ -3,7 +3,9 @@
 
 import json
 from datetime import datetime
+
 from core.logger import log_info, log_success
+
 
 class ReportGenerator:
     def __init__(self, json_file, output_file="custom_report.txt"):
@@ -12,7 +14,7 @@ class ReportGenerator:
 
     def generate(self):
         try:
-            with open(self.json_file, 'r') as f:
+            with open(self.json_file, "r") as f:
                 data = json.load(f)
         except:
             log_info("No data found")
@@ -34,7 +36,9 @@ Author: zeus (z4) | @iM_z4
         total = 0
         for key, value in data.items():
             if isinstance(value, dict):
-                count = value.get('total_found', value.get('total', value.get('vulnerable_count', 0)))
+                count = value.get(
+                    "total_found", value.get("total", value.get("vulnerable_count", 0))
+                )
                 total += count if isinstance(count, int) else 0
                 report += f"{key.replace('_', ' ').title()}: {count}\n"
 
@@ -49,12 +53,14 @@ Author: zeus (z4) | @iM_z4
         for key, value in data.items():
             if isinstance(value, dict):
                 report += f"\n--- {key.replace('_', ' ').title()} ---\n"
-                if 'vulnerabilities' in value:
-                    for v in value['vulnerabilities']:
+                if "vulnerabilities" in value:
+                    for v in value["vulnerabilities"]:
                         report += f"  • {v.get('type', 'Unknown')}: {v.get('description', 'N/A')}\n"
-                elif 'results' in value:
-                    for r in value['results']:
-                        report += f"  • {r.get('type', 'Unknown')}: {r.get('url', 'N/A')}\n"
+                elif "results" in value:
+                    for r in value["results"]:
+                        report += (
+                            f"  • {r.get('type', 'Unknown')}: {r.get('url', 'N/A')}\n"
+                        )
 
         report += """
 ═══════════════════════════════════════════════════════════
@@ -76,6 +82,6 @@ Telegram: @iM_z4
 ═══════════════════════════════════════════════════════════
 """
 
-        with open(self.output_file, 'w') as f:
+        with open(self.output_file, "w") as f:
             f.write(report)
         log_success(f"Custom report generated: {self.output_file}")

@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 import socket
+
 import dns.resolver
 import requests
+
 from core.logger import log_debug
+
 
 def resolve_domain(domain):
     try:
@@ -10,6 +13,7 @@ def resolve_domain(domain):
         return ip
     except socket.gaierror:
         return None
+
 
 def check_http_status(subdomain, timeout=3):
     urls = [f"http://{subdomain}", f"https://{subdomain}"]

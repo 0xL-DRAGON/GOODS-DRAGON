@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Test all module imports - Fixed paths"""
-import sys
+
 import os
+import sys
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 errors = []
@@ -23,7 +25,6 @@ modules_to_test = [
     ("modules.core.async_http", []),
     ("modules.core.user_agents", []),
     ("modules.core.waf_evasion", []),
-    
     # recon
     ("modules.recon.subdomain", ["SubdomainFinder"]),
     ("modules.recon.wayback", ["WaybackScanner"]),
@@ -43,7 +44,6 @@ modules_to_test = [
     ("modules.recon.public_info", ["PublicInfo"]),
     ("modules.recon.phone_info", ["PhoneInfo"]),
     ("modules.recon.takeover_advanced", []),
-    
     # web
     ("modules.web.disclosure", ["InfoDisclosureScanner"]),
     ("modules.web.sqli", ["SQLiScanner"]),
@@ -88,7 +88,6 @@ modules_to_test = [
     ("modules.web.api_key_scanner", ["APIKeyScanner"]),
     ("modules.web.jwt_oauth", ["JWTOAuthTester"]),
     ("modules.web.mobile_security", ["MobileSecurity"]),
-    
     # scan
     ("modules.scan.portscan", ["PortScanner"]),
     ("modules.scan.s3", ["S3Finder"]),
@@ -96,20 +95,16 @@ modules_to_test = [
     ("modules.scan.host_discovery", ["HostDiscovery"]),
     ("modules.scan.bruteforce", ["BruteForce"]),
     ("modules.scan.password_crack", ["PasswordCracker"]),
-    
     # exploit
     ("modules.exploit.exploit", ["ExploitModule"]),
     ("modules.exploit.dev", ["ExploitDev"]),
-    
     # reporting
     ("modules.reporting.html_report", ["HTMLReport"]),
     ("modules.reporting.hackerone_format", ["HackerOneReport"]),
     ("modules.reporting.dynamic_report", ["DynamicReport"]),
     ("modules.reporting.advanced_report", ["AdvancedReport"]),
-    
     # utils
     ("utils.helpers", []),
-    
     # webui
     ("webui", ["app"]),
 ]

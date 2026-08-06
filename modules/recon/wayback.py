@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
 import json
-from core.logger import log_info, log_success, log_debug, log_error
+
+import requests
+
+from core.logger import log_debug, log_error, log_info, log_success
+
 
 class WaybackScanner:
     def __init__(self, domain, verbose=False):
@@ -20,7 +23,9 @@ class WaybackScanner:
                 if len(data) > 1:
                     for item in data[1:]:
                         self.results.append(item[0])
-                log_success(f"Found {len(self.results)} historical URLs from Wayback Machine")
+                log_success(
+                    f"Found {len(self.results)} historical URLs from Wayback Machine"
+                )
             else:
                 log_error(f"Wayback API returned status: {resp.status_code}")
         except Exception as e:
@@ -34,5 +39,5 @@ class WaybackScanner:
             "target": self.domain,
             "scan_type": "wayback",
             "total_urls": len(urls),
-            "urls": urls[:500]  # محدود کردن به ۵۰۰ عدد برای جلوگیری از حجم بالا
+            "urls": urls[:500],  # محدود کردن به ۵۰۰ عدد برای جلوگیری از حجم بالا
         }

@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re
 import random
+import re
 import urllib.parse
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
 from modules.core.http_client import HTTPClient
 from modules.core.payload_manager import PayloadManager
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
 
 class LFIScanner:
     """
@@ -17,7 +20,7 @@ class LFIScanner:
     """
 
     def __init__(self, target: str, verbose: bool = False):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.client = HTTPClient(timeout=30, retries=5, verbose=verbose)
         self.payload_manager = PayloadManager(verbose=verbose)
@@ -36,21 +39,66 @@ class LFIScanner:
 
         # ---------- SUCCESS INDICATORS ----------
         self.success_indicators = [
-            "root:", "bin:", "daemon:", "adm:", "lp:", "sync:", "shutdown:",
-            "halt:", "mail:", "news:", "uucp:", "operator:", "games:", "gopher:",
-            "ftp:", "nobody:", "systemd:", "dbus:", "polkitd:", "sshd:",
-            "mysql:", "postgres:", "www-data:", "nginx:", "apache:",
-            "[boot loader]", "[operating systems]", "Windows", "Microsoft",
-            "C:\\", "D:\\", "Program Files", "System32", "Users\\",
-            "NT AUTHORITY", "SYSTEM", "Administrator", "Guest",
-            "ssh-rsa", "ssh-dss", "BEGIN RSA PRIVATE KEY",
-            "BEGIN DSA PRIVATE KEY", "BEGIN OPENSSH PRIVATE KEY",
-            "mysql_native_password", "caching_sha2_password",
-            "DB_HOST", "DB_USER", "DB_PASS", "DB_NAME",
-            "SECRET_KEY", "API_KEY", "ACCESS_TOKEN", "JWT_SECRET",
-            "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY",
-            "GITHUB_TOKEN", "GITLAB_TOKEN", "SLACK_TOKEN",
-            "-----BEGIN CERTIFICATE-----", "-----BEGIN PRIVATE KEY-----"
+            "root:",
+            "bin:",
+            "daemon:",
+            "adm:",
+            "lp:",
+            "sync:",
+            "shutdown:",
+            "halt:",
+            "mail:",
+            "news:",
+            "uucp:",
+            "operator:",
+            "games:",
+            "gopher:",
+            "ftp:",
+            "nobody:",
+            "systemd:",
+            "dbus:",
+            "polkitd:",
+            "sshd:",
+            "mysql:",
+            "postgres:",
+            "www-data:",
+            "nginx:",
+            "apache:",
+            "[boot loader]",
+            "[operating systems]",
+            "Windows",
+            "Microsoft",
+            "C:\\",
+            "D:\\",
+            "Program Files",
+            "System32",
+            "Users\\",
+            "NT AUTHORITY",
+            "SYSTEM",
+            "Administrator",
+            "Guest",
+            "ssh-rsa",
+            "ssh-dss",
+            "BEGIN RSA PRIVATE KEY",
+            "BEGIN DSA PRIVATE KEY",
+            "BEGIN OPENSSH PRIVATE KEY",
+            "mysql_native_password",
+            "caching_sha2_password",
+            "DB_HOST",
+            "DB_USER",
+            "DB_PASS",
+            "DB_NAME",
+            "SECRET_KEY",
+            "API_KEY",
+            "ACCESS_TOKEN",
+            "JWT_SECRET",
+            "AWS_ACCESS_KEY_ID",
+            "AWS_SECRET_ACCESS_KEY",
+            "GITHUB_TOKEN",
+            "GITLAB_TOKEN",
+            "SLACK_TOKEN",
+            "-----BEGIN CERTIFICATE-----",
+            "-----BEGIN PRIVATE KEY-----",
         ]
 
     def _load_internal_payloads(self) -> List[str]:
@@ -429,8 +477,8 @@ class LFIScanner:
         for tag in tags:
             results = self.payload_manager.get_payloads("lfi", tags=[tag], limit=50)
             for p in results:
-                if 'value' in p:
-                    payloads.append(p['value'])
+                if "value" in p:
+                    payloads.append(p["value"])
         return list(set(payloads))
 
     def extract_params(self) -> Dict:
@@ -467,7 +515,7 @@ class LFIScanner:
                     "url": test_url,
                     "indicator": indicator,
                     "status": resp.status_code,
-                    "preview": resp.text[:200].replace('\n', ' ').strip()
+                    "preview": resp.text[:200].replace("\n", " ").strip(),
                 }
                 self.results.append(result)
                 log_success(f"LFI found: {test_url} (indicator: {indicator})")
@@ -478,23 +526,38 @@ class LFIScanner:
         log_info(f"Starting LFI/RFI scan on: {self.target}")
         params = self.extract_params()
         if not params:
-            log_warning("No GET parameters found. LFI scan works best with parameters like ?page=about")
+            log_warning(
+                "No GET parameters found. LFI scan works best with parameters like ?page=about"
+            )
             return {
                 "target": self.target,
                 "scan_type": "lfi",
                 "total_params": 0,
                 "vulnerable_count": 0,
                 "vulnerabilities": [],
-                "payloads_tested": 0
+                "payloads_tested": 0,
             }
 
         log_info(f"Found {len(params)} parameter(s): {', '.join(params.keys())}")
-        log_info(f"Testing {len(self.all_payloads)} payloads (Internal: {len(self.internal_payloads)} + Manager: {len(self.manager_payloads)})")
+        log_info(
+            f"Testing {len(self.all_payloads)} payloads (Internal: {len(self.internal_payloads)} + Manager: {len(self.manager_payloads)})"
+        )
 
         # Identify likely parameters for file inclusion
         target_params = []
         for p in params.keys():
-            if p.lower() in ['page', 'file', 'path', 'include', 'doc', 'id', 'cat', 'article', 'news', 'view']:
+            if p.lower() in [
+                "page",
+                "file",
+                "path",
+                "include",
+                "doc",
+                "id",
+                "cat",
+                "article",
+                "news",
+                "view",
+            ]:
                 target_params.append(p)
         if not target_params:
             target_params = list(params.keys())[:3]
@@ -514,9 +577,10 @@ class LFIScanner:
             "target": self.target,
             "scan_type": "lfi",
             "total_params": len(params),
-            "total_payloads_tested": min(len(self.all_payloads), 100) * len(target_params),
+            "total_payloads_tested": min(len(self.all_payloads), 100)
+            * len(target_params),
             "payloads_internal": len(self.internal_payloads),
             "payloads_manager": len(self.manager_payloads),
             "vulnerable_count": len(self.results),
-            "vulnerabilities": self.results
+            "vulnerabilities": self.results,
         }

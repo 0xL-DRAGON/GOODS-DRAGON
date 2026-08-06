@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-import os, sys
+import os
+import sys
+
 main_path = os.path.expanduser("~/GOODS-DRAGON/main.py")
 if not os.path.exists(main_path):
     print("Error: main.py not found. Please ensure GOODS-DRAGON is installed in ~/GOODS-DRAGON")

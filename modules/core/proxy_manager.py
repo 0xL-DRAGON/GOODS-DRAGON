@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import random
-import time
-import requests
 import threading
-from core.logger import log_info, log_success, log_warning, log_error
+import time
+
+import requests
+
+from core.logger import log_error, log_info, log_success, log_warning
+
 
 class ProxyManager:
     def __init__(self, verbose=False, auto_rotate=True, rotate_interval=30):
@@ -21,7 +24,7 @@ class ProxyManager:
     def fetch_free_proxies(self):
         """دریافت پروکسی‌های رایگان از APIهای عمومی (با منابع جایگزین و قابل‌دسترس)"""
         log_info("Fetching free proxies from public APIs...")
-        
+
         # منابع جایگزین (قابل‌دسترس در ایران)
         proxy_sources = [
             # GitHub منابع (معمولاً در دسترس هستند)
@@ -34,57 +37,73 @@ class ProxyManager:
             "https://raw.githubusercontent.com/hookzof/socks5_list/master/proxy.txt",
             # Geonode (معمولاً در دسترس است)
             "https://proxylist.geonode.com/api/proxy-list?limit=100&page=1&sort_by=lastChecked&sort_type=desc",
-            "https://proxylist.geonode.com/api/proxy-list?limit=100&page=2&sort_by=lastChecked&sort_type=desc"
+            "https://proxylist.geonode.com/api/proxy-list?limit=100&page=2&sort_by=lastChecked&sort_type=desc",
         ]
-        
+
         all_proxies = []
         for url in proxy_sources:
             try:
                 # افزایش timeout برای GitHub
-                timeout = 30 if 'github' in url else 15
-                resp = requests.get(url, timeout=timeout, headers={"User-Agent": "Mozilla/5.0"})
-                
+                timeout = 30 if "github" in url else 15
+                resp = requests.get(
+                    url, timeout=timeout, headers={"User-Agent": "Mozilla/5.0"}
+                )
+
                 if resp.status_code == 200:
-                    if 'geonode' in url:
+                    if "geonode" in url:
                         # پردازش JSON برای Geonode
                         try:
                             data = resp.json()
-                            for item in data.get('data', []):
-                                if item.get('protocols') and item.get('ip') and item.get('port'):
-                                    protocol = item['protocols'][0].lower()
-                                    if protocol in ['http', 'https']:
-                                        all_proxies.append(f"http://{item['ip']}:{item['port']}")
-                                    elif protocol in ['socks4', 'socks5']:
-                                        all_proxies.append(f"{protocol}://{item['ip']}:{item['port']}")
+                            for item in data.get("data", []):
+                                if (
+                                    item.get("protocols")
+                                    and item.get("ip")
+                                    and item.get("port")
+                                ):
+                                    protocol = item["protocols"][0].lower()
+                                    if protocol in ["http", "https"]:
+                                        all_proxies.append(
+                                            f"http://{item['ip']}:{item['port']}"
+                                        )
+                                    elif protocol in ["socks4", "socks5"]:
+                                        all_proxies.append(
+                                            f"{protocol}://{item['ip']}:{item['port']}"
+                                        )
                         except:
                             pass
                     else:
                         # پردازش لیست ساده
-                        proxies = resp.text.strip().split('\n')
-                        proxies = [p.strip() for p in proxies if p.strip() and not p.startswith('#')]
+                        proxies = resp.text.strip().split("\n")
+                        proxies = [
+                            p.strip()
+                            for p in proxies
+                            if p.strip() and not p.startswith("#")
+                        ]
                         all_proxies.extend(proxies)
-                    
+
                     if self.verbose:
                         log_success(f"Fetched proxies from {url.split('/')[2]}")
                 else:
                     if self.verbose:
-                        log_warning(f"Failed from {url.split('/')[2]} (Status: {resp.status_code})")
+                        log_warning(
+                            f"Failed from {url.split('/')[2]} (Status: {resp.status_code})"
+                        )
             except Exception as e:
                 if self.verbose:
                     log_warning(f"Failed from {url.split('/')[2]}: {e}")
-        
+
         # حذف پروکسی‌های تکراری و فرمت‌دهی
         cleaned_proxies = []
         for p in all_proxies:
             p = p.strip()
-            if p and ':' in p and len(p) > 5:
+            if p and ":" in p and len(p) > 5:
                 # اگر پروکسی بدون پروتکل بود، http:// اضافه کن
-                if not p.startswith('http://') and not p.startswith('socks'):
+                if not p.startswith("http://") and not p.startswith("socks"):
                     p = f"http://{p}"
                 cleaned_proxies.append(p)
-        
+
         cleaned_proxies = list(set(cleaned_proxies))
-        
+
         if cleaned_proxies:
             log_success(f"Total unique proxies fetched: {len(cleaned_proxies)}")
             self.proxies = cleaned_proxies
@@ -103,14 +122,16 @@ class ProxyManager:
             "http://51.75.126.130:80",
             "http://51.75.126.130:443",
             "http://51.75.126.130:1080",
-            "http://51.75.126.130:8888"
+            "http://51.75.126.130:8888",
         ]
 
     def test_proxy(self, proxy):
         """بررسی صحت یک پروکسی"""
         try:
             test_url = "http://httpbin.org/ip"
-            resp = requests.get(test_url, proxies={"http": proxy, "https": proxy}, timeout=5)
+            resp = requests.get(
+                test_url, proxies={"http": proxy, "https": proxy}, timeout=5
+            )
             return resp.status_code == 200
         except:
             return False
@@ -121,11 +142,11 @@ class ProxyManager:
             if not self.proxies:
                 log_warning("No proxies available. Fetching new list...")
                 self.fetch_free_proxies()
-            
+
             if not self.proxies:
                 log_warning("No proxies available. Using direct connection.")
                 return None
-            
+
             # چرخش پروکسی
             if self.auto_rotate:
                 proxy = self.proxies[self.current_proxy_index % len(self.proxies)]
@@ -154,7 +175,9 @@ class ProxyManager:
         """شروع چرخش خودکار پروکسی"""
         if self.auto_rotate and not self._rotation_thread:
             self._stop_rotation = False
-            self._rotation_thread = threading.Thread(target=self._rotate_loop, daemon=True)
+            self._rotation_thread = threading.Thread(
+                target=self._rotate_loop, daemon=True
+            )
             self._rotation_thread.start()
             log_success("Automatic proxy rotation started.")
 
@@ -175,5 +198,5 @@ class ProxyManager:
             "status": "ready",
             "total_proxies": len(self.proxies),
             "auto_rotate": self.auto_rotate,
-            "rotate_interval": self.rotate_interval
+            "rotate_interval": self.rotate_interval,
         }

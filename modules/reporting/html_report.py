@@ -3,7 +3,9 @@
 
 import json
 from datetime import datetime
+
 from core.logger import log_info, log_success
+
 
 class HTMLReport:
     def __init__(self, json_file, output_file="report.html"):
@@ -13,7 +15,7 @@ class HTMLReport:
 
     def load_data(self):
         try:
-            with open(self.json_file, 'r', encoding='utf-8') as f:
+            with open(self.json_file, "r", encoding="utf-8") as f:
                 self.data = json.load(f)
             return True
         except Exception as e:
@@ -37,10 +39,13 @@ class HTMLReport:
         total_findings = 0
         for scan_type, results in self.data.items():
             if isinstance(results, dict):
-                count = results.get('vulnerable_count', results.get('total_found', results.get('total', 0)))
+                count = results.get(
+                    "vulnerable_count",
+                    results.get("total_found", results.get("total", 0)),
+                )
                 total_findings += count if isinstance(count, int) else 0
                 md += f"| {scan_type.replace('_', ' ').title()} | {count} |\n"
-        
+
         md += f"\n**Total Findings:** {total_findings}\n\n---\n\n## 🔍 Detailed Findings\n\n"
 
         for scan_type, results in self.data.items():
@@ -71,7 +76,9 @@ class HTMLReport:
         total_vulns = 0
         for key, value in self.data.items():
             if isinstance(value, dict):
-                total_vulns += value.get('vulnerable_count', value.get('total_found', value.get('total', 0)))
+                total_vulns += value.get(
+                    "vulnerable_count", value.get("total_found", value.get("total", 0))
+                )
 
         html = f"""
         <!DOCTYPE html>
@@ -211,7 +218,7 @@ class HTMLReport:
         </html>
         """
 
-        with open(self.output_file, 'w', encoding='utf-8') as f:
+        with open(self.output_file, "w", encoding="utf-8") as f:
             f.write(html)
         log_success(f"HTML report generated: {self.output_file}")
 
@@ -219,7 +226,7 @@ class HTMLReport:
         """Generate both HTML and Markdown reports"""
         self.generate_html()
         # Save Markdown
-        md_file = self.output_file.replace('.html', '.md').replace('.json', '.md')
-        with open(md_file, 'w', encoding='utf-8') as f:
+        md_file = self.output_file.replace(".html", ".md").replace(".json", ".md")
+        with open(md_file, "w", encoding="utf-8") as f:
             f.write(self.generate_markdown())
         log_success(f"Markdown report generated: {md_file}")

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import subprocess
 import sys
-import os
-from core.logger import log_info, log_success, log_error
+
+from core.logger import log_error, log_info, log_success
+
 
 class AutoScript:
     def __init__(self, target, verbose=False):

@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
 import re
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
+import requests
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
+
 
 class GitScanner:
     def __init__(self, target, verbose=False):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.found = []
 
@@ -28,7 +32,7 @@ class GitScanner:
             "admin/.git/HEAD",
             "assets/.git/HEAD",
             "include/.git/HEAD",
-            "src/.git/HEAD"
+            "src/.git/HEAD",
         ]
 
     def check_path(self, path):
@@ -40,7 +44,7 @@ class GitScanner:
                     "url": url,
                     "status": resp.status_code,
                     "content_length": len(resp.text),
-                    "type": "git_exposed"
+                    "type": "git_exposed",
                 }
                 self.found.append(result)
                 log_success(f"🔥 Found exposed Git path: {url}")
@@ -68,5 +72,5 @@ class GitScanner:
             "target": self.target,
             "scan_type": "git_scan",
             "total_found": len(self.found),
-            "paths": self.found
+            "paths": self.found,
         }

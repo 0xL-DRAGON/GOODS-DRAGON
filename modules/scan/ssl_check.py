@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import ssl
-import socket
 import datetime
 import re
-from core.logger import log_info, log_success, log_debug, log_error, log_warning
+import socket
+import ssl
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
+
 
 class SSLChecker:
     def __init__(self, target, verbose=False):
@@ -19,36 +22,42 @@ class SSLChecker:
             with socket.create_connection((self.target, 443), timeout=10) as sock:
                 with context.wrap_socket(sock, server_hostname=self.target) as ssock:
                     cert = ssock.getpeercert()
-                    
+
                     # Get SSL/TLS version
                     protocol = ssock.version()
-                    
+
                     # Extract certificate info
-                    subject = dict(x[0] for x in cert.get('subject', []))
-                    issuer = dict(x[0] for x in cert.get('issuer', []))
-                    
+                    subject = dict(x[0] for x in cert.get("subject", []))
+                    issuer = dict(x[0] for x in cert.get("issuer", []))
+
                     # Dates
-                    not_before = datetime.datetime.strptime(cert['notBefore'], '%b %d %H:%M:%S %Y %Z')
-                    not_after = datetime.datetime.strptime(cert['notAfter'], '%b %d %H:%M:%S %Y %Z')
+                    not_before = datetime.datetime.strptime(
+                        cert["notBefore"], "%b %d %H:%M:%S %Y %Z"
+                    )
+                    not_after = datetime.datetime.strptime(
+                        cert["notAfter"], "%b %d %H:%M:%S %Y %Z"
+                    )
                     days_left = (not_after - datetime.datetime.now()).days
 
                     self.results = {
                         "target": self.target,
                         "protocol": protocol,
-                        "subject": subject.get('commonName', 'N/A'),
-                        "issuer": issuer.get('organizationName', 'N/A'),
-                        "not_before": not_before.strftime('%Y-%m-%d'),
-                        "not_after": not_after.strftime('%Y-%m-%d'),
+                        "subject": subject.get("commonName", "N/A"),
+                        "issuer": issuer.get("organizationName", "N/A"),
+                        "not_before": not_before.strftime("%Y-%m-%d"),
+                        "not_after": not_after.strftime("%Y-%m-%d"),
                         "days_left": days_left,
-                        "valid": days_left > 0
+                        "valid": days_left > 0,
                     }
 
                     log_success(f"SSL/TLS Check completed for {self.target}")
                     log_info(f"  Protocol: {protocol}")
                     log_info(f"  Subject: {subject.get('commonName', 'N/A')}")
                     log_info(f"  Issuer: {issuer.get('organizationName', 'N/A')}")
-                    log_info(f"  Valid until: {not_after.strftime('%Y-%m-%d')} ({days_left} days left)")
-                    
+                    log_info(
+                        f"  Valid until: {not_after.strftime('%Y-%m-%d')} ({days_left} days left)"
+                    )
+
                     if days_left < 30:
                         log_warning(f"⚠️ Certificate expires in {days_left} days!")
                     elif days_left < 7:
@@ -74,8 +83,4 @@ class SSLChecker:
     def run(self):
         log_info(f"Starting SSL/TLS Check on: {self.target}")
         result = self.check_ssl()
-        return {
-            "target": self.target,
-            "scan_type": "ssl_check",
-            "results": result
-        }
+        return {"target": self.target, "scan_type": "ssl_check", "results": result}

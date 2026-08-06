@@ -4,7 +4,9 @@
 import random
 import time
 import urllib.parse
+
 from core.logger import log_info, log_success
+
 
 class WAFEvasion:
     def __init__(self, verbose=False):
@@ -16,12 +18,12 @@ class WAFEvasion:
             self._comment_insertion,
             self._whitespace_insertion,
             self._parameter_pollution,
-            self._null_byte_injection
+            self._null_byte_injection,
         ]
 
     def _case_swapping(self, payload):
         """تغییر حالت حروف (مثلاً SeLeCt)"""
-        return ''.join(random.choice([c.upper(), c.lower()]) for c in payload)
+        return "".join(random.choice([c.upper(), c.lower()]) for c in payload)
 
     def _url_encoding(self, payload):
         """کدگذاری URL"""
@@ -42,8 +44,8 @@ class WAFEvasion:
         chars = list(payload)
         for i in range(len(chars)):
             if random.random() < 0.2:
-                chars.insert(i, random.choice([' ', '\t', '\n']))
-        return ''.join(chars)
+                chars.insert(i, random.choice([" ", "\t", "\n"]))
+        return "".join(chars)
 
     def _parameter_pollution(self, payload):
         """تزریق پارامترهای تکراری"""
@@ -68,5 +70,5 @@ class WAFEvasion:
         log_success("WAF Evasion techniques ready.")
         return {
             "status": "ready",
-            "techniques": [t.__name__.replace('_', ' ') for t in self.techniques]
+            "techniques": [t.__name__.replace("_", " ") for t in self.techniques],
         }

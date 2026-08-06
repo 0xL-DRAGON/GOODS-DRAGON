@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import requests
+
 from core.logger import log_info, log_success, log_warning
 from modules.core.http_client import HTTPClient
+
 
 class ThreatIntel:
     def __init__(self, target, verbose=False, api_keys=None):
@@ -15,52 +17,52 @@ class ThreatIntel:
 
     def check_virustotal(self):
         """بررسی با VirusTotal"""
-        if not self.api_keys.get('virustotal'):
+        if not self.api_keys.get("virustotal"):
             log_warning("VirusTotal API key not provided")
             return
-        
+
         log_info("Checking VirusTotal...")
         try:
             url = f"https://www.virustotal.com/api/v3/domains/{self.target}"
-            headers = {"x-apikey": self.api_keys['virustotal']}
+            headers = {"x-apikey": self.api_keys["virustotal"]}
             resp = self.client.get(url, headers=headers)
             if resp and resp.status_code == 200:
                 data = resp.json()
-                self.results['virustotal'] = data.get('data', {})
+                self.results["virustotal"] = data.get("data", {})
                 log_success("VirusTotal check completed")
         except:
             pass
 
     def check_shodan(self):
         """بررسی با Shodan"""
-        if not self.api_keys.get('shodan'):
+        if not self.api_keys.get("shodan"):
             log_warning("Shodan API key not provided")
             return
-        
+
         log_info("Checking Shodan...")
         try:
             url = f"https://api.shodan.io/shodan/host/{self.target}?key={self.api_keys['shodan']}"
             resp = self.client.get(url)
             if resp and resp.status_code == 200:
-                self.results['shodan'] = resp.json()
+                self.results["shodan"] = resp.json()
                 log_success("Shodan check completed")
         except:
             pass
 
     def check_abuseipdb(self):
         """بررسی با AbuseIPDB"""
-        if not self.api_keys.get('abuseipdb'):
+        if not self.api_keys.get("abuseipdb"):
             log_warning("AbuseIPDB API key not provided")
             return
-        
+
         log_info("Checking AbuseIPDB...")
         try:
             url = f"https://api.abuseipdb.com/api/v2/check"
-            headers = {"Key": self.api_keys['abuseipdb'], "Accept": "application/json"}
+            headers = {"Key": self.api_keys["abuseipdb"], "Accept": "application/json"}
             params = {"ipAddress": self.target}
             resp = self.client.get(url, headers=headers, params=params)
             if resp and resp.status_code == 200:
-                self.results['abuseipdb'] = resp.json()
+                self.results["abuseipdb"] = resp.json()
                 log_success("AbuseIPDB check completed")
         except:
             pass
@@ -74,5 +76,5 @@ class ThreatIntel:
         return {
             "target": self.target,
             "scan_type": "threat_intel",
-            "results": self.results
+            "results": self.results,
         }

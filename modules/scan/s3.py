@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from core.logger import log_info, log_success, log_debug, log_error, log_warning
+
+import requests
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
+
 
 class S3Finder:
     def __init__(self, target, threads=20, verbose=False):
@@ -730,7 +734,7 @@ class S3Finder:
             f"zm-{self.target}",
             f"zms-{self.target}",
             f"zw-{self.target}",
-            f"zws-{self.target}"
+            f"zws-{self.target}",
         ]
 
     def check_bucket(self, bucket_name):
@@ -738,7 +742,7 @@ class S3Finder:
             f"https://{bucket_name}.s3.amazonaws.com",
             f"http://{bucket_name}.s3.amazonaws.com",
             f"https://{bucket_name}.s3.amazonaws.com/?list-type=2",
-            f"https://s3.amazonaws.com/{bucket_name}"
+            f"https://s3.amazonaws.com/{bucket_name}",
         ]
 
         for url in urls:
@@ -747,13 +751,19 @@ class S3Finder:
                 # Check if bucket exists and is public
                 if resp.status_code == 200:
                     # Check if it's an actual bucket listing
-                    if 'ListBucketResult' in resp.text or '<Contents>' in resp.text or 'Bucket' in resp.text:
+                    if (
+                        "ListBucketResult" in resp.text
+                        or "<Contents>" in resp.text
+                        or "Bucket" in resp.text
+                    ):
                         with self.lock:
-                            self.found.append({
-                                "bucket": bucket_name,
-                                "url": url,
-                                "status": "public_readable"
-                            })
+                            self.found.append(
+                                {
+                                    "bucket": bucket_name,
+                                    "url": url,
+                                    "status": "public_readable",
+                                }
+                            )
                             log_success(f"🔥 Found open S3 bucket: {bucket_name}")
                         return True
                     elif resp.status_code == 403:
@@ -772,7 +782,10 @@ class S3Finder:
         log_info(f"Checking {len(self.bucket_patterns)} bucket name patterns...")
 
         with ThreadPoolExecutor(max_workers=self.threads) as executor:
-            futures = {executor.submit(self.check_bucket, name): name for name in self.bucket_patterns}
+            futures = {
+                executor.submit(self.check_bucket, name): name
+                for name in self.bucket_patterns
+            }
             for future in as_completed(futures):
                 try:
                     future.result()
@@ -784,5 +797,5 @@ class S3Finder:
             "target": self.target,
             "scan_type": "s3_finder",
             "total_found": len(self.found),
-            "buckets": self.found
+            "buckets": self.found,
         }

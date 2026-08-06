@@ -1,18 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
 import json
-from core.logger import log_info, log_success, log_warning, log_error
+
+import requests
+
+from core.logger import log_error, log_info, log_success, log_warning
+
 
 class APIScanner:
     def __init__(self, target, verbose=False):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.results = []
 
     def check_swagger(self):
-        paths = ["/swagger.json", "/swagger/v1/swagger.json", "/api-docs", "/v1/api-docs", "/openapi.json"]
+        paths = [
+            "/swagger.json",
+            "/swagger/v1/swagger.json",
+            "/api-docs",
+            "/v1/api-docs",
+            "/openapi.json",
+        ]
         for path in paths:
             url = f"{self.target}{path}"
             try:
@@ -21,7 +30,9 @@ class APIScanner:
                     data = resp.json()
                     if "paths" in data or "endpoints" in data:
                         log_success(f"Found Swagger/OpenAPI docs: {url}")
-                        self.results.append({"type": "swagger", "url": url, "status": "exposed"})
+                        self.results.append(
+                            {"type": "swagger", "url": url, "status": "exposed"}
+                        )
                         return
             except:
                 pass
@@ -36,20 +47,33 @@ class APIScanner:
                 resp = requests.post(url, data=query, headers=headers, timeout=5)
                 if resp.status_code == 200 and "data" in resp.json():
                     log_success(f"Found GraphQL endpoint: {url}")
-                    self.results.append({"type": "graphql", "url": url, "status": "exposed"})
+                    self.results.append(
+                        {"type": "graphql", "url": url, "status": "exposed"}
+                    )
                     return
             except:
                 pass
 
     def check_common_apis(self):
-        paths = ["/api/v1", "/api/v2", "/api/v3", "/rest/api", "/api/rest", "/api/", "/v1", "/v2"]
+        paths = [
+            "/api/v1",
+            "/api/v2",
+            "/api/v3",
+            "/rest/api",
+            "/api/rest",
+            "/api/",
+            "/v1",
+            "/v2",
+        ]
         for path in paths:
             url = f"{self.target}{path}"
             try:
                 resp = requests.get(url, timeout=5)
                 if resp.status_code != 404:
                     log_success(f"Found API endpoint: {url} ({resp.status_code})")
-                    self.results.append({"type": "api_endpoint", "url": url, "status": resp.status_code})
+                    self.results.append(
+                        {"type": "api_endpoint", "url": url, "status": resp.status_code}
+                    )
             except:
                 pass
 
@@ -60,7 +84,9 @@ class APIScanner:
                 acao = resp.headers["access-control-allow-origin"]
                 if acao == "*" or acao == "https://evil.com":
                     log_success(f"CORS misconfiguration detected: {acao}")
-                    self.results.append({"type": "cors", "value": acao, "status": "vulnerable"})
+                    self.results.append(
+                        {"type": "cors", "value": acao, "status": "vulnerable"}
+                    )
         except:
             pass
 
@@ -75,5 +101,5 @@ class APIScanner:
             "target": self.target,
             "scan_type": "api_scanner",
             "total_found": len(self.results),
-            "results": self.results
+            "results": self.results,
         }

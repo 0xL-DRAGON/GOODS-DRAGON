@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import random
+
 import requests
+
 from core.logger import log_info, log_success, log_warning
+
 
 class StealthMode:
     def __init__(self, target, verbose=False, proxy_list=None):
@@ -16,7 +19,7 @@ class StealthMode:
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
             "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/121.0",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15"
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
         ]
 
     def get_random_user_agent(self):
@@ -36,13 +39,14 @@ class StealthMode:
             "Accept-Encoding": "gzip, deflate, br",
             "DNT": "1",
             "Connection": "keep-alive",
-            "Upgrade-Insecure-Requests": "1"
+            "Upgrade-Insecure-Requests": "1",
         }
 
     def random_delay(self):
         delay = random.uniform(0.5, 2.0)
         log_info(f"⏳ Sleeping for {delay:.2f} seconds...")
         import time
+
         time.sleep(delay)
 
     def check_visibility(self):
@@ -71,5 +75,5 @@ class StealthMode:
             "target": self.target,
             "user_agent": self.get_random_user_agent(),
             "proxy": self.proxy_list[0] if self.proxy_list else None,
-            "status": "ready"
+            "status": "ready",
         }

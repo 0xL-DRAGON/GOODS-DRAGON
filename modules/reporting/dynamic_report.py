@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import json
 import csv
+import json
 import os
 from datetime import datetime
+
 from core.logger import log_info, log_success
+
 
 class DynamicReport:
     def __init__(self, json_file, output_dir="reports/"):
@@ -16,7 +18,7 @@ class DynamicReport:
 
     def load_data(self):
         try:
-            with open(self.json_file, 'r', encoding='utf-8') as f:
+            with open(self.json_file, "r", encoding="utf-8") as f:
                 self.data = json.load(f)
             return True
         except Exception as e:
@@ -50,7 +52,7 @@ class DynamicReport:
         </html>
         """
         path = f"{self.output_dir}{self.base_name}.html"
-        with open(path, 'w', encoding='utf-8') as f:
+        with open(path, "w", encoding="utf-8") as f:
             f.write(html)
         log_success(f"HTML report: {path}")
 
@@ -63,19 +65,19 @@ class DynamicReport:
         md += json_str
         md += "\n```\n"
         path = f"{self.output_dir}{self.base_name}.md"
-        with open(path, 'w', encoding='utf-8') as f:
+        with open(path, "w", encoding="utf-8") as f:
             f.write(md)
         log_success(f"Markdown report: {path}")
 
     def generate_json(self):
         path = f"{self.output_dir}{self.base_name}.json"
-        with open(path, 'w', encoding='utf-8') as f:
+        with open(path, "w", encoding="utf-8") as f:
             json.dump(self.data, f, indent=2, ensure_ascii=False)
         log_success(f"JSON report: {path}")
 
     def generate_csv(self):
         path = f"{self.output_dir}{self.base_name}.csv"
-        with open(path, 'w', newline='', encoding='utf-8') as f:
+        with open(path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             writer.writerow(["Module", "Key", "Value"])
             for key, value in self.data.items():
@@ -88,10 +90,13 @@ class DynamicReport:
         try:
             from reportlab.lib.pagesizes import letter
             from reportlab.pdfgen import canvas
+
             path = f"{self.output_dir}{self.base_name}.pdf"
             c = canvas.Canvas(path, pagesize=letter)
             c.drawString(100, 750, "🐉 GOODS-DRAGON - Security Report")
-            c.drawString(100, 730, f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            c.drawString(
+                100, 730, f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            )
             c.drawString(100, 710, f"Author: zeus (z4) | @iM_z4")
             c.drawString(100, 680, "Summary:")
             y = 660

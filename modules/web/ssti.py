@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re
 import random
+import re
 import urllib.parse
-from typing import List, Dict, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
 from modules.core.http_client import HTTPClient
 from modules.core.payload_manager import PayloadManager
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
 
 class SSTIScanner:
     """
@@ -17,7 +20,7 @@ class SSTIScanner:
     """
 
     def __init__(self, target: str, verbose: bool = False):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.client = HTTPClient(timeout=30, retries=5, verbose=verbose)
         self.payload_manager = PayloadManager(verbose=verbose)
@@ -37,21 +40,75 @@ class SSTIScanner:
 
         # ---------- SUCCESS INDICATORS ----------
         self.success_indicators = [
-            "49", "7777777", "config", "__mro__", "subclasses", "__class__",
-            "__globals__", "__builtins__", "__import__", "os", "system",
-            "popen", "eval", "exec", "open", "file", "read", "write",
-            "self", "request", "session", "g", "app", "config",
-            "Jinja2", "Template", "render", "context", "namespace",
-            "freemarker", "velocity", "smarty", "twig", "erb", "mako",
-            "java.lang", "java.lang.Runtime", "ProcessBuilder",
+            "49",
+            "7777777",
+            "config",
+            "__mro__",
+            "subclasses",
+            "__class__",
+            "__globals__",
+            "__builtins__",
+            "__import__",
+            "os",
+            "system",
+            "popen",
+            "eval",
+            "exec",
+            "open",
+            "file",
+            "read",
+            "write",
+            "self",
+            "request",
+            "session",
+            "g",
+            "app",
+            "config",
+            "Jinja2",
+            "Template",
+            "render",
+            "context",
+            "namespace",
+            "freemarker",
+            "velocity",
+            "smarty",
+            "twig",
+            "erb",
+            "mako",
+            "java.lang",
+            "java.lang.Runtime",
+            "ProcessBuilder",
             "Runtime.getRuntime().exec",
             "freemarker.template.utility.Execute",
-            "smarty.template", "twig.extension", "twig.runtime",
-            "default", "get", "set", "keys", "values", "items",
-            "os.environ", "os.path", "subprocess", "Popen",
-            "class", "mro", "base", "subclasses", "globals",
-            "builtins", "import", "__import__", "open", "file",
-            "read", "write", "append", "system", "exec", "eval"
+            "smarty.template",
+            "twig.extension",
+            "twig.runtime",
+            "default",
+            "get",
+            "set",
+            "keys",
+            "values",
+            "items",
+            "os.environ",
+            "os.path",
+            "subprocess",
+            "Popen",
+            "class",
+            "mro",
+            "base",
+            "subclasses",
+            "globals",
+            "builtins",
+            "import",
+            "__import__",
+            "open",
+            "file",
+            "read",
+            "write",
+            "append",
+            "system",
+            "exec",
+            "eval",
         ]
 
         # Engine-specific detection patterns
@@ -61,43 +118,24 @@ class SSTIScanner:
                 r"jinja2\.Template",
                 r"config\s*=",
                 r"self\.__class__",
-                r"url_for\s*\("
+                r"url_for\s*\(",
             ],
             "velocity": [
                 r"org\.apache\.velocity",
                 r"VelocityContext",
                 r"$!",
-                r"#set\s*\("
+                r"#set\s*\(",
             ],
             "freemarker": [
                 r"freemarker\.template",
                 r"TemplateModel",
                 r"${",
-                r"<#assign"
+                r"<#assign",
             ],
-            "twig": [
-                r"Twig_Template",
-                r"twig\.runtime",
-                r"Twig\s+Extension",
-                r"{{"
-            ],
-            "smarty": [
-                r"Smarty\s+Template",
-                r"smarty\.config",
-                r"{\$",
-                r"{include"
-            ],
-            "erb": [
-                r"ERB\s+Template",
-                r"<%=.*%>",
-                r"ERB::Util"
-            ],
-            "mako": [
-                r"Mako\s+Template",
-                r"mako\.runtime",
-                r"${",
-                r"<%"
-            ]
+            "twig": [r"Twig_Template", r"twig\.runtime", r"Twig\s+Extension", r"{{"],
+            "smarty": [r"Smarty\s+Template", r"smarty\.config", r"{\$", r"{include"],
+            "erb": [r"ERB\s+Template", r"<%=.*%>", r"ERB::Util"],
+            "mako": [r"Mako\s+Template", r"mako\.runtime", r"${", r"<%"],
         }
 
     def _load_internal_payloads(self) -> List[str]:
@@ -322,16 +360,16 @@ class SSTIScanner:
 
         # ----- ENCODED & OBFUSCATED -----
         encoded = [
-            "{{7*7}}".replace('{', '{').replace('}', '}'),
-            "${7*7}".replace('$', '$'),
-            "<%= 7*7 %>".replace('<', '<').replace('>', '>'),
-            "{{7*7}}".replace('7', '7'),
-            "${7*7}".replace('7', '7'),
-            "<%= 7*7 %>".replace('7', '7'),
-            "{{self.__class__.__mro__}}".replace('self', 'self'),
-            "{{self.__class__.__mro__[1].__subclasses__()}}".replace('self', 'self'),
-            "{{''.__class__.__mro__[2].__subclasses__()}}".replace('', ''),
-            "{{[].__class__.__base__.__subclasses__()}}".replace('[]', '[]'),
+            "{{7*7}}".replace("{", "{").replace("}", "}"),
+            "${7*7}".replace("$", "$"),
+            "<%= 7*7 %>".replace("<", "<").replace(">", ">"),
+            "{{7*7}}".replace("7", "7"),
+            "${7*7}".replace("7", "7"),
+            "<%= 7*7 %>".replace("7", "7"),
+            "{{self.__class__.__mro__}}".replace("self", "self"),
+            "{{self.__class__.__mro__[1].__subclasses__()}}".replace("self", "self"),
+            "{{''.__class__.__mro__[2].__subclasses__()}}".replace("", ""),
+            "{{[].__class__.__base__.__subclasses__()}}".replace("[]", "[]"),
         ]
         payloads.extend(encoded)
 
@@ -340,12 +378,22 @@ class SSTIScanner:
     def _load_manager_payloads(self) -> List[str]:
         """Load payloads from Payload Manager"""
         payloads = []
-        tags = ["basic", "jinja2", "velocity", "freemarker", "erb", "smarty", "twig", "mako", "jade"]
+        tags = [
+            "basic",
+            "jinja2",
+            "velocity",
+            "freemarker",
+            "erb",
+            "smarty",
+            "twig",
+            "mako",
+            "jade",
+        ]
         for tag in tags:
             results = self.payload_manager.get_payloads("ssti", tags=[tag], limit=50)
             for p in results:
-                if 'value' in p:
-                    payloads.append(p['value'])
+                if "value" in p:
+                    payloads.append(p["value"])
         return list(set(payloads))
 
     def extract_params(self) -> Dict:
@@ -388,7 +436,9 @@ class SSTIScanner:
                 if not self.detected_engine:
                     self.detected_engine = self.detect_engine(resp.text)
                     if self.detected_engine:
-                        log_success(f"Template engine detected: {self.detected_engine.upper()}")
+                        log_success(
+                            f"Template engine detected: {self.detected_engine.upper()}"
+                        )
 
                 result = {
                     "param": param,
@@ -397,7 +447,7 @@ class SSTIScanner:
                     "indicator": indicator,
                     "status": resp.status_code,
                     "engine": self.detected_engine,
-                    "preview": resp.text[:200].replace('\n', ' ').strip()
+                    "preview": resp.text[:200].replace("\n", " ").strip(),
                 }
                 self.results.append(result)
                 log_success(f"SSTI found: {test_url} (indicator: {indicator})")
@@ -408,7 +458,9 @@ class SSTIScanner:
         log_info(f"Starting SSTI scan on: {self.target}")
         params = self.extract_params()
         if not params:
-            log_warning("No GET parameters found. SSTI scan works best with parameters like ?name=test")
+            log_warning(
+                "No GET parameters found. SSTI scan works best with parameters like ?name=test"
+            )
             return {
                 "target": self.target,
                 "scan_type": "ssti",
@@ -416,15 +468,29 @@ class SSTIScanner:
                 "vulnerable_count": 0,
                 "vulnerabilities": [],
                 "payloads_tested": 0,
-                "detected_engine": None
+                "detected_engine": None,
             }
 
         log_info(f"Found {len(params)} parameter(s): {', '.join(params.keys())}")
-        log_info(f"Testing {len(self.all_payloads)} payloads (Internal: {len(self.internal_payloads)} + Manager: {len(self.manager_payloads)})")
+        log_info(
+            f"Testing {len(self.all_payloads)} payloads (Internal: {len(self.internal_payloads)} + Manager: {len(self.manager_payloads)})"
+        )
 
         target_params = []
         for p in params.keys():
-            if p.lower() in ['name', 'q', 'search', 'query', 'page', 'id', 'cat', 'article', 'news', 'view', 'user']:
+            if p.lower() in [
+                "name",
+                "q",
+                "search",
+                "query",
+                "page",
+                "id",
+                "cat",
+                "article",
+                "news",
+                "view",
+                "user",
+            ]:
                 target_params.append(p)
         if not target_params:
             target_params = list(params.keys())[:3]
@@ -446,10 +512,11 @@ class SSTIScanner:
             "target": self.target,
             "scan_type": "ssti",
             "total_params": len(params),
-            "total_payloads_tested": min(len(self.all_payloads), 100) * len(target_params),
+            "total_payloads_tested": min(len(self.all_payloads), 100)
+            * len(target_params),
             "payloads_internal": len(self.internal_payloads),
             "payloads_manager": len(self.manager_payloads),
             "detected_engine": self.detected_engine,
             "vulnerable_count": len(self.results),
-            "vulnerabilities": self.results
+            "vulnerabilities": self.results,
         }

@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re
 import random
+import re
 import urllib.parse
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
 from modules.core.http_client import HTTPClient
 from modules.core.payload_manager import PayloadManager
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
 
 class SSRFScanner:
     """
@@ -17,7 +20,7 @@ class SSRFScanner:
     """
 
     def __init__(self, target: str, verbose: bool = False):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.client = HTTPClient(timeout=30, retries=5, verbose=verbose)
         self.payload_manager = PayloadManager(verbose=verbose)
@@ -37,25 +40,65 @@ class SSRFScanner:
         # ---------- SUCCESS INDICATORS ----------
         self.success_indicators = [
             # Cloud metadata
-            "instance-id", "local-ipv4", "public-ipv4", "security-credentials",
-            "169.254.169.254", "latest/meta-data", "user-data", "public-keys",
-            "iam", "security-credentials", "ami-id", "instance-type",
+            "instance-id",
+            "local-ipv4",
+            "public-ipv4",
+            "security-credentials",
+            "169.254.169.254",
+            "latest/meta-data",
+            "user-data",
+            "public-keys",
+            "iam",
+            "security-credentials",
+            "ami-id",
+            "instance-type",
             # Internal services
-            "redis_version", "redis_mode", "mysql", "MariaDB", "PostgreSQL",
-            "You have mail", "uid=", "root:", "bin:", "daemon:",
+            "redis_version",
+            "redis_mode",
+            "mysql",
+            "MariaDB",
+            "PostgreSQL",
+            "You have mail",
+            "uid=",
+            "root:",
+            "bin:",
+            "daemon:",
             # AWS
-            "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "aws_access_key_id",
+            "AWS_ACCESS_KEY_ID",
+            "AWS_SECRET_ACCESS_KEY",
+            "aws_access_key_id",
             # GCP
-            "project-id", "zone", "instance-name", "hostname",
+            "project-id",
+            "zone",
+            "instance-name",
+            "hostname",
             # Azure
-            "IMDS", "azure", "compute", "vmId",
+            "IMDS",
+            "azure",
+            "compute",
+            "vmId",
             # Common internal
-            "localhost", "127.0.0.1", "internal", "private", "vpc",
+            "localhost",
+            "127.0.0.1",
+            "internal",
+            "private",
+            "vpc",
             # Files
-            "root:", "bash", "sh", "bin", "etc", "var", "home",
+            "root:",
+            "bash",
+            "sh",
+            "bin",
+            "etc",
+            "var",
+            "home",
             # HTTP responses
-            "200 OK", "404 Not Found", "403 Forbidden", "500 Internal Server Error",
-            "Connection refused", "Connection timed out", "Name or service not known"
+            "200 OK",
+            "404 Not Found",
+            "403 Forbidden",
+            "500 Internal Server Error",
+            "Connection refused",
+            "Connection timed out",
+            "Name or service not known",
         ]
 
     def _load_internal_payloads(self) -> List[str]:
@@ -367,8 +410,8 @@ class SSRFScanner:
         for tag in tags:
             results = self.payload_manager.get_payloads("ssrf", tags=[tag], limit=50)
             for p in results:
-                if 'value' in p:
-                    payloads.append(p['value'])
+                if "value" in p:
+                    payloads.append(p["value"])
         return list(set(payloads))
 
     def extract_params(self) -> Dict:
@@ -405,7 +448,7 @@ class SSRFScanner:
                     "url": test_url,
                     "indicator": indicator,
                     "status": resp.status_code,
-                    "preview": resp.text[:200].replace('\n', ' ').strip()
+                    "preview": resp.text[:200].replace("\n", " ").strip(),
                 }
                 self.results.append(result)
                 log_success(f"SSRF found: {test_url} (indicator: {indicator})")
@@ -413,14 +456,17 @@ class SSRFScanner:
 
         # Also check for connection errors that indicate internal access
         if resp.status_code in [400, 403, 404, 500, 502, 503, 504]:
-            if "connection refused" in resp.text.lower() or "timed out" in resp.text.lower():
+            if (
+                "connection refused" in resp.text.lower()
+                or "timed out" in resp.text.lower()
+            ):
                 result = {
                     "param": param,
                     "payload": payload,
                     "url": test_url,
                     "indicator": "connection_refused_or_timeout",
                     "status": resp.status_code,
-                    "preview": resp.text[:200].replace('\n', ' ').strip()
+                    "preview": resp.text[:200].replace("\n", " ").strip(),
                 }
                 self.results.append(result)
                 log_success(f"SSRF possible (internal access): {test_url}")
@@ -432,23 +478,40 @@ class SSRFScanner:
         log_info(f"Starting SSRF scan on: {self.target}")
         params = self.extract_params()
         if not params:
-            log_warning("No GET parameters found. SSRF scan works best with URL parameters like ?url=http://example.com")
+            log_warning(
+                "No GET parameters found. SSRF scan works best with URL parameters like ?url=http://example.com"
+            )
             return {
                 "target": self.target,
                 "scan_type": "ssrf",
                 "total_params": 0,
                 "vulnerable_count": 0,
                 "vulnerabilities": [],
-                "payloads_tested": 0
+                "payloads_tested": 0,
             }
 
         log_info(f"Found {len(params)} parameter(s): {', '.join(params.keys())}")
-        log_info(f"Testing {len(self.all_payloads)} payloads (Internal: {len(self.internal_payloads)} + Manager: {len(self.manager_payloads)})")
+        log_info(
+            f"Testing {len(self.all_payloads)} payloads (Internal: {len(self.internal_payloads)} + Manager: {len(self.manager_payloads)})"
+        )
 
         # Identify likely parameters for SSRF (url, link, dest, redirect, etc.)
         target_params = []
         for p in params.keys():
-            if p.lower() in ['url', 'link', 'dest', 'redirect', 'return', 'next', 'path', 'uri', 'src', 'href', 'loc', 'location']:
+            if p.lower() in [
+                "url",
+                "link",
+                "dest",
+                "redirect",
+                "return",
+                "next",
+                "path",
+                "uri",
+                "src",
+                "href",
+                "loc",
+                "location",
+            ]:
                 target_params.append(p)
         if not target_params:
             target_params = list(params.keys())[:3]
@@ -467,9 +530,10 @@ class SSRFScanner:
             "target": self.target,
             "scan_type": "ssrf",
             "total_params": len(params),
-            "total_payloads_tested": min(len(self.all_payloads), 100) * len(target_params),
+            "total_payloads_tested": min(len(self.all_payloads), 100)
+            * len(target_params),
             "payloads_internal": len(self.internal_payloads),
             "payloads_manager": len(self.manager_payloads),
             "vulnerable_count": len(self.results),
-            "vulnerabilities": self.results
+            "vulnerabilities": self.results,
         }

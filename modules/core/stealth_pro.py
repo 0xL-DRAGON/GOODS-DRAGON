@@ -3,12 +3,22 @@
 
 import random
 import time
-import requests
+
 import cloudscraper  # pip install cloudscraper
+import requests
+
 from core.logger import log_info, log_success, log_warning
 
+
 class StealthPro:
-    def __init__(self, target, verbose=False, proxy_list=None, rotate_ua=True, use_cloudscraper=True):
+    def __init__(
+        self,
+        target,
+        verbose=False,
+        proxy_list=None,
+        rotate_ua=True,
+        use_cloudscraper=True,
+    ):
         self.target = target
         self.verbose = verbose
         self.proxy_list = proxy_list or []
@@ -23,7 +33,7 @@ class StealthPro:
             "Mozilla/5.0 (Windows NT 10.0; rv:109.0) Gecko/20100101 Firefox/121.0",
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
             "Mozilla/5.0 (Linux; Android 13; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0"
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0",
         ]
 
     def _create_session(self):
@@ -47,7 +57,7 @@ class StealthPro:
             "Accept-Encoding": "gzip, deflate, br",
             "DNT": "1",
             "Connection": "keep-alive",
-            "Upgrade-Insecure-Requests": "1"
+            "Upgrade-Insecure-Requests": "1",
         }
         if self.rotate_ua:
             headers["User-Agent"] = self.get_random_user_agent()
@@ -65,9 +75,13 @@ class StealthPro:
         for attempt in range(retries):
             try:
                 if method.upper() == "GET":
-                    resp = self.session.get(url, headers=headers, proxies=proxy, timeout=15)
+                    resp = self.session.get(
+                        url, headers=headers, proxies=proxy, timeout=15
+                    )
                 else:
-                    resp = self.session.post(url, data=data, headers=headers, proxies=proxy, timeout=15)
+                    resp = self.session.post(
+                        url, data=data, headers=headers, proxies=proxy, timeout=15
+                    )
                 if resp.status_code != 403 and resp.status_code != 429:
                     return resp
                 if self.verbose:
@@ -105,5 +119,5 @@ class StealthPro:
             "user_agent": self.get_random_user_agent(),
             "proxy": self.proxy_list[0] if self.proxy_list else None,
             "cloudscraper": self.use_cloudscraper,
-            "status": "ready"
+            "status": "ready",
         }

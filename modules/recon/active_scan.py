@@ -1,14 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
+import requests
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
 from core.network import resolve_domain
 
+
 class ActiveSubdomainScanner:
-    def __init__(self, domain, wordlist_path="wordlists/subdomains.txt", threads=30, verbose=False):
+    def __init__(
+        self,
+        domain,
+        wordlist_path="wordlists/subdomains.txt",
+        threads=30,
+        verbose=False,
+    ):
         self.domain = domain
         self.wordlist_path = wordlist_path
         self.threads = threads
@@ -18,17 +28,40 @@ class ActiveSubdomainScanner:
 
     def load_wordlist(self):
         import os
+
         if not os.path.exists(self.wordlist_path):
             log_warning(f"Wordlist {self.wordlist_path} not found. Using default list.")
-            return ["www", "mail", "ftp", "webmail", "smtp", "pop", "ns1", "cpanel", "admin", "blog", "dev", "vpn", "mysql", "api", "cdn", "git", "store", "help", "server"]
+            return [
+                "www",
+                "mail",
+                "ftp",
+                "webmail",
+                "smtp",
+                "pop",
+                "ns1",
+                "cpanel",
+                "admin",
+                "blog",
+                "dev",
+                "vpn",
+                "mysql",
+                "api",
+                "cdn",
+                "git",
+                "store",
+                "help",
+                "server",
+            ]
         with open(self.wordlist_path, "r", encoding="utf-8") as f:
-            return [line.strip() for line in f if line.strip() and not line.startswith("#")]
+            return [
+                line.strip() for line in f if line.strip() and not line.startswith("#")
+            ]
 
     def check_subdomain(self, sub):
         full_domain = f"{sub}.{self.domain}"
         url_http = f"http://{full_domain}"
         url_https = f"https://{full_domain}"
-        
+
         # Check DNS first
         ip = resolve_domain(full_domain)
         if not ip:
@@ -46,7 +79,7 @@ class ActiveSubdomainScanner:
                     "ip": ip,
                     "url": url,
                     "status": status,
-                    "alive": True
+                    "alive": True,
                 }
                 with self.lock:
                     self.active_subdomains.append(result)
@@ -67,19 +100,23 @@ class ActiveSubdomainScanner:
         log_info(f"Starting Active Subdomain Scan on: {self.domain}")
         wordlist = self.load_wordlist()
         log_info(f"Loaded {len(wordlist)} words.")
-        
+
         with ThreadPoolExecutor(max_workers=self.threads) as executor:
-            futures = {executor.submit(self.check_subdomain, sub): sub for sub in wordlist}
+            futures = {
+                executor.submit(self.check_subdomain, sub): sub for sub in wordlist
+            }
             for future in as_completed(futures):
                 try:
                     future.result()
                 except Exception as e:
                     log_error(f"Error: {e}")
 
-        log_success(f"Active scan completed. Found {len(self.active_subdomains)} active subdomains.")
+        log_success(
+            f"Active scan completed. Found {len(self.active_subdomains)} active subdomains."
+        )
         return {
             "target": self.domain,
             "scan_type": "active_subdomain",
             "total_active": len(self.active_subdomains),
-            "subdomains": self.active_subdomains
+            "subdomains": self.active_subdomains,
         }

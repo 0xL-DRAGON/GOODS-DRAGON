@@ -5,28 +5,30 @@ GOODS-DRAGON - Automatic Dependency Checker & Installer
 Ensures tool works independently without manual setup
 """
 
-import sys
-import subprocess
 import importlib
-from core.logger import log_info, log_warning, log_success, log_error
+import subprocess
+import sys
+
+from core.logger import log_error, log_info, log_success, log_warning
 
 OPTIONAL_DEPENDENCIES = {
     "paramiko": {
         "package": "paramiko",
         "feature": "SSH/FTP/RDP Brute Force",
-        "required_by": ["modules.scan.bruteforce"]
+        "required_by": ["modules.scan.bruteforce"],
     },
     "selenium": {
         "package": "selenium",
         "feature": "Browser Emulator",
-        "required_by": ["modules.core.browser_emulator"]
+        "required_by": ["modules.core.browser_emulator"],
     },
     "cloudscraper": {
         "package": "cloudscraper",
         "feature": "Advanced Stealth Pro",
-        "required_by": ["modules.core.stealth_pro"]
-    }
+        "required_by": ["modules.core.stealth_pro"],
+    },
 }
+
 
 def check_and_install(package_name, feature_name):
     """
@@ -39,16 +41,16 @@ def check_and_install(package_name, feature_name):
     except ImportError:
         log_warning(f"'{package_name}' is required for: {feature_name}")
         log_info(f"This feature needs an additional package to work.")
-        
+
         response = input(f"[?] Install '{package_name}' now? (y/n): ").strip().lower()
-        
-        if response == 'y':
+
+        if response == "y":
             log_info(f"Installing {package_name}...")
             try:
                 subprocess.check_call(
                     [sys.executable, "-m", "pip", "install", package_name],
                     stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL
+                    stderr=subprocess.DEVNULL,
                 )
                 log_success(f"{package_name} installed successfully!")
                 return True
@@ -61,6 +63,7 @@ def check_and_install(package_name, feature_name):
             log_info(f"Install manually later: pip install {package_name}")
             return False
 
+
 def check_module_dependencies(module_name):
     """
     Check and auto-install dependencies for a specific module.
@@ -72,17 +75,18 @@ def check_module_dependencies(module_name):
                 return False
     return True
 
+
 def print_dependency_status():
     """
     Show status of all optional dependencies.
     """
     log_info("=== Optional Dependencies Status ===")
-    
+
     for pkg_name, info in OPTIONAL_DEPENDENCIES.items():
         try:
             importlib.import_module(pkg_name)
             log_success(f"✅ {pkg_name:15} - {info['feature']}")
         except ImportError:
             log_warning(f"❌ {pkg_name:15} - {info['feature']} (not installed)")
-    
+
     log_info("Install missing ones with: pip install <package>")

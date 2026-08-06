@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import asyncio
-import aiohttp
 import random
+
+import aiohttp
+
 from modules.core.user_agents import get_random_user_agent
+
 
 class AsyncHTTPClient:
     def __init__(self, timeout=15, retries=3, proxy_list=None, verbose=False):
@@ -19,9 +22,7 @@ class AsyncHTTPClient:
             connector = aiohttp.TCPConnector(limit=100, ttl_dns_cache=300)
             timeout = aiohttp.ClientTimeout(total=self.timeout)
             self.session = aiohttp.ClientSession(
-                connector=connector,
-                timeout=timeout,
-                headers=self._get_headers()
+                connector=connector, timeout=timeout, headers=self._get_headers()
             )
         return self.session
 
@@ -33,7 +34,7 @@ class AsyncHTTPClient:
             "Accept-Encoding": "gzip, deflate, br",
             "DNT": "1",
             "Connection": "keep-alive",
-            "Upgrade-Insecure-Requests": "1"
+            "Upgrade-Insecure-Requests": "1",
         }
 
     async def get(self, url, params=None, **kwargs):

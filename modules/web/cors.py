@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re
 import random
+import re
 import urllib.parse
-from typing import List, Dict, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
 from modules.core.http_client import HTTPClient
 from modules.core.payload_manager import PayloadManager
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
 
 class CORSChecker:
     """
@@ -18,7 +21,7 @@ class CORSChecker:
     """
 
     def __init__(self, target: str, verbose: bool = False):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.client = HTTPClient(timeout=30, retries=5, verbose=verbose)
         self.payload_manager = PayloadManager(verbose=verbose)
@@ -27,78 +30,350 @@ class CORSChecker:
 
         # ---------- TRUSTED ORIGINS (FOR MANIPULATION) ----------
         self.trusted_origins = [
-            "example.com", "test.com", "demo.com", "dev.com", "staging.com",
-            "prod.com", "admin.com", "api.com", "app.com", "web.com",
-            "mobile.com", "cdn.com", "static.com", "assets.com", "media.com",
-            "images.com", "videos.com", "docs.com", "files.com", "uploads.com",
-            "download.com", "backup.com", "mirror.com", "proxy.com", "gateway.com",
-            "auth.com", "login.com", "signup.com", "register.com", "profile.com",
-            "dashboard.com", "portal.com", "support.com", "help.com", "contact.com",
-            "about.com", "blog.com", "news.com", "forum.com", "community.com",
-            "shop.com", "store.com", "cart.com", "checkout.com", "payment.com",
-            "order.com", "track.com", "ship.com", "deliver.com", "review.com",
-            "rating.com", "comment.com", "share.com", "like.com", "follow.com",
-            "message.com", "chat.com", "call.com", "video.com", "audio.com",
-            "file.com", "folder.com", "drive.com", "cloud.com", "sync.com",
-            "backup.com", "restore.com", "export.com", "import.com", "print.com",
-            "pdf.com", "doc.com", "sheet.com", "slide.com", "form.com",
-            "survey.com", "poll.com", "quiz.com", "game.com", "play.com",
-            "watch.com", "listen.com", "read.com", "write.com", "draw.com",
-            "paint.com", "code.com", "develop.com", "build.com", "test.com",
-            "deploy.com", "monitor.com", "log.com", "metric.com", "alert.com",
-            "report.com", "analytics.com", "insight.com", "intel.com", "secure.com",
-            "safe.com", "privacy.com", "policy.com", "terms.com", "legal.com",
-            "copyright.com", "trademark.com", "patent.com", "license.com",
-            "opensource.com", "community.com", "education.com", "research.com",
-            "science.com", "tech.com", "health.com", "fitness.com", "sport.com",
-            "travel.com", "food.com", "drink.com", "music.com", "art.com",
-            "photo.com", "video.com", "movie.com", "tv.com", "radio.com",
-            "podcast.com", "stream.com", "live.com", "event.com", "ticket.com",
-            "booking.com", "reserve.com", "schedule.com", "calendar.com", "date.com",
-            "time.com", "clock.com", "alarm.com", "timer.com", "stopwatch.com",
-            "counter.com", "score.com", "leaderboard.com", "rank.com", "level.com",
-            "badge.com", "achievement.com", "reward.com", "point.com", "coin.com",
-            "token.com", "credit.com", "debit.com", "wallet.com", "balance.com",
-            "transaction.com", "transfer.com", "withdraw.com", "deposit.com",
-            "payment.com", "invoice.com", "receipt.com", "bill.com", "tax.com",
-            "fee.com", "price.com", "cost.com", "value.com", "worth.com",
-            "estimate.com", "quote.com", "offer.com", "discount.com", "coupon.com",
-            "voucher.com", "gift.com", "card.com", "membership.com", "subscription.com",
-            "plan.com", "package.com", "bundle.com", "deal.com", "sale.com",
-            "clearance.com", "outlet.com", "warehouse.com", "inventory.com", "stock.com",
-            "supply.com", "chain.com", "logistics.com", "shipping.com", "delivery.com",
-            "courier.com", "post.com", "mail.com", "email.com", "inbox.com",
-            "outbox.com", "draft.com", "sent.com", "spam.com", "trash.com",
-            "archive.com", "folder.com", "label.com", "tag.com", "category.com",
-            "group.com", "team.com", "staff.com", "employee.com", "manager.com",
-            "director.com", "ceo.com", "founder.com", "partner.com", "client.com",
-            "customer.com", "vendor.com", "supplier.com", "distributor.com", "retailer.com",
-            "wholesaler.com", "manufacturer.com", "producer.com", "creator.com", "designer.com",
-            "developer.com", "engineer.com", "analyst.com", "consultant.com", "advisor.com",
-            "expert.com", "specialist.com", "technician.com", "operator.com", "agent.com",
-            "representative.com", "ambassador.com", "advocate.com", "champion.com", "leader.com",
-            "mentor.com", "coach.com", "trainer.com", "instructor.com", "teacher.com",
-            "professor.com", "doctor.com", "nurse.com", "therapist.com", "counselor.com",
-            "socialworker.com", "psychologist.com", "psychiatrist.com", "dentist.com", "veterinarian.com",
-            "pharmacist.com", "physician.com", "surgeon.com", "radiologist.com", "pathologist.com",
-            "anesthesiologist.com", "neurologist.com", "cardiologist.com", "oncologist.com", "pediatrician.com",
-            "obstetrician.com", "gynecologist.com", "dermatologist.com", "ophthalmologist.com", "otolaryngologist.com",
-            "urologist.com", "nephrologist.com", "endocrinologist.com", "rheumatologist.com", "allergist.com",
-            "immunologist.com", "infectiousdisease.com", "pulmonologist.com", "gastroenterologist.com", "hepatologist.com",
-            "hematologist.com", "orthopedist.com", "neurosurgeon.com", "plasticsurgeon.com", "thoracicsurgeon.com",
-            "vascularsurgeon.com", "cardiacsurgeon.com", "transplantsurgeon.com", "pediatricsurgeon.com", "orthopedicsurgeon.com",
-            "urologicsurgeon.com", "gynecologicsurgeon.com", "obstetricsurgeon.com", "dentalsurgeon.com", "oralsurgeon.com",
-            "maxillofacialsurgeon.com", "oculoplasticsurgeon.com", "refractivesurgeon.com", "lasiksurgeon.com", "cataractsurgeon.com",
-            "retinasurgeon.com", "glaucomasurgeon.com", "corneasurgeon.com", "keratoconussurgeon.com", "pterygiumsurgery.com",
-            "strabismussurgery.com", "vitrectomysurgery.com", "trabeculectomysurgery.com", "cataractsurgery.com", "lasiksurgery.com",
-            "refractivesurgery.com", "oculoplasticsurgery.com", "orbitaldecompressionsurgery.com", "blepharoplastysurgery.com",
-            "ptosissurgery.com", "entropionsurgery.com", "ectropionsurgery.com", "dacryocystorhinostomysurgery.com",
-            "orbitalfracturesurgery.com", "enucleationsurgery.com", "eviscerationsurgery.com", "keratoprosthesissurgery.com",
-            "corneatransplantsurgery.com", "conjunctivoplasty.com", "pterygiumexcision.com", "limbalstemcelltransplant.com",
-            "amnioticmembranetransplant.com", "cornealcrosslinking.com", "intracornealringsegment.com",
-            "photorefractivekeratectomy.com", "laserassistedinsitukeratomileusis.com", "smallincisionlenticuleextraction.com",
-            "refractivelensexchange.com", "intraocularlensimplant.com", "phacoemulsification.com",
-            "extracapsularcataractextraction.com", "intracapsularcataractextraction.com"
+            "example.com",
+            "test.com",
+            "demo.com",
+            "dev.com",
+            "staging.com",
+            "prod.com",
+            "admin.com",
+            "api.com",
+            "app.com",
+            "web.com",
+            "mobile.com",
+            "cdn.com",
+            "static.com",
+            "assets.com",
+            "media.com",
+            "images.com",
+            "videos.com",
+            "docs.com",
+            "files.com",
+            "uploads.com",
+            "download.com",
+            "backup.com",
+            "mirror.com",
+            "proxy.com",
+            "gateway.com",
+            "auth.com",
+            "login.com",
+            "signup.com",
+            "register.com",
+            "profile.com",
+            "dashboard.com",
+            "portal.com",
+            "support.com",
+            "help.com",
+            "contact.com",
+            "about.com",
+            "blog.com",
+            "news.com",
+            "forum.com",
+            "community.com",
+            "shop.com",
+            "store.com",
+            "cart.com",
+            "checkout.com",
+            "payment.com",
+            "order.com",
+            "track.com",
+            "ship.com",
+            "deliver.com",
+            "review.com",
+            "rating.com",
+            "comment.com",
+            "share.com",
+            "like.com",
+            "follow.com",
+            "message.com",
+            "chat.com",
+            "call.com",
+            "video.com",
+            "audio.com",
+            "file.com",
+            "folder.com",
+            "drive.com",
+            "cloud.com",
+            "sync.com",
+            "backup.com",
+            "restore.com",
+            "export.com",
+            "import.com",
+            "print.com",
+            "pdf.com",
+            "doc.com",
+            "sheet.com",
+            "slide.com",
+            "form.com",
+            "survey.com",
+            "poll.com",
+            "quiz.com",
+            "game.com",
+            "play.com",
+            "watch.com",
+            "listen.com",
+            "read.com",
+            "write.com",
+            "draw.com",
+            "paint.com",
+            "code.com",
+            "develop.com",
+            "build.com",
+            "test.com",
+            "deploy.com",
+            "monitor.com",
+            "log.com",
+            "metric.com",
+            "alert.com",
+            "report.com",
+            "analytics.com",
+            "insight.com",
+            "intel.com",
+            "secure.com",
+            "safe.com",
+            "privacy.com",
+            "policy.com",
+            "terms.com",
+            "legal.com",
+            "copyright.com",
+            "trademark.com",
+            "patent.com",
+            "license.com",
+            "opensource.com",
+            "community.com",
+            "education.com",
+            "research.com",
+            "science.com",
+            "tech.com",
+            "health.com",
+            "fitness.com",
+            "sport.com",
+            "travel.com",
+            "food.com",
+            "drink.com",
+            "music.com",
+            "art.com",
+            "photo.com",
+            "video.com",
+            "movie.com",
+            "tv.com",
+            "radio.com",
+            "podcast.com",
+            "stream.com",
+            "live.com",
+            "event.com",
+            "ticket.com",
+            "booking.com",
+            "reserve.com",
+            "schedule.com",
+            "calendar.com",
+            "date.com",
+            "time.com",
+            "clock.com",
+            "alarm.com",
+            "timer.com",
+            "stopwatch.com",
+            "counter.com",
+            "score.com",
+            "leaderboard.com",
+            "rank.com",
+            "level.com",
+            "badge.com",
+            "achievement.com",
+            "reward.com",
+            "point.com",
+            "coin.com",
+            "token.com",
+            "credit.com",
+            "debit.com",
+            "wallet.com",
+            "balance.com",
+            "transaction.com",
+            "transfer.com",
+            "withdraw.com",
+            "deposit.com",
+            "payment.com",
+            "invoice.com",
+            "receipt.com",
+            "bill.com",
+            "tax.com",
+            "fee.com",
+            "price.com",
+            "cost.com",
+            "value.com",
+            "worth.com",
+            "estimate.com",
+            "quote.com",
+            "offer.com",
+            "discount.com",
+            "coupon.com",
+            "voucher.com",
+            "gift.com",
+            "card.com",
+            "membership.com",
+            "subscription.com",
+            "plan.com",
+            "package.com",
+            "bundle.com",
+            "deal.com",
+            "sale.com",
+            "clearance.com",
+            "outlet.com",
+            "warehouse.com",
+            "inventory.com",
+            "stock.com",
+            "supply.com",
+            "chain.com",
+            "logistics.com",
+            "shipping.com",
+            "delivery.com",
+            "courier.com",
+            "post.com",
+            "mail.com",
+            "email.com",
+            "inbox.com",
+            "outbox.com",
+            "draft.com",
+            "sent.com",
+            "spam.com",
+            "trash.com",
+            "archive.com",
+            "folder.com",
+            "label.com",
+            "tag.com",
+            "category.com",
+            "group.com",
+            "team.com",
+            "staff.com",
+            "employee.com",
+            "manager.com",
+            "director.com",
+            "ceo.com",
+            "founder.com",
+            "partner.com",
+            "client.com",
+            "customer.com",
+            "vendor.com",
+            "supplier.com",
+            "distributor.com",
+            "retailer.com",
+            "wholesaler.com",
+            "manufacturer.com",
+            "producer.com",
+            "creator.com",
+            "designer.com",
+            "developer.com",
+            "engineer.com",
+            "analyst.com",
+            "consultant.com",
+            "advisor.com",
+            "expert.com",
+            "specialist.com",
+            "technician.com",
+            "operator.com",
+            "agent.com",
+            "representative.com",
+            "ambassador.com",
+            "advocate.com",
+            "champion.com",
+            "leader.com",
+            "mentor.com",
+            "coach.com",
+            "trainer.com",
+            "instructor.com",
+            "teacher.com",
+            "professor.com",
+            "doctor.com",
+            "nurse.com",
+            "therapist.com",
+            "counselor.com",
+            "socialworker.com",
+            "psychologist.com",
+            "psychiatrist.com",
+            "dentist.com",
+            "veterinarian.com",
+            "pharmacist.com",
+            "physician.com",
+            "surgeon.com",
+            "radiologist.com",
+            "pathologist.com",
+            "anesthesiologist.com",
+            "neurologist.com",
+            "cardiologist.com",
+            "oncologist.com",
+            "pediatrician.com",
+            "obstetrician.com",
+            "gynecologist.com",
+            "dermatologist.com",
+            "ophthalmologist.com",
+            "otolaryngologist.com",
+            "urologist.com",
+            "nephrologist.com",
+            "endocrinologist.com",
+            "rheumatologist.com",
+            "allergist.com",
+            "immunologist.com",
+            "infectiousdisease.com",
+            "pulmonologist.com",
+            "gastroenterologist.com",
+            "hepatologist.com",
+            "hematologist.com",
+            "orthopedist.com",
+            "neurosurgeon.com",
+            "plasticsurgeon.com",
+            "thoracicsurgeon.com",
+            "vascularsurgeon.com",
+            "cardiacsurgeon.com",
+            "transplantsurgeon.com",
+            "pediatricsurgeon.com",
+            "orthopedicsurgeon.com",
+            "urologicsurgeon.com",
+            "gynecologicsurgeon.com",
+            "obstetricsurgeon.com",
+            "dentalsurgeon.com",
+            "oralsurgeon.com",
+            "maxillofacialsurgeon.com",
+            "oculoplasticsurgeon.com",
+            "refractivesurgeon.com",
+            "lasiksurgeon.com",
+            "cataractsurgeon.com",
+            "retinasurgeon.com",
+            "glaucomasurgeon.com",
+            "corneasurgeon.com",
+            "keratoconussurgeon.com",
+            "pterygiumsurgery.com",
+            "strabismussurgery.com",
+            "vitrectomysurgery.com",
+            "trabeculectomysurgery.com",
+            "cataractsurgery.com",
+            "lasiksurgery.com",
+            "refractivesurgery.com",
+            "oculoplasticsurgery.com",
+            "orbitaldecompressionsurgery.com",
+            "blepharoplastysurgery.com",
+            "ptosissurgery.com",
+            "entropionsurgery.com",
+            "ectropionsurgery.com",
+            "dacryocystorhinostomysurgery.com",
+            "orbitalfracturesurgery.com",
+            "enucleationsurgery.com",
+            "eviscerationsurgery.com",
+            "keratoprosthesissurgery.com",
+            "corneatransplantsurgery.com",
+            "conjunctivoplasty.com",
+            "pterygiumexcision.com",
+            "limbalstemcelltransplant.com",
+            "amnioticmembranetransplant.com",
+            "cornealcrosslinking.com",
+            "intracornealringsegment.com",
+            "photorefractivekeratectomy.com",
+            "laserassistedinsitukeratomileusis.com",
+            "smallincisionlenticuleextraction.com",
+            "refractivelensexchange.com",
+            "intraocularlensimplant.com",
+            "phacoemulsification.com",
+            "extracapsularcataractextraction.com",
+            "intracapsularcataractextraction.com",
         ]
 
         # ---------- INTERNAL PAYLOADS (150+ FOR SPEED & INDEPENDENCE) ----------
@@ -135,7 +410,7 @@ class CORSChecker:
             "fetch",
             "XMLHttpRequest",
             "preflight",
-            "OPTIONS"
+            "OPTIONS",
         ]
 
     def _load_internal_payloads(self) -> List[str]:
@@ -383,8 +658,8 @@ class CORSChecker:
         for tag in tags:
             results = self.payload_manager.get_payloads("cors", tags=[tag], limit=50)
             for p in results:
-                if 'value' in p:
-                    payloads.append(p['value'])
+                if "value" in p:
+                    payloads.append(p["value"])
         return list(set(payloads))
 
     def test_cors(self, origin: str) -> bool:
@@ -397,12 +672,12 @@ class CORSChecker:
         self.payloads_tested += 1
 
         # Check for CORS headers
-        acao = resp.headers.get('Access-Control-Allow-Origin', '')
-        acac = resp.headers.get('Access-Control-Allow-Credentials', '')
-        acam = resp.headers.get('Access-Control-Allow-Methods', '')
-        acah = resp.headers.get('Access-Control-Allow-Headers', '')
-        aceh = resp.headers.get('Access-Control-Expose-Headers', '')
-        acma = resp.headers.get('Access-Control-Max-Age', '')
+        acao = resp.headers.get("Access-Control-Allow-Origin", "")
+        acac = resp.headers.get("Access-Control-Allow-Credentials", "")
+        acam = resp.headers.get("Access-Control-Allow-Methods", "")
+        acah = resp.headers.get("Access-Control-Allow-Headers", "")
+        aceh = resp.headers.get("Access-Control-Expose-Headers", "")
+        acma = resp.headers.get("Access-Control-Max-Age", "")
 
         if acao:
             result = {
@@ -414,12 +689,14 @@ class CORSChecker:
                 "access_control_expose_headers": aceh,
                 "access_control_max_age": acma,
                 "status": resp.status_code,
-                "vulnerable": self._is_vulnerable(acao, acac, origin)
+                "vulnerable": self._is_vulnerable(acao, acac, origin),
             }
             self.results.append(result)
 
             if result["vulnerable"]:
-                log_success(f"CORS vulnerability found! Origin: {origin} -> ACAO: {acao}")
+                log_success(
+                    f"CORS vulnerability found! Origin: {origin} -> ACAO: {acao}"
+                )
             elif self.verbose:
                 log_debug(f"CORS header found for origin: {origin} -> ACAO: {acao}")
 
@@ -453,15 +730,15 @@ class CORSChecker:
         headers = {
             "Origin": "https://evil.com",
             "Access-Control-Request-Method": "GET",
-            "Access-Control-Request-Headers": "X-Requested-With"
+            "Access-Control-Request-Headers": "X-Requested-With",
         }
         resp = self.client.request("OPTIONS", self.target, headers=headers)
         if not resp:
             return False
 
-        acam = resp.headers.get('Access-Control-Allow-Methods', '')
-        acah = resp.headers.get('Access-Control-Allow-Headers', '')
-        acao = resp.headers.get('Access-Control-Allow-Origin', '')
+        acam = resp.headers.get("Access-Control-Allow-Methods", "")
+        acah = resp.headers.get("Access-Control-Allow-Headers", "")
+        acao = resp.headers.get("Access-Control-Allow-Origin", "")
 
         if acam or acah or acao:
             result = {
@@ -471,7 +748,7 @@ class CORSChecker:
                 "access_control_allow_headers": acah,
                 "access_control_allow_origin": acao,
                 "status": resp.status_code,
-                "vulnerable": acao == "https://evil.com" or acao == "*"
+                "vulnerable": acao == "https://evil.com" or acao == "*",
             }
             self.results.append(result)
             if result["vulnerable"]:
@@ -482,7 +759,9 @@ class CORSChecker:
 
     def run(self) -> Dict:
         log_info(f"Starting CORS check on: {self.target}")
-        log_info(f"Testing {len(self.all_payloads)} origins (Internal: {len(self.internal_payloads)} + Manager: {len(self.manager_payloads)})")
+        log_info(
+            f"Testing {len(self.all_payloads)} origins (Internal: {len(self.internal_payloads)} + Manager: {len(self.manager_payloads)})"
+        )
 
         # Test standard origins
         shuffled = self.all_payloads.copy()
@@ -503,5 +782,5 @@ class CORSChecker:
             "payloads_internal": len(self.internal_payloads),
             "payloads_manager": len(self.manager_payloads),
             "vulnerable_count": len(vulnerable),
-            "results": self.results
+            "results": self.results,
         }

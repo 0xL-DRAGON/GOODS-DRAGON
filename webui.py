@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template_string, request, jsonify
-import subprocess
 import json
 import os
+import subprocess
+
+from flask import Flask, jsonify, render_template_string, request
 
 app = Flask(__name__)
 
@@ -113,18 +114,20 @@ document.getElementById('runForm').addEventListener('submit', function(e) {
 </html>
 """
 
-@app.route('/')
+
+@app.route("/")
 def index():
     return render_template_string(HTML_TEMPLATE)
 
-@app.route('/run', methods=['POST'])
+
+@app.route("/run", methods=["POST"])
 def run():
     data = request.json
-    target = data.get('target')
-    module = data.get('module')
-    threads = data.get('threads', 30)
-    verbose = data.get('verbose', True)
-    report = data.get('report', True)
+    target = data.get("target")
+    module = data.get("module")
+    threads = data.get("threads", 30)
+    verbose = data.get("verbose", True)
+    report = data.get("report", True)
 
     cmd = f"python main.py {module} -t {target} -th {threads}"
     if verbose:
@@ -133,7 +136,9 @@ def run():
         cmd += " --report"
 
     try:
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=300)
+        result = subprocess.run(
+            cmd, shell=True, capture_output=True, text=True, timeout=300
+        )
         output = result.stdout + result.stderr
     except subprocess.TimeoutExpired:
         output = "Scan timed out after 300 seconds."
@@ -142,5 +147,6 @@ def run():
 
     return jsonify({"output": output})
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=False)

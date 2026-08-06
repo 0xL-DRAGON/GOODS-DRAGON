@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import ipaddress
 import socket
 import subprocess
 import threading
-import ipaddress
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from core.logger import log_info, log_success, log_debug, log_error
+
+from core.logger import log_debug, log_error, log_info, log_success
+
 
 class HostDiscovery:
     def __init__(self, subnet, threads=50, verbose=False):
@@ -20,8 +22,10 @@ class HostDiscovery:
         """Check if host is alive using ICMP ping"""
         try:
             # Using system ping command (works on Linux/Termux)
-            cmd = ['ping', '-c', '1', '-W', '1', str(ip)]
-            result = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=2)
+            cmd = ["ping", "-c", "1", "-W", "1", str(ip)]
+            result = subprocess.run(
+                cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=2
+            )
             if result.returncode == 0:
                 with self.lock:
                     self.alive_hosts.append(str(ip))
@@ -70,12 +74,14 @@ class HostDiscovery:
                     except Exception as e:
                         log_error(f"Error scanning {ip}: {e}")
 
-            log_success(f"Host discovery completed. Found {len(self.alive_hosts)} alive hosts.")
+            log_success(
+                f"Host discovery completed. Found {len(self.alive_hosts)} alive hosts."
+            )
             return {
                 "target": self.subnet,
                 "scan_type": "host_discovery",
                 "total_alive": len(self.alive_hosts),
-                "hosts": self.alive_hosts
+                "hosts": self.alive_hosts,
             }
         except Exception as e:
             log_error(f"Invalid subnet: {e}")

@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
+import requests
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
+
 
 class InfoDisclosureScanner:
     def __init__(self, target, verbose=False, threads=20):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.threads = threads
         self.sensitive_files = [
@@ -43,7 +47,7 @@ class InfoDisclosureScanner:
             "docker-compose.yml",
             "Jenkinsfile",
             ".travis.yml",
-            ".gitlab-ci.yml"
+            ".gitlab-ci.yml",
         ]
         self.found = []
 
@@ -53,20 +57,26 @@ class InfoDisclosureScanner:
             resp = requests.get(url, timeout=5, allow_redirects=False)
             if resp.status_code == 200:
                 # بررسی محتوای پاسخ برای تشخیص فایل واقعی (نه صفحه 404)
-                content_type = resp.headers.get('Content-Type', '').lower()
+                content_type = resp.headers.get("Content-Type", "").lower()
                 content_length = len(resp.text)
-                
+
                 # فیلتر کردن پاسخ‌های بی‌معنی (مثل صفحه 404 سفارشی)
-                if content_length > 50 and '404' not in resp.text[:100] and 'not found' not in resp.text[:100].lower():
+                if (
+                    content_length > 50
+                    and "404" not in resp.text[:100]
+                    and "not found" not in resp.text[:100].lower()
+                ):
                     result = {
                         "url": url,
                         "status": resp.status_code,
                         "content_type": content_type,
                         "content_length": content_length,
-                        "preview": resp.text[:200].replace('\n', ' ').strip()
+                        "preview": resp.text[:200].replace("\n", " ").strip(),
                     }
                     self.found.append(result)
-                    log_success(f"✅ Found sensitive file: {url} ({content_type}, {content_length} bytes)")
+                    log_success(
+                        f"✅ Found sensitive file: {url} ({content_type}, {content_length} bytes)"
+                    )
                     return result
             elif self.verbose:
                 log_debug(f"❌ {url} -> {resp.status_code}")
@@ -78,19 +88,24 @@ class InfoDisclosureScanner:
     def run(self):
         log_info(f"Starting Info Disclosure scan on: {self.target}")
         log_info(f"Checking {len(self.sensitive_files)} sensitive paths...")
-        
+
         with ThreadPoolExecutor(max_workers=self.threads) as executor:
-            futures = {executor.submit(self.check_file, path): path for path in self.sensitive_files}
+            futures = {
+                executor.submit(self.check_file, path): path
+                for path in self.sensitive_files
+            }
             for future in as_completed(futures):
                 try:
                     future.result()
                 except Exception as e:
                     log_error(f"Error: {e}")
-        
-        log_success(f"Info Disclosure scan completed. Found {len(self.found)} sensitive files.")
+
+        log_success(
+            f"Info Disclosure scan completed. Found {len(self.found)} sensitive files."
+        )
         return {
             "target": self.target,
             "scan_type": "info_disclosure",
             "total_found": len(self.found),
-            "files": self.found
+            "files": self.found,
         }

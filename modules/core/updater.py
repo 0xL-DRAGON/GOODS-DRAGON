@@ -1,19 +1,26 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
-import sys
 import json
-import requests
+import os
 import subprocess
-from core.logger import log_info, log_success, log_warning, log_error
+import sys
+
+import requests
+
+from core.logger import log_error, log_info, log_success, log_warning
+
 
 class SelfUpdater:
-    def __init__(self, repo_owner="0xL-DRAGON", repo_name="GOODS-DRAGON", current_version="1.1.0"):
+    def __init__(
+        self, repo_owner="0xL-DRAGON", repo_name="GOODS-DRAGON", current_version="1.1.0"
+    ):
         self.repo_owner = repo_owner
         self.repo_name = repo_name
         self.current_version = current_version
-        self.api_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest"
+        self.api_url = (
+            f"https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest"
+        )
 
     def check_for_updates(self):
         """بررسی وجود نسخه جدید در گیت‌هاب"""

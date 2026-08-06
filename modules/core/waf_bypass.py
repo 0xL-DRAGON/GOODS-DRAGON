@@ -3,13 +3,24 @@
 
 import random
 import time
-import requests
+
 import cloudscraper
+import requests
 from fake_useragent import UserAgent
-from core.logger import log_info, log_success, log_warning, log_error
+
+from core.logger import log_error, log_info, log_success, log_warning
+
 
 class WAFBypass:
-    def __init__(self, target, verbose=False, proxy_list=None, rotate_ua=True, use_cloudscraper=True, random_delay=True):
+    def __init__(
+        self,
+        target,
+        verbose=False,
+        proxy_list=None,
+        rotate_ua=True,
+        use_cloudscraper=True,
+        random_delay=True,
+    ):
         self.target = target
         self.verbose = verbose
         self.proxy_list = proxy_list or []
@@ -24,11 +35,7 @@ class WAFBypass:
     def _create_session(self):
         if self.use_cloudscraper:
             return cloudscraper.create_scraper(
-                browser={
-                    'browser': 'chrome',
-                    'platform': 'windows',
-                    'mobile': False
-                }
+                browser={"browser": "chrome", "platform": "windows", "mobile": False}
             )
         return requests.Session()
 
@@ -44,7 +51,7 @@ class WAFBypass:
             "Sec-Fetch-Mode": "navigate",
             "Sec-Fetch-Site": "none",
             "Sec-Fetch-User": "?1",
-            "Cache-Control": "max-age=0"
+            "Cache-Control": "max-age=0",
         }
         if self.rotate_ua:
             headers["User-Agent"] = self.ua.random
@@ -65,7 +72,7 @@ class WAFBypass:
 
     def add_random_params(self, url):
         """اضافه کردن پارامترهای تصادفی به URL برای دور زدن WAF"""
-        if '?' in url:
+        if "?" in url:
             url += f"&_={random.randint(100000, 999999)}"
         else:
             url += f"?_={random.randint(100000, 999999)}"
@@ -75,32 +82,40 @@ class WAFBypass:
         headers = self.get_random_headers()
         proxy = self.get_random_proxy()
         url = self.add_random_params(url)
-        
+
         for attempt in range(retries):
             try:
                 if method.upper() == "GET":
-                    resp = self.session.get(url, headers=headers, proxies=proxy, timeout=15)
+                    resp = self.session.get(
+                        url, headers=headers, proxies=proxy, timeout=15
+                    )
                 else:
-                    resp = self.session.post(url, data=data, headers=headers, proxies=proxy, timeout=15)
-                
+                    resp = self.session.post(
+                        url, data=data, headers=headers, proxies=proxy, timeout=15
+                    )
+
                 if resp.status_code != 403 and resp.status_code != 429:
                     return resp
-                
+
                 if self.verbose:
-                    log_warning(f"Blocked ({resp.status_code}), retrying... (attempt {attempt+1}/{retries})")
-                
+                    log_warning(
+                        f"Blocked ({resp.status_code}), retrying... (attempt {attempt+1}/{retries})"
+                    )
+
                 # افزایش تاخیر در هر بار تلاش
                 self.random_delay_func(2.0, 8.0)
-                
+
                 # تغییر User-Agent در هر تلاش
                 if self.rotate_ua:
                     headers["User-Agent"] = self.ua.random
-                    
+
             except Exception as e:
                 if self.verbose:
-                    log_warning(f"Request failed: {e}, retrying... (attempt {attempt+1}/{retries})")
+                    log_warning(
+                        f"Request failed: {e}, retrying... (attempt {attempt+1}/{retries})"
+                    )
                 self.random_delay_func(2.0, 8.0)
-        
+
         return None
 
     def check_visibility(self):
@@ -124,7 +139,7 @@ class WAFBypass:
             log_info("No proxy configured. Using direct connection.")
         log_info(f"Cloudscraper: {'Enabled' if self.use_cloudscraper else 'Disabled'}")
         log_info(f"Random Delay: {'Enabled' if self.random_delay else 'Disabled'}")
-        
+
         self.check_visibility()
         log_success("WAF Bypass mode ready.")
         return {
@@ -132,5 +147,5 @@ class WAFBypass:
             "user_agent": self.ua.random if self.rotate_ua else None,
             "proxy": self.proxy_list[0] if self.proxy_list else None,
             "cloudscraper": self.use_cloudscraper,
-            "status": "ready"
+            "status": "ready",
         }

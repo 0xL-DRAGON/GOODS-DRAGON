@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re
 import random
+import re
 import urllib.parse
-from typing import List, Dict, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
 from modules.core.http_client import HTTPClient
 from modules.core.payload_manager import PayloadManager
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
 
 class OpenRedirectScanner:
     """
@@ -17,7 +20,7 @@ class OpenRedirectScanner:
     """
 
     def __init__(self, target: str, verbose: bool = False):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.client = HTTPClient(timeout=30, retries=5, verbose=verbose)
         self.payload_manager = PayloadManager(verbose=verbose)
@@ -36,25 +39,75 @@ class OpenRedirectScanner:
 
         # ---------- SUCCESS INDICATORS ----------
         self.success_indicators = [
-            "evil.com", "attacker.com", "malicious.com", "phishing.com",
-            "redirect", "302", "301", "307", "308",
-            "location:", "Location:", "Refresh:", "refresh:",
-            "window.location", "window.open", "document.location",
-            "top.location", "parent.location", "self.location",
-            "location.href", "location.replace", "location.assign",
-            "document.URL", "document.URI", "document.referrer",
-            "http://", "https://", "//", "javascript:"
+            "evil.com",
+            "attacker.com",
+            "malicious.com",
+            "phishing.com",
+            "redirect",
+            "302",
+            "301",
+            "307",
+            "308",
+            "location:",
+            "Location:",
+            "Refresh:",
+            "refresh:",
+            "window.location",
+            "window.open",
+            "document.location",
+            "top.location",
+            "parent.location",
+            "self.location",
+            "location.href",
+            "location.replace",
+            "location.assign",
+            "document.URL",
+            "document.URI",
+            "document.referrer",
+            "http://",
+            "https://",
+            "//",
+            "javascript:",
         ]
 
         # Parameter patterns to test
         self.redirect_params = [
-            "url", "redirect", "return", "next", "dest", "destination",
-            "goto", "go", "forward", "to", "link", "href", "src",
-            "path", "uri", "resource", "page", "view", "action",
-            "callback", "continue", "redir", "out", "return_to",
-            "redirect_uri", "redirect_url", "redirect_to", "redirect_uri",
-            "redir_url", "redir_to", "redir_uri", "return_url",
-            "return_uri", "next_url", "next_uri", "goto_url"
+            "url",
+            "redirect",
+            "return",
+            "next",
+            "dest",
+            "destination",
+            "goto",
+            "go",
+            "forward",
+            "to",
+            "link",
+            "href",
+            "src",
+            "path",
+            "uri",
+            "resource",
+            "page",
+            "view",
+            "action",
+            "callback",
+            "continue",
+            "redir",
+            "out",
+            "return_to",
+            "redirect_uri",
+            "redirect_url",
+            "redirect_to",
+            "redirect_uri",
+            "redir_url",
+            "redir_to",
+            "redir_uri",
+            "return_url",
+            "return_uri",
+            "next_url",
+            "next_uri",
+            "goto_url",
         ]
 
     def _load_internal_payloads(self) -> List[str]:
@@ -288,12 +341,24 @@ class OpenRedirectScanner:
     def _load_manager_payloads(self) -> List[str]:
         """Load payloads from Payload Manager"""
         payloads = []
-        tags = ["basic", "external", "protocol_relative", "data_uri", "javascript", "encoded", "scheme", "ip", "obfuscated"]
+        tags = [
+            "basic",
+            "external",
+            "protocol_relative",
+            "data_uri",
+            "javascript",
+            "encoded",
+            "scheme",
+            "ip",
+            "obfuscated",
+        ]
         for tag in tags:
-            results = self.payload_manager.get_payloads("open_redirect", tags=[tag], limit=50)
+            results = self.payload_manager.get_payloads(
+                "open_redirect", tags=[tag], limit=50
+            )
             for p in results:
-                if 'value' in p:
-                    payloads.append(p['value'])
+                if "value" in p:
+                    payloads.append(p["value"])
         return list(set(payloads))
 
     def extract_params(self) -> Dict:
@@ -325,7 +390,7 @@ class OpenRedirectScanner:
 
         # Check for redirect status codes
         if resp.status_code in [301, 302, 303, 307, 308]:
-            location = resp.headers.get('location', '')
+            location = resp.headers.get("location", "")
             if location:
                 # Check if the redirect points to an external URL
                 for indicator in self.success_indicators:
@@ -336,7 +401,7 @@ class OpenRedirectScanner:
                             "url": test_url,
                             "status": resp.status_code,
                             "location": location,
-                            "indicator": indicator
+                            "indicator": indicator,
                         }
                         self.results.append(result)
                         log_success(f"Open Redirect found: {test_url} -> {location}")
@@ -346,14 +411,17 @@ class OpenRedirectScanner:
         if resp.status_code == 200:
             for indicator in self.success_indicators:
                 if indicator in resp.text.lower():
-                    if "window.location" in resp.text or "document.location" in resp.text:
+                    if (
+                        "window.location" in resp.text
+                        or "document.location" in resp.text
+                    ):
                         result = {
                             "param": param,
                             "payload": payload,
                             "url": test_url,
                             "status": resp.status_code,
                             "indicator": indicator,
-                            "preview": resp.text[:200].replace('\n', ' ').strip()
+                            "preview": resp.text[:200].replace("\n", " ").strip(),
                         }
                         self.results.append(result)
                         log_success(f"JavaScript Redirect found: {test_url}")
@@ -365,18 +433,22 @@ class OpenRedirectScanner:
         log_info(f"Starting Open Redirect scan on: {self.target}")
         params = self.extract_params()
         if not params:
-            log_warning("No GET parameters found. Open Redirect scan works best with parameters like ?url=http://example.com")
+            log_warning(
+                "No GET parameters found. Open Redirect scan works best with parameters like ?url=http://example.com"
+            )
             return {
                 "target": self.target,
                 "scan_type": "open_redirect",
                 "total_params": 0,
                 "vulnerable_count": 0,
                 "vulnerabilities": [],
-                "payloads_tested": 0
+                "payloads_tested": 0,
             }
 
         log_info(f"Found {len(params)} parameter(s): {', '.join(params.keys())}")
-        log_info(f"Testing {len(self.all_payloads)} payloads (Internal: {len(self.internal_payloads)} + Manager: {len(self.manager_payloads)})")
+        log_info(
+            f"Testing {len(self.all_payloads)} payloads (Internal: {len(self.internal_payloads)} + Manager: {len(self.manager_payloads)})"
+        )
 
         target_params = []
         for p in params.keys():
@@ -396,14 +468,17 @@ class OpenRedirectScanner:
                     if self.verbose:
                         log_info("Found vulnerability, continuing to test for more...")
 
-        log_success(f"Open Redirect scan completed. Found {len(self.results)} vulnerabilities.")
+        log_success(
+            f"Open Redirect scan completed. Found {len(self.results)} vulnerabilities."
+        )
         return {
             "target": self.target,
             "scan_type": "open_redirect",
             "total_params": len(params),
-            "total_payloads_tested": min(len(self.all_payloads), 100) * len(target_params),
+            "total_payloads_tested": min(len(self.all_payloads), 100)
+            * len(target_params),
             "payloads_internal": len(self.internal_payloads),
             "payloads_manager": len(self.manager_payloads),
             "vulnerable_count": len(self.results),
-            "vulnerabilities": self.results
+            "vulnerabilities": self.results,
         }

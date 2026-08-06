@@ -2,13 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import re
+
 import requests
+
 from core.logger import log_info, log_success, log_warning
 from modules.core.http_client import HTTPClient
 
+
 class MobileSecurity:
     def __init__(self, target, verbose=False):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.client = HTTPClient(timeout=15, retries=3, verbose=verbose)
         self.results = []
@@ -19,8 +22,10 @@ class MobileSecurity:
         try:
             resp = self.client.get(apk_url, timeout=30)
             if resp and resp.status_code == 200:
-                if 'dangerous' in resp.text.lower():
-                    self.results.append({"type": "dangerous_permission", "url": apk_url})
+                if "dangerous" in resp.text.lower():
+                    self.results.append(
+                        {"type": "dangerous_permission", "url": apk_url}
+                    )
                     log_warning("Potential dangerous permissions found")
         except:
             pass
@@ -40,13 +45,15 @@ class MobileSecurity:
             "/mobile/api",
             "/.well-known/apple-app-site-association",
             "/apple-app-site-association",
-            "/.well-known/assetlinks.json"
+            "/.well-known/assetlinks.json",
         ]
         for endpoint in endpoints:
             url = f"{self.target}{endpoint}"
             resp = self.client.get(url)
             if resp and resp.status_code != 404:
-                self.results.append({"type": "mobile_api", "url": url, "status": resp.status_code})
+                self.results.append(
+                    {"type": "mobile_api", "url": url, "status": resp.status_code}
+                )
                 log_success(f"Found mobile API: {url}")
 
     def check_android_manifest(self):
@@ -55,7 +62,9 @@ class MobileSecurity:
         url = f"{self.target}/AndroidManifest.xml"
         resp = self.client.get(url)
         if resp and resp.status_code == 200:
-            self.results.append({"type": "android_manifest", "url": url, "status": resp.status_code})
+            self.results.append(
+                {"type": "android_manifest", "url": url, "status": resp.status_code}
+            )
             log_success("AndroidManifest.xml found")
 
     def run(self):
@@ -67,5 +76,5 @@ class MobileSecurity:
             "target": self.target,
             "scan_type": "mobile_security",
             "total_found": len(self.results),
-            "results": self.results
+            "results": self.results,
         }

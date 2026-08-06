@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import re
+
 import requests
+
 from core.logger import log_info, log_success
 from modules.core.http_client import HTTPClient
+
 
 class EmailHarvester:
     def __init__(self, domain, verbose=False):
@@ -20,7 +23,7 @@ class EmailHarvester:
             f"site:{self.domain} @gmail.com",
             f"site:{self.domain} @yahoo.com",
             f"site:{self.domain} @outlook.com",
-            f"site:{self.domain} @protonmail.com"
+            f"site:{self.domain} @protonmail.com",
         ]
         for dork in dorks:
             log_info(f"Dork: {dork}")
@@ -34,10 +37,10 @@ class EmailHarvester:
             resp = self.client.get(url)
             if resp and resp.status_code == 200:
                 data = resp.json()
-                email_pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
-                for item in data.get('items', []):
-                    if 'email' in str(item).lower():
-                        self.emails.append(item.get('html_url', ''))
+                email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                for item in data.get("items", []):
+                    if "email" in str(item).lower():
+                        self.emails.append(item.get("html_url", ""))
                 log_success(f"Found {len(self.emails)} emails from GitHub")
         except Exception as e:
             log_info(f"GitHub search error: {e}")
@@ -49,7 +52,7 @@ class EmailHarvester:
             url = f"https://api.hackertarget.com/hostsearch/?q={self.domain}"
             resp = self.client.get(url)
             if resp and resp.status_code == 200:
-                email_pattern = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+                email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                 found = re.findall(email_pattern, resp.text)
                 self.emails.extend(found)
                 log_success(f"Found {len(found)} emails from web search")
@@ -66,5 +69,5 @@ class EmailHarvester:
             "target": self.domain,
             "scan_type": "email_harvester",
             "total_found": len(self.emails),
-            "emails": list(set(self.emails))
+            "emails": list(set(self.emails)),
         }

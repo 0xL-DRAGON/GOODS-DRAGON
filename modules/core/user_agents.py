@@ -43,10 +43,13 @@ USER_AGENTS = [
     "Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)",
 ]
 
+
 def get_random_user_agent():
     """بازگرداندن یک User-Agent تصادفی از لیست داخلی"""
     import random
+
     return random.choice(USER_AGENTS)
+
 
 def get_user_agents():
     """بازگرداندن کل لیست User-Agentها"""

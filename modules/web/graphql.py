@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import re
 import json
 import random
+import re
 import urllib.parse
-from typing import List, Dict, Optional, Any
+from typing import Any, Dict, List, Optional
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
 from modules.core.http_client import HTTPClient
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
 
 class GraphQLScanner:
     """
@@ -18,7 +21,7 @@ class GraphQLScanner:
     """
 
     def __init__(self, target: str, verbose: bool = False):
-        self.target = target.rstrip('/')
+        self.target = target.rstrip("/")
         self.verbose = verbose
         self.client = HTTPClient(timeout=30, retries=5, verbose=verbose)
         self.results = []
@@ -45,7 +48,7 @@ class GraphQLScanner:
             "/gql",
             "/api/gql",
             "/query",
-            "/api/query"
+            "/api/query",
         ]
 
         # Introspection query to extract schema
@@ -144,7 +147,7 @@ class GraphQLScanner:
             # Command Injection
             {"type": "rce", "value": ";id"},
             {"type": "rce", "value": "|id"},
-            {"type": "rce", "value": "&id"}
+            {"type": "rce", "value": "&id"},
         ]
 
         # Error patterns for GraphQL
@@ -178,7 +181,7 @@ class GraphQLScanner:
             "Access denied",
             "Table '.*' is marked as crashed",
             "Lock wait timeout exceeded",
-            "Deadlock found when trying to get lock"
+            "Deadlock found when trying to get lock",
         ]
 
     def discover_endpoints(self) -> List[str]:
@@ -194,10 +197,10 @@ class GraphQLScanner:
                 resp = self.client.get(test_url)
                 if resp and resp.status_code == 200:
                     data = resp.json()
-                    if 'data' in data and '__schema' in data['data']:
+                    if "data" in data and "__schema" in data["data"]:
                         endpoints.append(url)
                         log_success(f"Found GraphQL endpoint: {url}")
-                    elif 'errors' in data:
+                    elif "errors" in data:
                         endpoints.append(url)
                         log_success(f"Found GraphQL endpoint (with errors): {url}")
             except:
@@ -211,12 +214,14 @@ class GraphQLScanner:
                     resp = self.client.post(url, json=payload, headers=headers)
                     if resp and resp.status_code == 200:
                         data = resp.json()
-                        if 'data' in data and '__schema' in data['data']:
+                        if "data" in data and "__schema" in data["data"]:
                             endpoints.append(url)
                             log_success(f"Found GraphQL endpoint (POST): {url}")
-                        elif 'errors' in data:
+                        elif "errors" in data:
                             endpoints.append(url)
-                            log_success(f"Found GraphQL endpoint (POST with errors): {url}")
+                            log_success(
+                                f"Found GraphQL endpoint (POST with errors): {url}"
+                            )
                 except:
                     pass
 
@@ -232,15 +237,19 @@ class GraphQLScanner:
             resp = self.client.post(endpoint, json=payload, headers=headers)
             if resp and resp.status_code == 200:
                 data = resp.json()
-                if 'data' in data and '__schema' in data['data']:
-                    self.schema = data['data']['__schema']
-                    log_success(f"Schema extracted successfully. Found {len(self.schema.get('types', []))} types.")
+                if "data" in data and "__schema" in data["data"]:
+                    self.schema = data["data"]["__schema"]
+                    log_success(
+                        f"Schema extracted successfully. Found {len(self.schema.get('types', []))} types."
+                    )
                     return self.schema
-                elif 'errors' in data:
+                elif "errors" in data:
                     log_warning(f"Introspection returned errors: {data['errors']}")
                     return {}
             else:
-                log_warning(f"Introspection failed with status: {resp.status_code if resp else 'N/A'}")
+                log_warning(
+                    f"Introspection failed with status: {resp.status_code if resp else 'N/A'}"
+                )
         except Exception as e:
             log_error(f"Introspection error: {e}")
         return {}
@@ -254,31 +263,42 @@ class GraphQLScanner:
             resp = self.client.post(endpoint, json=payload)
             if resp and resp.status_code == 200:
                 data = resp.json()
-                if 'errors' in data:
-                    for error in data['errors']:
-                        if 'depth' in error.get('message', '').lower() or 'limit' in error.get('message', '').lower():
-                            log_success(f"Query depth limit detected! Depth attack blocked.")
-                            self.vulnerabilities.append({
-                                "type": "query_depth_limit",
-                                "endpoint": endpoint,
-                                "field": f"{type_name}.{field_name}",
-                                "detail": "Depth limit is enforced"
-                            })
+                if "errors" in data:
+                    for error in data["errors"]:
+                        if (
+                            "depth" in error.get("message", "").lower()
+                            or "limit" in error.get("message", "").lower()
+                        ):
+                            log_success(
+                                f"Query depth limit detected! Depth attack blocked."
+                            )
+                            self.vulnerabilities.append(
+                                {
+                                    "type": "query_depth_limit",
+                                    "endpoint": endpoint,
+                                    "field": f"{type_name}.{field_name}",
+                                    "detail": "Depth limit is enforced",
+                                }
+                            )
                             return True
                 else:
                     log_warning(f"No depth limit detected for {type_name}.{field_name}")
-                    self.vulnerabilities.append({
-                        "type": "query_depth_vulnerable",
-                        "endpoint": endpoint,
-                        "field": f"{type_name}.{field_name}",
-                        "detail": "Deeply nested query allowed"
-                    })
+                    self.vulnerabilities.append(
+                        {
+                            "type": "query_depth_vulnerable",
+                            "endpoint": endpoint,
+                            "field": f"{type_name}.{field_name}",
+                            "detail": "Deeply nested query allowed",
+                        }
+                    )
                     return False
         except Exception as e:
             log_debug(f"Depth test error: {e}")
         return False
 
-    def test_field_duplication(self, endpoint: str, type_name: str, field_name: str) -> bool:
+    def test_field_duplication(
+        self, endpoint: str, type_name: str, field_name: str
+    ) -> bool:
         """Test for field duplication attack (aliases)"""
         log_info(f"Testing field duplication on {type_name}.{field_name}...")
         # Create 50 aliases of the same field
@@ -291,25 +311,34 @@ class GraphQLScanner:
             resp = self.client.post(endpoint, json=payload)
             if resp and resp.status_code == 200:
                 data = resp.json()
-                if 'errors' in data:
-                    for error in data['errors']:
-                        if 'alias' in error.get('message', '').lower() or 'duplicate' in error.get('message', '').lower():
-                            log_success(f"Alias limit detected! Duplication attack blocked.")
-                            self.vulnerabilities.append({
-                                "type": "alias_limit",
-                                "endpoint": endpoint,
-                                "field": f"{type_name}.{field_name}",
-                                "detail": "Alias limit is enforced"
-                            })
+                if "errors" in data:
+                    for error in data["errors"]:
+                        if (
+                            "alias" in error.get("message", "").lower()
+                            or "duplicate" in error.get("message", "").lower()
+                        ):
+                            log_success(
+                                f"Alias limit detected! Duplication attack blocked."
+                            )
+                            self.vulnerabilities.append(
+                                {
+                                    "type": "alias_limit",
+                                    "endpoint": endpoint,
+                                    "field": f"{type_name}.{field_name}",
+                                    "detail": "Alias limit is enforced",
+                                }
+                            )
                             return True
                 else:
                     log_warning(f"No alias limit detected for {type_name}.{field_name}")
-                    self.vulnerabilities.append({
-                        "type": "alias_vulnerable",
-                        "endpoint": endpoint,
-                        "field": f"{type_name}.{field_name}",
-                        "detail": "Multiple aliases allowed"
-                    })
+                    self.vulnerabilities.append(
+                        {
+                            "type": "alias_vulnerable",
+                            "endpoint": endpoint,
+                            "field": f"{type_name}.{field_name}",
+                            "detail": "Multiple aliases allowed",
+                        }
+                    )
                     return False
         except Exception as e:
             log_debug(f"Alias test error: {e}")
@@ -324,7 +353,7 @@ class GraphQLScanner:
             {"query": "query { __typename }"},
             {"query": "query { __typename }"},
             {"query": "query { __typename }"},
-            {"query": "query { __typename }"}
+            {"query": "query { __typename }"},
         ]
         try:
             resp = self.client.post(endpoint, json=batch_payload)
@@ -332,40 +361,50 @@ class GraphQLScanner:
                 data = resp.json()
                 if isinstance(data, list) and len(data) == 5:
                     log_warning(f"Batch requests allowed! Attack possible.")
-                    self.vulnerabilities.append({
-                        "type": "batch_requests",
-                        "endpoint": endpoint,
-                        "detail": "Multiple queries allowed in one request"
-                    })
+                    self.vulnerabilities.append(
+                        {
+                            "type": "batch_requests",
+                            "endpoint": endpoint,
+                            "detail": "Multiple queries allowed in one request",
+                        }
+                    )
                     return True
         except:
             pass
         return False
 
-    def test_argument_injection(self, endpoint: str, type_name: str, field_name: str, arg_name: str) -> bool:
+    def test_argument_injection(
+        self, endpoint: str, type_name: str, field_name: str, arg_name: str
+    ) -> bool:
         """Test for argument injection vulnerabilities"""
-        log_info(f"Testing argument injection on {type_name}.{field_name}({arg_name})...")
+        log_info(
+            f"Testing argument injection on {type_name}.{field_name}({arg_name})..."
+        )
         for payload_info in self.injection_payloads:
             payload_value = payload_info["value"]
-            query = f"query {{ {type_name} {{ {field_name}({arg_name}: \"{payload_value}\") {{ {field_name} }} }} }}"
+            query = f'query {{ {type_name} {{ {field_name}({arg_name}: "{payload_value}") {{ {field_name} }} }} }}'
             payload = {"query": query}
             try:
                 resp = self.client.post(endpoint, json=payload)
                 if resp and resp.status_code == 200:
                     data = resp.json()
-                    if 'errors' in data:
-                        error_msg = str(data['errors']).lower()
+                    if "errors" in data:
+                        error_msg = str(data["errors"]).lower()
                         # Check for SQL errors
                         for pattern in self.error_patterns:
                             if re.search(pattern, error_msg, re.IGNORECASE):
-                                self.vulnerabilities.append({
-                                    "type": f"injection_{payload_info['type']}",
-                                    "endpoint": endpoint,
-                                    "field": f"{type_name}.{field_name}({arg_name})",
-                                    "payload": payload_value,
-                                    "error_pattern": pattern
-                                })
-                                log_success(f"Injection ({payload_info['type']}) found on {field_name}({arg_name}) with payload: {payload_value}")
+                                self.vulnerabilities.append(
+                                    {
+                                        "type": f"injection_{payload_info['type']}",
+                                        "endpoint": endpoint,
+                                        "field": f"{type_name}.{field_name}({arg_name})",
+                                        "payload": payload_value,
+                                        "error_pattern": pattern,
+                                    }
+                                )
+                                log_success(
+                                    f"Injection ({payload_info['type']}) found on {field_name}({arg_name}) with payload: {payload_value}"
+                                )
                                 return True
             except Exception as e:
                 log_debug(f"Injection test error: {e}")
@@ -383,7 +422,7 @@ class GraphQLScanner:
                 "scan_type": "graphql",
                 "endpoints": [],
                 "schema": {},
-                "vulnerabilities": []
+                "vulnerabilities": [],
             }
 
         # Step 2: For each endpoint, extract schema and test
@@ -395,44 +434,57 @@ class GraphQLScanner:
                 continue
 
             # Get query type fields
-            query_type_name = schema.get('queryType', {}).get('name')
+            query_type_name = schema.get("queryType", {}).get("name")
             if query_type_name:
-                query_type = next((t for t in schema.get('types', []) if t.get('name') == query_type_name), None)
-                if query_type and query_type.get('fields'):
-                    fields = query_type.get('fields', [])
+                query_type = next(
+                    (
+                        t
+                        for t in schema.get("types", [])
+                        if t.get("name") == query_type_name
+                    ),
+                    None,
+                )
+                if query_type and query_type.get("fields"):
+                    fields = query_type.get("fields", [])
                     log_info(f"Found {len(fields)} query fields")
 
                     # Test each field for vulnerabilities
                     for field in fields:
-                        field_name = field.get('name')
+                        field_name = field.get("name")
                         if not field_name:
                             continue
-                        field_type = field.get('type', {})
-                        type_name = field_type.get('name', 'Unknown')
+                        field_type = field.get("type", {})
+                        type_name = field_type.get("name", "Unknown")
 
                         # Test depth
                         self.test_query_depth(endpoint, query_type_name, field_name)
 
                         # Test alias duplication
-                        self.test_field_duplication(endpoint, query_type_name, field_name)
+                        self.test_field_duplication(
+                            endpoint, query_type_name, field_name
+                        )
 
                         # Test argument injection
-                        args = field.get('args', [])
+                        args = field.get("args", [])
                         for arg in args:
-                            arg_name = arg.get('name')
+                            arg_name = arg.get("name")
                             if arg_name:
-                                self.test_argument_injection(endpoint, query_type_name, field_name, arg_name)
+                                self.test_argument_injection(
+                                    endpoint, query_type_name, field_name, arg_name
+                                )
 
             # Test batch requests
             self.test_batch_requests(endpoint)
 
         # Summary
-        log_success(f"GraphQL scan completed. Found {len(self.vulnerabilities)} vulnerabilities.")
+        log_success(
+            f"GraphQL scan completed. Found {len(self.vulnerabilities)} vulnerabilities."
+        )
         return {
             "target": self.target,
             "scan_type": "graphql",
             "endpoints": self.endpoints,
             "schema": self.schema,
             "vulnerability_count": len(self.vulnerabilities),
-            "vulnerabilities": self.vulnerabilities
+            "vulnerabilities": self.vulnerabilities,
         }

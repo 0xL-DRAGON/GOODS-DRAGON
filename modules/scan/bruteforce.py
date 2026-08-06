@@ -1,14 +1,27 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import socket
-import paramiko
 import ftplib
+import socket
 import threading
-from core.logger import log_info, log_success, log_warning, log_error, log_debug
+
+import paramiko
+
+from core.logger import (log_debug, log_error, log_info, log_success,
+                         log_warning)
+
 
 class BruteForce:
-    def __init__(self, target, port, service, userlist="root,admin", passlist="password,123456,admin", threads=10, verbose=False):
+    def __init__(
+        self,
+        target,
+        port,
+        service,
+        userlist="root,admin",
+        passlist="password,123456,admin",
+        threads=10,
+        verbose=False,
+    ):
         self.target = target
         self.port = port
         self.service = service.lower()
@@ -25,14 +38,18 @@ class BruteForce:
         try:
             client = paramiko.SSHClient()
             client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            client.connect(self.target, port=self.port, username=username, password=password, timeout=5)
+            client.connect(
+                self.target,
+                port=self.port,
+                username=username,
+                password=password,
+                timeout=5,
+            )
             client.close()
             with self.lock:
-                self.found.append({
-                    "service": "SSH",
-                    "username": username,
-                    "password": password
-                })
+                self.found.append(
+                    {"service": "SSH", "username": username, "password": password}
+                )
                 log_success(f"🔥 SSH credentials found: {username}:{password}")
             return True
         except:
@@ -44,11 +61,9 @@ class BruteForce:
             ftp.login(username, password)
             ftp.quit()
             with self.lock:
-                self.found.append({
-                    "service": "FTP",
-                    "username": username,
-                    "password": password
-                })
+                self.found.append(
+                    {"service": "FTP", "username": username, "password": password}
+                )
                 log_success(f"🔥 FTP credentials found: {username}:{password}")
             return True
         except:
@@ -62,7 +77,9 @@ class BruteForce:
             sock.settimeout(3)
             sock.connect((self.target, self.port))
             sock.close()
-            log_debug(f"RDP port {self.port} is open, but brute force not fully implemented")
+            log_debug(
+                f"RDP port {self.port} is open, but brute force not fully implemented"
+            )
             return False
         except:
             return False
@@ -89,5 +106,5 @@ class BruteForce:
             "scan_type": "bruteforce",
             "service": self.service,
             "total_found": len(self.found),
-            "credentials": self.found
+            "credentials": self.found,
         }

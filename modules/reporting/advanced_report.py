@@ -4,7 +4,9 @@
 import json
 import os
 from datetime import datetime
+
 from core.logger import log_info, log_success
+
 
 class AdvancedReport:
     def __init__(self, json_file, output_dir="reports/"):
@@ -15,7 +17,7 @@ class AdvancedReport:
 
     def load_data(self):
         try:
-            with open(self.json_file, 'r', encoding='utf-8') as f:
+            with open(self.json_file, "r", encoding="utf-8") as f:
                 self.data = json.load(f)
             return True
         except Exception as e:
@@ -79,7 +81,7 @@ class AdvancedReport:
         </html>
         """
         path = f"{self.output_dir}{self.base_name}_advanced.html"
-        with open(path, 'w', encoding='utf-8') as f:
+        with open(path, "w", encoding="utf-8") as f:
             f.write(html)
         log_success(f"Advanced HTML report: {path}")
 
@@ -88,10 +90,10 @@ class AdvancedReport:
         risk_score = 0
         for key, value in self.data.items():
             if isinstance(value, dict):
-                if 'vulnerable_count' in value:
-                    risk_score += value['vulnerable_count']
-                if 'total_found' in value:
-                    risk_score += value['total_found'] // 2
+                if "vulnerable_count" in value:
+                    risk_score += value["vulnerable_count"]
+                if "total_found" in value:
+                    risk_score += value["total_found"] // 2
         if risk_score > 20:
             return "🔴 Critical"
         elif risk_score > 10:
@@ -106,10 +108,13 @@ class AdvancedReport:
         try:
             from reportlab.lib.pagesizes import letter
             from reportlab.pdfgen import canvas
+
             path = f"{self.output_dir}{self.base_name}_advanced.pdf"
             c = canvas.Canvas(path, pagesize=letter)
             c.drawString(100, 750, "🐉 GOODS-DRAGON - Advanced Security Report")
-            c.drawString(100, 730, f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            c.drawString(
+                100, 730, f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            )
             c.drawString(100, 710, f"Author: zeus (z4) | @iM_z4")
             c.drawString(100, 680, f"Target: {self.data.get('target', 'N/A')}")
             c.drawString(100, 660, f"Risk Level: {self._calculate_risk()}")
