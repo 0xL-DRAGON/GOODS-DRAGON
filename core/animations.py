@@ -8,6 +8,7 @@ import sys
 import time
 import threading
 import random
+from core.color_config import use_colors
 
 # Colors
 GREEN = '\033[92m'
@@ -18,6 +19,12 @@ WHITE = '\033[97m'
 BOLD = '\033[1m'
 RESET = '\033[0m'
 DIM = '\033[90m'
+
+
+def _c(color_code, text):
+    if use_colors():
+        return f"{color_code}{text}\033[0m"
+    return text
 
 class ProgressBar:
     """Animated progress bar for scan operations"""
@@ -38,11 +45,11 @@ class ProgressBar:
         bar = '█' * filled + '░' * (self.length - filled)
         
         if percent < 100:
-            color = CYAN
+            color = CYAN if use_colors() else ''
         else:
-            color = GREEN
+            color = GREEN if use_colors() else ''
         
-        sys.stdout.write(f'\r{self.prefix:20} [{color}{bar}{RESET}] {percent}%')
+        sys.stdout.write(f'\r{self.prefix:20} [{color}{bar}{_c(RESET, '') if not use_colors() else RESET}] {percent}%')
         sys.stdout.flush()
         
         if percent >= 100:
@@ -59,7 +66,10 @@ class ProgressBar:
         i = 0
         while self.running and self.current < self.total:
             i = (i + 1) % len(symbols)
-            sys.stdout.write(f'\r{CYAN}{symbols[i]}{RESET} {self.prefix}...')
+            if use_colors():
+                sys.stdout.write(f'\r{CYAN}{symbols[i]}{RESET} {self.prefix}...')
+            else:
+                sys.stdout.write(f'\r{symbols[i]} {self.prefix}...')
             sys.stdout.flush()
             time.sleep(0.1)
     
@@ -70,7 +80,10 @@ class ProgressBar:
         if success:
             self.update(self.total)
         else:
-            sys.stdout.write(f'\r{self.prefix:20} {RED}✕ Failed{RESET}\n')
+            if use_colors():
+                sys.stdout.write(f'\r{self.prefix:20} {RED}✕ Failed{RESET}\n')
+            else:
+                sys.stdout.write(f'\r{self.prefix:20} X Failed\n')
             sys.stdout.flush()
 
 class HackerUI:
@@ -80,28 +93,44 @@ class HackerUI:
     def scan_header(target, module_name):
         """Display scan start header"""
         print()
-        print(f"{GREEN}╔{'═'*60}╗{RESET}")
-        print(f"{GREEN}║{RESET} {BOLD}🐉 GOODS-DRAGON - {module_name}{RESET}")
-        print(f"{GREEN}╠{'═'*60}╣{RESET}")
-        print(f"{GREEN}║{RESET} {DIM}Target:{RESET} {CYAN}{target}{RESET}")
-        print(f"{GREEN}╚{'═'*60}╝{RESET}")
+        if use_colors():
+            print(f"{GREEN}╔{'═'*60}╗{RESET}")
+            print(f"{GREEN}║{RESET} {BOLD}🐉 GOODS-DRAGON - {module_name}{RESET}")
+            print(f"{GREEN}╠{'═'*60}╣{RESET}")
+            print(f"{GREEN}║{RESET} {DIM}Target:{RESET} {CYAN}{target}{RESET}")
+            print(f"{GREEN}╚{'═'*60}╝{RESET}")
+        else:
+            print(f"╔{'═'*60}╗")
+            print(f"║ GOODS-DRAGON - {module_name}")
+            print(f"╠{'═'*60}╣")
+            print(f"║ Target: {target}")
+            print(f"╚{'═'*60}╝")
         print()
     
     @staticmethod
     def scan_footer(results_file=None):
         """Display scan completion"""
         print()
-        print(f"{GREEN}╔{'═'*60}╗{RESET}")
-        print(f"{GREEN}║{RESET}  {BOLD}✅ Scan Complete!{RESET}")
-        if results_file:
-            print(f"{GREEN}║{RESET}  {DIM}📄 Results:{RESET} {CYAN}{results_file}{RESET}")
-        print(f"{GREEN}╚{'═'*60}╝{RESET}")
+        if use_colors():
+            print(f"{GREEN}╔{'═'*60}╗{RESET}")
+            print(f"{GREEN}║{RESET}  {BOLD}✅ Scan Complete!{RESET}")
+            if results_file:
+                print(f"{GREEN}║{RESET}  {DIM}📄 Results:{RESET} {CYAN}{results_file}{RESET}")
+            print(f"{GREEN}╚{'═'*60}╝{RESET}")
+        else:
+            print(f"╔{'═'*60}╗")
+            print(f"║  Scan Complete!")
+            if results_file:
+                print(f"║  Results: {results_file}")
+            print(f"╚{'═'*60}╝")
         print()
     
     @staticmethod
     def matrix_effect(duration=2):
         """Display Matrix-style rain effect"""
         import random
+        if not use_colors():
+            return
         chars = 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃ0123456789'
         width = 60
         end_time = time.time() + duration
@@ -116,9 +145,16 @@ class HackerUI:
     @staticmethod
     def countdown(message, seconds=3):
         """Display countdown before scan"""
-        for i in range(seconds, 0, -1):
-            sys.stdout.write(f'\r{YELLOW}⏳ {message} in {i}...{RESET}')
-            sys.stdout.flush()
-            time.sleep(1)
-        sys.stdout.write(f'\r{GREEN}🚀 {message}...{RESET}\n')
+        if use_colors():
+            for i in range(seconds, 0, -1):
+                sys.stdout.write(f'\r{YELLOW}⏳ {message} in {i}...{RESET}')
+                sys.stdout.flush()
+                time.sleep(1)
+            sys.stdout.write(f'\r{GREEN}🚀 {message}...{RESET}\n')
+        else:
+            for i in range(seconds, 0, -1):
+                sys.stdout.write(f'\r[*] {message} in {i}...')
+                sys.stdout.flush()
+                time.sleep(1)
+            sys.stdout.write(f'\r[+] {message}...\n')
 

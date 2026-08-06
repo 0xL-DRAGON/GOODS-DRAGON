@@ -172,6 +172,9 @@ def main():
         epilog="For more info, contact @iM_z4 on Telegram"
     )
     
+    parser.add_argument('--color', choices=['auto', 'always', 'never'], default='auto',
+                    help='Control color output (default: auto)')
+
     subparsers = parser.add_subparsers(dest="command", help="Available commands")
 
     # ----- Subcommand: recon -----
@@ -306,6 +309,10 @@ def main():
     
     
     args = parser.parse_args()
+
+    # Apply color setting
+    from core.color_config import set_color_mode
+    set_color_mode(args.color)
 
     if not args.command:
         parser.print_help()
