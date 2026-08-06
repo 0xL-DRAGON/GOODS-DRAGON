@@ -1,5 +1,11 @@
 # 🐉 GOODS-DRAGON
-
+<p align="center">
+  <img src="https://img.shields.io/github/stars/0xL-DRAGON/GOODS-DRAGON?style=for-the-badge&color=00ff00" alt="Stars">
+  <img src="https://img.shields.io/github/forks/0xL-DRAGON/GOODS-DRAGON?style=for-the-badge&color=00ff00" alt="Forks">
+  <img src="https://img.shields.io/github/license/0xL-DRAGON/GOODS-DRAGON?style=for-the-badge&color=blue" alt="License">
+  <img src="https://img.shields.io/badge/version-2.0.0-green?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/team-L--DRAGON-red?style=for-the-badge" alt="Team">
+</p>
 **Advanced Pentesting & Bug Bounty Framework**
 
 ---
