@@ -33,121 +33,6 @@ def show_banner():
     print(f"{'='*50}\n")
 
 # ------- Professional Graphical Menu -------
-def interactive_menu():
-    from rich.console import Console
-    from rich.table import Table
-    from rich.panel import Panel
-    console = Console()
-    
-    console.clear()
-    
-    banner = r"""
-    ╔═══════════════════════════════════════════════════════════════╗
-    ║                                                               ║
-    ║    ██████╗ ██████╗  █████╗  ██████╗  ██████╗ ███╗   ██╗    ║
-    ║    ██╔══██╗██╔══██╗██╔══██╗██╔═══██╗██╔═══██╗████╗  ██║    ║
-    ║    ██║  ██║██████╔╝███████║██║   ██║██║   ██║██╔██╗ ██║    ║
-    ║    ██║  ██║██╔══██╗██╔══██║██║   ██║██║   ██║██║╚██╗██║    ║
-    ║    ██████╔╝██║  ██║██║  ██║╚██████╔╝╚██████╔╝██║ ╚████║    ║
-    ║    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝    ║
-    ║                                                               ║
-    ║                   🐉 GOODS-DRAGON v2.0.0 🐉                    ║
-    ║                                                               ║
-    ╚═══════════════════════════════════════════════════════════════╝
-    """
-    console.print(Panel(banner, border_style="cyan", padding=(1, 2)))
-    
-    console.print(Panel.fit(
-        "[bold yellow]Author: zeus (z4)[/bold yellow]  |  [bold cyan]Telegram: @iM_z4[/bold cyan]",
-        border_style="blue"
-    ))
-    
-    table = Table(show_header=True, header_style="bold magenta", title="[bold green]⚡ MAIN MENU ⚡[/bold green]")
-    table.add_column("Option", style="bold cyan", no_wrap=True)
-    table.add_column("Module", style="bold white")
-    table.add_column("Description", style="dim")
-    
-    table.add_row("[bold green]1[/bold green]", "Reconnaissance", "Subdomain, Wayback, Active, Takeover, Cloud, OSINT, Email Harvest, AD Enum, Social Eng, Threat Intel, Dark Web, Payload Manager")
-    table.add_row("[bold green]2[/bold green]", "Web Vulnerabilities", "SQLi, XSS, CMS, CVE, Headers, JS, Tech, Git, WAF, IDOR, SSTI, SSRF, LFI, CORS, JWT, Open Redirect, GraphQL, Rate Limit, 2FA, Param Discovery, Blind XSS, Secret, Version, Broken Link, Fuzz, Business Logic, Race Condition, Chained Attack, Static Analysis, API Scanner, RCE, Directory Traversal, API Key Scan, JWT/OAuth, Mobile Security, SSRF, SSTI, Login Bypass, Dir Bruteforce")
-    table.add_row("[bold green]3[/bold green]", "Network Scan", "Port, Host Discovery, SSL, S3, Brute Force, Password Crack, Exploit Dev")
-    table.add_row("[bold green]4[/bold green]", "Smart Scan", "Auto-detect rate limit and suggest optimal settings")
-    table.add_row("[bold green]5[/bold green]", "Stealth Mode", "Proxy, random User-Agent, random delays")
-    table.add_row("[bold green]6[/bold green]", "Stealth Pro", "Advanced stealth with cloudscraper and proxy rotation")
-    table.add_row("[bold green]7[/bold green]", "WAF Bypass", "Advanced WAF bypass with random headers, proxies, and delays")
-    table.add_row("[bold green]8[/bold green]", "Browser Emulator", "Full browser emulation with Selenium and JS execution")
-    table.add_row("[bold green]9[/bold green]", "Cloud Scanner", "AWS S3, GCP, Azure Blob discovery")
-    table.add_row("[bold green]10[/bold green]", "Auto Proxy", "Automatic proxy rotation from public APIs")
-    table.add_row("[bold green]11[/bold green]", "AI Scanner", "AI-powered scanning with smart payload selection")
-    table.add_row("[bold green]12[/bold green]", "Dark Web", "Dark web monitoring for leaked data")
-    table.add_row("[bold green]13[/bold green]", "Exploit Dev", "Exploit development and PoC generation")
-    table.add_row("[bold green]14[/bold green]", "Payload Manager", "Centralized payload database management")
-    table.add_row("[bold green]15[/bold green]", "Reports", "Generate HTML, Markdown, HackerOne, PDF, CSV, JSON, Advanced")
-    table.add_row("[bold red]0[/bold red]", "Exit", "Quit GOODS-DRAGON")
-    
-    console.print(table)
-    console.print(Panel.fit("[bold cyan]Enter target and select an option[/bold cyan]", border_style="blue"))
-    
-    choice = input("[bold yellow]Select an option [0-16]: [/bold yellow]").strip()
-    
-    if choice == "0":
-        log_info("Exiting GOODS-DRAGON. Stay secure!")
-        sys.exit(0)
-    
-    target = input("[bold yellow]Enter target (domain/IP/Phone): [/bold yellow]").strip()
-    if not target:
-        log_error("Target cannot be empty.")
-        return
-    
-    threads = input("[bold yellow]Threads (default 30): [/bold yellow]").strip()
-    threads = int(threads) if threads.isdigit() else 30
-    verbose = input("[bold yellow]Verbose mode? (y/n): [/bold yellow]").strip().lower() == 'y'
-    report = input("[bold yellow]Generate HTML report? (y/n): [/bold yellow]").strip().lower() == 'y'
-    
-    cmd = "python main.py "
-    
-    if choice == "1":
-        cmd += f"recon -t {target} --active-scan --wayback --takeover --cloud-enum --osint --email-harvest --ad-enum --social-eng --threat-intel -th {threads}"
-    elif choice == "2":
-        cmd += f"web -t {target} --sqli --xss --cms-detect --cve-scan --headers-check --js-deps --tech-detect --git-scan --waf-detect --idor-scan --ssti-scan --ssrf-scan --lfi-scan --cors-check --jwt-scan --open-redirect --graphql-scan --rate-limit --2fa-bypass --param-discovery --blind-xss --secret-scan --version-scan --broken-link --fuzz --business-logic --race-condition --chained-attack --static-analysis --api-scanner --rce-scan --dir-traversal --api-key-scan --jwt-oauth --mobile-security --login-bypass --dir-bruteforce -th {threads}"
-    elif choice == "3":
-        cmd += f"scan -t {target} --ssl-check -b --password-crack -th {threads}"
-    elif choice == "4":
-        cmd += f"web -t {target} --smart-scan -th {threads}"
-    elif choice == "5":
-        cmd += f"web -t {target} --stealth -th {threads}"
-    elif choice == "6":
-        cmd += f"web -t {target} --stealth-pro -th {threads}"
-    elif choice == "7":
-        cmd += f"web -t {target} --waf-bypass -th {threads}"
-    elif choice == "8":
-        cmd += f"web -t {target} --browser-emulator --headless -th {threads}"
-    elif choice == "9":
-        cmd += f"recon -t {target} --cloud-scanner -th {threads}"
-    elif choice == "10":
-        cmd += f"web -t {target} --auto-proxy --proxy-interval 30 -th {threads}"
-    elif choice == "11":
-        cmd += f"web -t {target} --ai-scan -th {threads}"
-    elif choice == "12":
-        cmd += f"recon -t {target} --dark-web -th {threads}"
-    elif choice == "13":
-        cmd += f"scan -t {target} --exploit-dev -th {threads}"
-    elif choice == "14":
-        cmd += f"recon -t {target} --payload-manager -th {threads}"
-    elif choice == "15":
-        cmd += f"recon -t {target} --advanced-report -th {threads}"
-    elif choice == "16":
-        return
-    else:
-        log_error("Invalid choice.")
-        return
-    
-    if verbose:
-        cmd += " -v"
-    if report and choice not in ["5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]:
-        cmd += " --report"
-    
-    log_info(f"Executing: {cmd}")
-    os.system(cmd)
 
 # ------- Main Entry -------
 def main():
@@ -162,10 +47,6 @@ def main():
         updater = SelfUpdater()
         updater.run()
         sys.exit(0)
-
-    if len(sys.argv) == 1:
-        interactive_menu()
-        return
 
     parser = argparse.ArgumentParser(
         description="GOODS-DRAGON - Advanced Pentesting & Bug Bounty Tool (Created by zeus @iM_z4)",
