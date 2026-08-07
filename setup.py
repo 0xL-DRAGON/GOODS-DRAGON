@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="goods-dragon",
-    version="2.0.2",
+    version="2.0.3",
     packages=find_packages(),
     py_modules=["main"],
     install_requires=[
