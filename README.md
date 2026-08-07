@@ -6,6 +6,7 @@
   <img src="https://img.shields.io/badge/version-2.0.0-green?style=for-the-badge" alt="Version">
   <img src="https://img.shields.io/badge/team-L--DRAGON-red?style=for-the-badge" alt="Team">
   <img src="https://img.shields.io/badge/coverage-3%25-lightgrey?style=for-the-badge" alt="Coverage">
+  <img src="https://img.shields.io/badge/coverage-3%25-lightgrey?style=for-the-badge" alt="Coverage">
 </p>
 **Advanced Pentesting & Bug Bounty Framework**
 
