@@ -32,3 +32,4 @@ dist/
 logs/
 reports/
 goods_dragon.egg-info/
+.coverage
