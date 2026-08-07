@@ -58,7 +58,7 @@ Forked or modified versions may contain malicious code.
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/0xL-DRAGON/GOODS-DRAGON.git
+curl -sSL https://raw.githubusercontent.com/0xL-DRAGON/GOODS-DRAGON/main/install.sh | bash
 cd GOODS-DRAGON
 pip install -r requirements.txt
 dragon
