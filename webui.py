@@ -137,7 +137,7 @@ def run():
 
     try:
         result = subprocess.run(
-            cmd, shell=True, capture_output=True, text=True, timeout=300
+            cmd, capture_output=True, text=True, timeout=300
         )
         output = result.stdout + result.stderr
     except subprocess.TimeoutExpired:
