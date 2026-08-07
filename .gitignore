@@ -28,3 +28,7 @@ test_imports.py
 test_imports_fixed.py
 patch_main.py
 dragon-eye
+dist/
+logs/
+reports/
+goods_dragon.egg-info/
