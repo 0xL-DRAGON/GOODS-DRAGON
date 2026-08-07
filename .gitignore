@@ -23,3 +23,8 @@ Thumbs.db
 *.asc
 *.p
 dist/
+goods_dragon.egg-info/
+test_imports.py
+test_imports_fixed.py
+patch_main.py
+dragon-eye

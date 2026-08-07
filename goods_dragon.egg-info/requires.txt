@@ -1,5 +1,0 @@
-requests
-dnspython
-flask
-beautifulsoup4
-rich
