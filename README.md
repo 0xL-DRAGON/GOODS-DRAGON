@@ -61,3 +61,12 @@ cd GOODS-DRAGON
 pip install -r requirements.txt
 dragon
 
+
+---
+
+## 📧 Contact
+
+| | |
+|---|---|
+| **Team Support** | l.dragon.support@gmail.com |
+| **Personal Support** | support.zeus.z4@gmail.com |
