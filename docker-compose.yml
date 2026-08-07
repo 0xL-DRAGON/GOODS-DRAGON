@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  goods-dragon:
+    build: .
+    container_name: goods-dragon
+    stdin_open: true
+    tty: true
