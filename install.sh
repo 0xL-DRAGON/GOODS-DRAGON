@@ -26,3 +26,4 @@ echo ""
 echo "✅ GOODS-DRAGON installed successfully!"
 echo "   Run: dragon"
 echo "   Help: dragon -h"
+
