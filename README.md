@@ -33,7 +33,7 @@
 - **Official Repository:** [github.com/0xL-DRAGON/GOODS-DRAGON](https://github.com/0xL-DRAGON/GOODS-DRAGON)
 - **Owner:** 0xL-DRAGON (zeus/z4)
 - **Updates:** Only the owner can push official updates
-- **Verification:** Run `python main.py --security` to verify authenticity
+- **Verification:** Run `dragon --security` to verify authenticity
 
 ⚠️ **Warning:** Only download from the official repository.
 Forked or modified versions may contain malicious code.
@@ -59,5 +59,5 @@ Forked or modified versions may contain malicious code.
 git clone https://github.com/0xL-DRAGON/GOODS-DRAGON.git
 cd GOODS-DRAGON
 pip install -r requirements.txt
-python main.py
+dragon
 
