@@ -17,7 +17,7 @@ class ADEnum:
         self.results = {}
 
     def find_dc(self):
-        """پیدا کردن Domain Controller"""
+        """Find Domain Controller"""
         log_info(f"Finding Domain Controller for {self.domain}")
         try:
             answers = dns.resolver.resolve(f"_ldap._tcp.dc._msdcs.{self.domain}", "SRV")
@@ -30,7 +30,7 @@ class ADEnum:
         self.results["dc"] = None
 
     def find_users(self):
-        """جستجوی کاربران (شبیه‌سازی)"""
+        """Search users (Simulation)"""
         log_info(f"Searching users in {self.domain}")
         common_users = [
             "admin",
@@ -45,7 +45,7 @@ class ADEnum:
         log_success(f"Found {len(common_users)} potential users")
 
     def find_shares(self):
-        """جستجوی اشتراک‌ها (شبیه‌سازی)"""
+        """Search shares (Simulation)"""
         log_info(f"Searching shares in {self.domain}")
         shares = ["C$", "ADMIN$", "IPC$", "NETLOGON", "SYSVOL"]
         self.results["shares"] = shares

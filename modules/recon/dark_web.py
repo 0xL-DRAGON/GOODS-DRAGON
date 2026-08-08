@@ -17,10 +17,10 @@ class DarkWebMonitor:
         self.results = {}
 
     def check_leaked_data(self):
-        """بررسی داده‌های لو رفته از منابع عمومی"""
+        """Check leaked data از منابع عمومی"""
         log_info(f"Checking for leaked data related to: {self.target}")
 
-        # شبیه‌سازی جستجو در دارک‌وب
+        # Simulation جستجو در دارک‌وب
         sources = [
             "https://api.hackertarget.com/hostsearch/?q={self.target}",
             "https://api.hackertarget.com/whois/?q={self.target}",
@@ -50,7 +50,7 @@ class DarkWebMonitor:
                 log_warning(f"Failed to check {source}: {e}")
 
     def check_tor_services(self):
-        """بررسی سرویس‌های Tor (شبیه‌سازی)"""
+        """بررسی سرویس‌های Tor (Simulation)"""
         log_info("Checking Tor services (simulated)...")
         # در واقعیت نیاز به SOCKS5 proxy برای Tor داره
         tor_services = [

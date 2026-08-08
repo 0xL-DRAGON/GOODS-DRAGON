@@ -37,7 +37,7 @@ class BrowserEmulator:
             self._init_requests()
 
     def _init_selenium(self):
-        """راه‌اندازی مرورگر واقعی با Selenium و webdriver-manager"""
+        """Launch browser واقعی با Selenium و webdriver-manager"""
         options = Options()
         if self.headless:
             options.add_argument("--headless=new")
@@ -103,7 +103,7 @@ class BrowserEmulator:
         time.sleep(delay)
 
     def fetch_with_selenium(self, url):
-        """دریافت محتوا با Selenium (اجرای کامل JS)"""
+        """Fetch content با Selenium (اجرای کامل JS)"""
         try:
             if not self.driver:
                 self._init_selenium()
@@ -125,7 +125,7 @@ class BrowserEmulator:
             return None
 
     def fetch_with_requests(self, url, method="GET", data=None, retries=5):
-        """دریافت محتوا با requests + cloudscraper"""
+        """Fetch content با requests + cloudscraper"""
         proxy = self.get_random_proxy()
         proxy_dict = {"http": proxy, "https": proxy} if proxy else None
 
@@ -163,7 +163,7 @@ class BrowserEmulator:
         return None
 
     def solve_challenge(self, url):
-        """تلاش برای حل چالش‌های امنیتی"""
+        """Attempt challenge solving‌های امنیتی"""
         log_info("Attempting to solve security challenge...")
 
         # مرحله ۱: استفاده از Selenium (اجرای JS)

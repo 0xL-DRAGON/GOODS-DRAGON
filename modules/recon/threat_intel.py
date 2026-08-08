@@ -16,7 +16,7 @@ class ThreatIntel:
         self.results = {}
 
     def check_virustotal(self):
-        """بررسی با VirusTotal"""
+        """Check with VirusTotal"""
         if not self.api_keys.get("virustotal"):
             log_warning("VirusTotal API key not provided")
             return
@@ -34,7 +34,7 @@ class ThreatIntel:
             pass
 
     def check_shodan(self):
-        """بررسی با Shodan"""
+        """Check with Shodan"""
         if not self.api_keys.get("shodan"):
             log_warning("Shodan API key not provided")
             return
@@ -50,7 +50,7 @@ class ThreatIntel:
             pass
 
     def check_abuseipdb(self):
-        """بررسی با AbuseIPDB"""
+        """Check with AbuseIPDB"""
         if not self.api_keys.get("abuseipdb"):
             log_warning("AbuseIPDB API key not provided")
             return

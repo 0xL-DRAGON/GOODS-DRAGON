@@ -52,5 +52,5 @@ def get_random_user_agent():
 
 
 def get_user_agents():
-    """بازگرداندن کل لیست User-Agentها"""
+    """بازگرداندن کل User-Agent listها"""
     return USER_AGENTS

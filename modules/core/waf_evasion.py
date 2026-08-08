@@ -22,11 +22,11 @@ class WAFEvasion:
         ]
 
     def _case_swapping(self, payload):
-        """تغییر حالت حروف (مثلاً SeLeCt)"""
+        """Change case (مثلاً SeLeCt)"""
         return "".join(random.choice([c.upper(), c.lower()]) for c in payload)
 
     def _url_encoding(self, payload):
-        """کدگذاری URL"""
+        """URL encode"""
         return urllib.parse.quote(payload)
 
     def _double_encoding(self, payload):
@@ -40,7 +40,7 @@ class WAFEvasion:
         return payload + "/**/"
 
     def _whitespace_insertion(self, payload):
-        """اضافه کردن فاصله‌های تصادفی"""
+        """Add spaces‌های تصادفی"""
         chars = list(payload)
         for i in range(len(chars)):
             if random.random() < 0.2:
@@ -48,7 +48,7 @@ class WAFEvasion:
         return "".join(chars)
 
     def _parameter_pollution(self, payload):
-        """تزریق پارامترهای تکراری"""
+        """Inject parameterهای تکراری"""
         return f"{payload}&id={random.randint(1,999)}"
 
     def _null_byte_injection(self, payload):

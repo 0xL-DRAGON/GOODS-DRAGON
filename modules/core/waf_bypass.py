@@ -71,7 +71,7 @@ class WAFBypass:
             time.sleep(delay)
 
     def add_random_params(self, url):
-        """اضافه کردن پارامترهای تصادفی به URL برای دور زدن WAF"""
+        """Add parameterهای تصادفی به URL برای دور زدن WAF"""
         if "?" in url:
             url += f"&_={random.randint(100000, 999999)}"
         else:

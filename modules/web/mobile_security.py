@@ -17,7 +17,7 @@ class MobileSecurity:
         self.results = []
 
     def check_apk(self, apk_url):
-        """بررسی امنیتی APK (شبیه‌سازی)"""
+        """بررسی امنیتی APK (Simulation)"""
         log_info(f"Checking APK: {apk_url}")
         try:
             resp = self.client.get(apk_url, timeout=30)
@@ -31,7 +31,7 @@ class MobileSecurity:
             pass
 
     def check_ios(self, plist_url):
-        """بررسی امنیتی iOS (شبیه‌سازی)"""
+        """بررسی امنیتی iOS (Simulation)"""
         log_info(f"Checking iOS plist: {plist_url}")
 
     def check_mobile_api(self):

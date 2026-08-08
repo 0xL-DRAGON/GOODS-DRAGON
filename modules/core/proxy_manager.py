@@ -156,14 +156,14 @@ class ProxyManager:
                 return random.choice(self.proxies)
 
     def remove_dead_proxy(self, proxy):
-        """حذف پروکسی مرده از لیست"""
+        """Remove dead proxy از لیست"""
         with self.lock:
             if proxy in self.proxies:
                 self.proxies.remove(proxy)
                 log_warning(f"Removed dead proxy: {proxy}")
 
     def _rotate_loop(self):
-        """حلقه چرخش خودکار پروکسی"""
+        """حلقه Auto rotate پروکسی"""
         while not self._stop_rotation:
             time.sleep(self.rotate_interval)
             if self.proxies:
@@ -172,7 +172,7 @@ class ProxyManager:
                 self.current_proxy_index += 1
 
     def start_rotation(self):
-        """شروع چرخش خودکار پروکسی"""
+        """شروع Auto rotate پروکسی"""
         if self.auto_rotate and not self._rotation_thread:
             self._stop_rotation = False
             self._rotation_thread = threading.Thread(
@@ -182,7 +182,7 @@ class ProxyManager:
             log_success("Automatic proxy rotation started.")
 
     def stop_rotation(self):
-        """توقف چرخش خودکار پروکسی"""
+        """توقف Auto rotate پروکسی"""
         self._stop_rotation = True
         if self._rotation_thread:
             self._rotation_thread.join(timeout=2)
@@ -190,7 +190,7 @@ class ProxyManager:
             log_info("Automatic proxy rotation stopped.")
 
     def run(self):
-        """اجرای کامل مدیریت پروکسی"""
+        """اجرای کامل Proxy management"""
         log_info("=== Starting Proxy Manager ===")
         self.fetch_free_proxies()
         self.start_rotation()

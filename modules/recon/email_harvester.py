@@ -17,7 +17,7 @@ class EmailHarvester:
         self.emails = []
 
     def search_google(self):
-        """جستجوی ایمیل در Google (شبیه‌سازی)"""
+        """Search emails در Google (Simulation)"""
         log_info(f"Searching Google for emails in {self.domain}")
         dorks = [
             f"site:{self.domain} @gmail.com",
@@ -30,7 +30,7 @@ class EmailHarvester:
         # در واقعیت نیاز به Google API یا scraping داره
 
     def search_github(self):
-        """جستجوی ایمیل در GitHub"""
+        """Search emails در GitHub"""
         log_info(f"Searching GitHub for emails in {self.domain}")
         try:
             url = f"https://api.github.com/search/code?q={self.domain}+in:file+extension:py+extension:js+extension:json"

@@ -16,7 +16,7 @@ class SocialEngineering:
         self.results = {}
 
     def generate_phishing_link(self, domain):
-        """تولید لینک فیشینگ شبیه‌سازی شده"""
+        """Generate phishing link Simulation شده"""
         log_info(f"Generating phishing links for {domain}")
         prefixes = ["secure", "login", "verify", "account", "webmail"]
         suffixes = [".com", ".net", ".org", ".info"]
@@ -26,7 +26,7 @@ class SocialEngineering:
         return self.results["phishing_links"]
 
     def search_leaked_emails(self):
-        """جستجوی ایمیل‌های لو رفته"""
+        """Search emails‌های لو رفته"""
         log_info(f"Searching leaked emails for {self.target}")
         try:
             url = f"https://api.hackertarget.com/hostsearch/?q={self.target}"

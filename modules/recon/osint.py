@@ -18,7 +18,7 @@ class OSINT:
         self.results = {}
 
     def email_search(self):
-        """جستجوی ایمیل‌های مرتبط با دامنه"""
+        """Search emails‌های مرتبط با دامنه"""
         log_info(f"Searching emails for: {self.target}")
         emails = []
         try:
@@ -32,7 +32,7 @@ class OSINT:
                         emails.append(item.get("html_url", ""))
                 log_success(f"Found {len(emails)} email references from GitHub")
 
-            # جستجوی ساده با Google Dorks (شبیه‌سازی)
+            # جستجوی ساده با Google Dorks (Simulation)
             dorks = [
                 f'site:{self.target} "@gmail.com"',
                 f'site:{self.target} "@yahoo.com"',
@@ -75,11 +75,11 @@ class OSINT:
         return info
 
     def phone_search(self):
-        """جستجوی شماره تلفن مرتبط (شبیه‌سازی)"""
+        """جستجوی شماره تلفن مرتبط (Simulation)"""
         log_info(f"Searching phone numbers for: {self.target}")
         phones = []
         try:
-            # جستجو در متن‌های عمومی (شبیه‌سازی)
+            # جستجو در متن‌های عمومی (Simulation)
             resp = self.client.get(
                 f"https://api.hackertarget.com/hostsearch/?q={self.target}"
             )

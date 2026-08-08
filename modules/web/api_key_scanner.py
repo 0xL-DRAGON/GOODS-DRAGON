@@ -40,7 +40,7 @@ class APIKeyScanner:
         }
 
     def scan_url(self, url):
-        """اسکن یک URL برای پیدا کردن کلیدها"""
+        """اسکن یک URL برای Find کلیدها"""
         try:
             resp = self.client.get(url)
             if not resp:

@@ -66,7 +66,7 @@ class SelfUpdater:
         if os.path.exists("main.py.new"):
             log_info("Applying update...")
             try:
-                # پشتیبان‌گیری از فایل فعلی
+                # Backup از فایل فعلی
                 os.rename("main.py", "main.py.bak")
                 os.rename("main.py.new", "main.py")
                 os.chmod("main.py", 0o755)
@@ -75,7 +75,7 @@ class SelfUpdater:
                 return True
             except Exception as e:
                 log_error(f"Failed to apply update: {e}")
-                # برگرداندن به حالت قبل
+                # Restore previous state
                 if os.path.exists("main.py.bak"):
                     os.rename("main.py.bak", "main.py")
         return False

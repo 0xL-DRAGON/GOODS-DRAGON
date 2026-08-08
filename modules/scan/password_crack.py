@@ -35,19 +35,19 @@ class PasswordCracker:
         ]
 
     def crack_ssh(self, ip, port=22):
-        """تست SSH با دیکشنری"""
+        """SSH test با دیکشنری"""
         log_info(f"Testing SSH on {ip}:{port}")
         for username in ["root", "admin", "user"]:
             for password in self.passwords[:5]:
-                # شبیه‌سازی (در واقعیت نیاز به paramiko داره)
+                # Simulation (در واقعیت نیاز به paramiko داره)
                 log_info(f"Trying {username}:{password}")
 
     def crack_ftp(self, ip, port=21):
-        """تست FTP با دیکشنری"""
+        """FTP test با دیکشنری"""
         log_info(f"Testing FTP on {ip}:{port}")
 
     def crack_hash(self, hash_value, hash_type):
-        """کرک هش با hashcat یا john"""
+        """Crack hash با hashcat یا john"""
         log_info(f"Attempting to crack {hash_type} hash: {hash_value[:20]}...")
         try:
             result = subprocess.run(
