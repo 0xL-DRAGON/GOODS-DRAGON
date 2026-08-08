@@ -45,6 +45,58 @@ def main():
         show_banner()
         sys.exit(0)
 
+    if "--security-check" in sys.argv:
+        print("\n🔍 GOODS-DRAGON Security Audit\n")
+        import os, glob
+        issues = 0
+        
+        # Check for sensitive files
+        sensitive_patterns = ["*.log", "*.token", "*.key", "*.pem", "*.password", "*.secret", "*.env", "credentials.*", "auth.*", "private.*"]
+        for pattern in sensitive_patterns:
+            for f in glob.glob(f"**/{pattern}", recursive=True):
+                if not any(x in f for x in [".git/", "__pycache__", "payloads/"]):
+                    print(f"⚠️  Sensitive file found: {f}")
+                    issues += 1
+        
+        # Check for tokens in files
+        token_patterns = ["github_pat_", "pypi-", "sk-", "xoxb-", "xoxp-", "xoxr-", "xoxa-"]
+        for f in glob.glob("**/*", recursive=True):
+            if os.path.isfile(f) and not any(x in f for x in [".git/", "__pycache__", "payloads/"]):
+                try:
+                    with open(f, "r", errors="ignore") as fp:
+                        content_f = fp.read()
+                    for tp in token_patterns:
+                        if tp in content_f:
+                            print(f"🔴 TOKEN FOUND in: {f}")
+                            issues += 1
+                            break
+                except:
+                    pass
+        
+        # Check .gitignore exists
+        if not os.path.exists(".gitignore"):
+            print("❌ .gitignore is missing!")
+            issues += 1
+        else:
+            with open(".gitignore") as f:
+                gitignore_content = f.read()
+            if "reports/" not in gitignore_content or "logs/" not in gitignore_content:
+                print("⚠️  .gitignore may not be complete")
+                issues += 1
+        
+        # Check pre-commit hook
+        if os.path.exists(".git/hooks/pre-commit"):
+            print("✅ Pre-commit security hook is active")
+        else:
+            print("❌ Pre-commit security hook is missing")
+            issues += 1
+        
+        if issues == 0:
+            print("\n✅ All security checks passed! Your project is clean.\n")
+        else:
+            print(f"\n❌ Found {issues} security issues. Please fix them.\n")
+        sys.exit(0)
+
     if "--update" in sys.argv:
         from modules.core.updater import SelfUpdater
 
