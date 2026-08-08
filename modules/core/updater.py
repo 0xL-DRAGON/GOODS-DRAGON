@@ -23,7 +23,7 @@ class SelfUpdater:
         )
 
     def check_for_updates(self):
-        """بررسی وجود نسخه جدید در گیت‌هاب"""
+        """Check for new version on GitHub"""
         log_info("Checking for updates...")
         try:
             resp = requests.get(self.api_url, timeout=10)
@@ -44,7 +44,7 @@ class SelfUpdater:
             return None, []
 
     def download_update(self, assets):
-        """دانلود فایل اصلی از ریلیز"""
+        """Download main file from release"""
         for asset in assets:
             if asset.get("name") == "main.py":
                 url = asset.get("browser_download_url")
@@ -62,11 +62,11 @@ class SelfUpdater:
         return False
 
     def apply_update(self):
-        """اعمال به‌روزرسانی"""
+        """Apply update"""
         if os.path.exists("main.py.new"):
             log_info("Applying update...")
             try:
-                # Backup از فایل فعلی
+                # Backup current file
                 os.rename("main.py", "main.py.bak")
                 os.rename("main.py.new", "main.py")
                 os.chmod("main.py", 0o755)
@@ -81,7 +81,7 @@ class SelfUpdater:
         return False
 
     def run(self):
-        """اجرای کامل فرآیند به‌روزرسانی"""
+        """Run full update process"""
         latest_version, assets = self.check_for_updates()
         if latest_version and assets:
             if self.download_update(assets):

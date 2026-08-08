@@ -29,51 +29,51 @@ class SecurityHeadersChecker:
 
         headers = resp.headers
 
-        # لیست کامل هدرهای امنیتی به همراه توضیحات
+        # Full security headers list with descriptions
         security_headers = {
             "Content-Security-Policy": {
                 "short": "CSP",
-                "description": "ممانعت از حملات XSS و تزریق کد",
+                "description": "Prevents XSS attacks and code injection",
             },
             "X-Frame-Options": {
                 "short": "XFO",
-                "description": "جلوگیری از Clickjacking",
+                "description": "Prevents Clickjacking",
             },
             "X-Content-Type-Options": {
                 "short": "XCTO",
-                "description": "جلوگیری از MIME Sniffing",
+                "description": "Prevents MIME sniffing",
             },
             "Strict-Transport-Security": {
                 "short": "HSTS",
-                "description": "اجبار به استفاده از HTTPS",
+                "description": "Forces HTTPS usage",
             },
             "Referrer-Policy": {
                 "short": "Referrer",
-                "description": "مدیریت ارسال Referrer",
+                "description": "Controls Referrer information",
             },
             "X-XSS-Protection": {
                 "short": "XXP",
-                "description": "محافظت در برابر XSS (قدیمی)",
+                "description": "Protects against XSS (legacy)",
             },
             "Permissions-Policy": {
                 "short": "Permissions",
-                "description": "مدیریت دسترسی‌های مرورگر",
+                "description": "Controls browser feature access",
             },
             "Feature-Policy": {
                 "short": "Feature",
-                "description": "مدیریت ویژگی‌های مرورگر (قدیمی)",
+                "description": "Controls browser features (legacy)",
             },
             "Cross-Origin-Embedder-Policy": {
                 "short": "COEP",
-                "description": "مدیریت Cross-Origin Embedding",
+                "description": "Controls cross-origin embedding",
             },
             "Cross-Origin-Opener-Policy": {
                 "short": "COOP",
-                "description": "مدیریت Cross-Origin Opener",
+                "description": "Controls cross-origin opener",
             },
             "Cross-Origin-Resource-Policy": {
                 "short": "CORP",
-                "description": "مدیریت Cross-Origin Resource",
+                "description": "Controls cross-origin resource",
             },
         }
 
@@ -111,7 +111,7 @@ class SecurityHeadersChecker:
             f"Security Headers Check completed. {present_count}/{total_headers} headers present."
         )
 
-        # رتبه‌بندی امنیت بر اساس تعداد هدرهای موجود
+        # Security rating based on number of present headers
         security_score = "Unknown"
         if present_count >= 8:
             security_score = "Excellent"

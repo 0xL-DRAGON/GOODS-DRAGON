@@ -17,7 +17,7 @@ class EmailHarvester:
         self.emails = []
 
     def search_google(self):
-        """Search emails در Google (Simulation)"""
+        """Search emails on Google (Simulation)"""
         log_info(f"Searching Google for emails in {self.domain}")
         dorks = [
             f"site:{self.domain} @gmail.com",
@@ -27,10 +27,10 @@ class EmailHarvester:
         ]
         for dork in dorks:
             log_info(f"Dork: {dork}")
-        # در واقعیت نیاز به Google API یا scraping داره
+        # In reality needs Google API or scraping
 
     def search_github(self):
-        """Search emails در GitHub"""
+        """Search emails on GitHub"""
         log_info(f"Searching GitHub for emails in {self.domain}")
         try:
             url = f"https://api.github.com/search/code?q={self.domain}+in:file+extension:py+extension:js+extension:json"
@@ -46,7 +46,7 @@ class EmailHarvester:
             log_info(f"GitHub search error: {e}")
 
     def search_web(self):
-        """جستجوی عمومی در وب"""
+        """General web search"""
         log_info(f"Searching web for emails in {self.domain}")
         try:
             url = f"https://api.hackertarget.com/hostsearch/?q={self.domain}"

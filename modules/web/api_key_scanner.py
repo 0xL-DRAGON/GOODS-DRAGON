@@ -40,7 +40,7 @@ class APIKeyScanner:
         }
 
     def scan_url(self, url):
-        """اسکن یک URL برای Find کلیدها"""
+        """Scan URL to find keys"""
         try:
             resp = self.client.get(url)
             if not resp:
@@ -67,10 +67,10 @@ class APIKeyScanner:
     def run(self):
         log_info(f"Starting API Key Scanner on: {self.target}")
 
-        # اسکن صفحه اصلی
+        # Scan main page
         self.scan_url(self.target)
 
-        # اسکن فایل‌های حساس
+        # Scan sensitive files
         sensitive_paths = [
             "/.env",
             "/.env.local",

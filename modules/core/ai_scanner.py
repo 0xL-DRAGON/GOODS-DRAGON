@@ -42,10 +42,10 @@ class AIScanner:
         }
 
     def simulate_ai_analysis(self):
-        """Simulation تحلیل هوش مصنوعی"""
+        """Simulate AI analysis"""
         log_info("AI analysis in progress...")
 
-        # Simulation شناسایی خودکار
+        # Simulate auto-detection
         analysis = {
             "target_type": random.choice(["web_app", "api", "server", "mobile"]),
             "risk_score": random.randint(1, 10),
@@ -69,7 +69,7 @@ class AIScanner:
         return analysis
 
     def smart_payload_selection(self):
-        """Smart payload selection بر اساس نوع هدف"""
+        """Smart payload selection based on target type"""
         log_info("Smart payload selection...")
         selected = {}
         for vuln_type, payloads in self.ai_patterns.items():
@@ -78,7 +78,7 @@ class AIScanner:
         return selected
 
     def adaptive_scanning(self):
-        """Adaptive scan با تغییر پارامترها"""
+        """Adaptive scan with parameter changes"""
         log_info("Adaptive scanning...")
         params = ["id", "page", "file", "q", "s", "search", "url", "path"]
         adapted = {}
@@ -93,7 +93,7 @@ class AIScanner:
     def run(self):
         log_info(f"Starting AI-Powered Scanning on: {self.target}")
 
-        # ۱. تحلیل هوش مصنوعی
+        # ۱. AI analysis
         analysis = self.simulate_ai_analysis()
 
         # ۲. Smart payload selection

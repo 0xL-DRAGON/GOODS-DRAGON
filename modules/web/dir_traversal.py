@@ -27,7 +27,7 @@ class DirTraversal:
         ]
 
     def test_payload(self, param, payload):
-        """تست یک پیلود روی یک پارامتر"""
+        """Test a payload on a parameter"""
         test_url = f"{self.target}?{param}={payload}"
         resp = self.client.get(test_url)
         if resp and resp.status_code == 200:

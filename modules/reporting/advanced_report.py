@@ -25,7 +25,7 @@ class AdvancedReport:
             return False
 
     def generate_html(self):
-        """تولید گزارش HTML پیشرفته با نمودار و تحلیل"""
+        """Generate advanced HTML report with charts and analysis"""
         html = f"""
         <!DOCTYPE html>
         <html>
@@ -86,7 +86,7 @@ class AdvancedReport:
         log_success(f"Advanced HTML report: {path}")
 
     def _calculate_risk(self):
-        """محاسبه سطح ریسک کلی"""
+        """Calculate overall risk level"""
         risk_score = 0
         for key, value in self.data.items():
             if isinstance(value, dict):
@@ -104,7 +104,7 @@ class AdvancedReport:
             return "🟢 Low"
 
     def generate_pdf(self):
-        """تولید PDF پیشرفته (با reportlab)"""
+        """Generate advanced PDF (with reportlab)"""
         try:
             from reportlab.lib.pagesizes import letter
             from reportlab.pdfgen import canvas

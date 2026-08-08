@@ -39,5 +39,5 @@ class WaybackScanner:
             "target": self.domain,
             "scan_type": "wayback",
             "total_urls": len(urls),
-            "urls": urls[:500],  # محدود کردن به ۵۰۰ عدد برای جلوگیری از حجم بالا
+            "urls": urls[:500],  # Limit to 500 to avoid high volume
         }

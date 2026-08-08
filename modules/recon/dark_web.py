@@ -17,10 +17,10 @@ class DarkWebMonitor:
         self.results = {}
 
     def check_leaked_data(self):
-        """Check leaked data از منابع عمومی"""
+        """Check leaked data from public sources"""
         log_info(f"Checking for leaked data related to: {self.target}")
 
-        # Simulation جستجو در دارک‌وب
+        # Simulate dark web search
         sources = [
             "https://api.hackertarget.com/hostsearch/?q={self.target}",
             "https://api.hackertarget.com/whois/?q={self.target}",
@@ -31,7 +31,7 @@ class DarkWebMonitor:
                 url = source.format(self=self)
                 resp = self.client.get(url)
                 if resp and resp.status_code == 200:
-                    # جستجوی اطلاعات حساس
+                    # Search sensitive information
                     patterns = {
                         "emails": r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
                         "phones": r"\b(\+?98|0)?9[0-9]{9}\b",
@@ -50,9 +50,9 @@ class DarkWebMonitor:
                 log_warning(f"Failed to check {source}: {e}")
 
     def check_tor_services(self):
-        """بررسی سرویس‌های Tor (Simulation)"""
+        """Check Tor services (Simulation)"""
         log_info("Checking Tor services (simulated)...")
-        # در واقعیت نیاز به SOCKS5 proxy برای Tor داره
+        # In reality needs SOCKS5 proxy for Tor
         tor_services = [
             "http://facebookcorewwwi.onion",
             "http://protonmailrmez3lotccipshtkleegetolb73fuirgj7r4o4vfu7ozyd.onion",

@@ -16,10 +16,10 @@ class AdvancedAuto:
         self.recommended_modules = []
 
     def detect_target_type(self):
-        """تشخیص خودکار نوع هدف"""
+        """Auto-detect target type"""
         log_info("Detecting target type...")
 
-        # چک کردن صفحه اصلی
+        # Check main page
         try:
             resp = requests.get(
                 self.target, timeout=5, headers={"User-Agent": "Mozilla/5.0"}
@@ -27,7 +27,7 @@ class AdvancedAuto:
             html = resp.text.lower()
             headers = str(resp.headers).lower()
 
-            # تشخیص CMS
+            # Detect CMS
             if "wp-content" in html or "wp-includes" in html:
                 self.detected_type = "wordpress"
                 self.recommended_modules = [
@@ -57,7 +57,7 @@ class AdvancedAuto:
                 log_success("Target detected as Drupal")
                 return
 
-            # تشخیص API
+            # Detect API
             if (
                 "api" in self.target
                 or "json" in headers
@@ -73,7 +73,7 @@ class AdvancedAuto:
                 log_success("Target detected as API")
                 return
 
-            # تشخیص فروشگاه
+            # Detect shop
             if "cart" in html or "checkout" in html or "product" in html:
                 self.detected_type = "ecommerce"
                 self.recommended_modules = [
@@ -85,7 +85,7 @@ class AdvancedAuto:
                 log_success("Target detected as E-commerce")
                 return
 
-            # پیش‌فرض
+            # Default
             self.detected_type = "generic"
             self.recommended_modules = [
                 "--headers-check",

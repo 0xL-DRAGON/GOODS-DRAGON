@@ -56,11 +56,11 @@ class InfoDisclosureScanner:
         try:
             resp = requests.get(url, timeout=5, allow_redirects=False)
             if resp.status_code == 200:
-                # بررسی محتوای پاسخ برای تشخیص فایل واقعی (نه صفحه 404)
+                # Check response content to detect real file (not 404 page)
                 content_type = resp.headers.get("Content-Type", "").lower()
                 content_length = len(resp.text)
 
-                # فیلتر کردن پاسخ‌های بی‌معنی (مثل صفحه 404 سفارشی)
+                # Filter meaningless responses (like custom 404 page)
                 if (
                     content_length > 50
                     and "404" not in resp.text[:100]

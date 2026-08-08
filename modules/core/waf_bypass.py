@@ -71,7 +71,7 @@ class WAFBypass:
             time.sleep(delay)
 
     def add_random_params(self, url):
-        """Add parameterهای تصادفی به URL برای دور زدن WAF"""
+        """Add random parameters to URL to bypass WAF"""
         if "?" in url:
             url += f"&_={random.randint(100000, 999999)}"
         else:
@@ -102,10 +102,10 @@ class WAFBypass:
                         f"Blocked ({resp.status_code}), retrying... (attempt {attempt+1}/{retries})"
                     )
 
-                # افزایش تاخیر در هر بار تلاش
+                # Increase delay on each attempt
                 self.random_delay_func(2.0, 8.0)
 
-                # تغییر User-Agent در هر تلاش
+                # Change User-Agent on each attempt
                 if self.rotate_ua:
                     headers["User-Agent"] = self.ua.random
 

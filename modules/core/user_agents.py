@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-لیست داخلی User-Agentهای معروف مرورگرها
-کاملاً مستقل و بدون نیاز به کتابخانه fake-useragent
+Internal list of famous browser User-Agents
+Completely standalone, no need for fake-useragent library
 """
 
 USER_AGENTS = [
@@ -38,19 +38,19 @@ USER_AGENTS = [
     "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/120.0.0.0 Mobile/15E148 Safari/604.1",
     # iOS - Firefox
     "Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/120.0.0.0 Mobile/15E148 Safari/605.1.15",
-    # Bot/Scraper (برای تست‌های مخفی)
+    # Bot/Scraper (for stealth tests)
     "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
     "Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)",
 ]
 
 
 def get_random_user_agent():
-    """بازگرداندن یک User-Agent تصادفی از لیست داخلی"""
+    """Return a random User-Agent from internal list"""
     import random
 
     return random.choice(USER_AGENTS)
 
 
 def get_user_agents():
-    """بازگرداندن کل User-Agent listها"""
+    """Return all User-Agent lists"""
     return USER_AGENTS

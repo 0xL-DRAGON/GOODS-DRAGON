@@ -14,7 +14,7 @@ class SubdomainTakeover:
         self.verbose = verbose
         self.vulnerable = []
 
-        # تنظیم DNS resolver بدون نیاز به /etc/resolv.conf
+        # Configure DNS resolver without /etc/resolv.conf
         self.resolver = dns.resolver.Resolver(configure=False)
         self.resolver.nameservers = ["8.8.8.8", "1.1.1.1"]
 
@@ -52,7 +52,7 @@ class SubdomainTakeover:
 
     def check_takeover(self, subdomain):
         try:
-            # استفاده از resolver سفارشی
+            # Use custom resolver
             answers = self.resolver.resolve(subdomain, "CNAME")
             cname = str(answers[0].target).rstrip(".")
 

@@ -37,7 +37,7 @@ class BrowserEmulator:
             self._init_requests()
 
     def _init_selenium(self):
-        """Launch browser واقعی با Selenium و webdriver-manager"""
+        """Launch real browser with Selenium and webdriver-manager"""
         options = Options()
         if self.headless:
             options.add_argument("--headless=new")
@@ -68,14 +68,14 @@ class BrowserEmulator:
             self._init_requests()
 
     def _init_requests(self):
-        """راه‌اندازی session با cloudscraper و هدرهای واقعی"""
+        """Setup session with cloudscraper and real headers"""
         self.session = cloudscraper.create_scraper(
             browser={"browser": "chrome", "platform": "windows", "mobile": False}
         )
         self.session.headers.update(self.get_random_headers())
 
     def get_random_headers(self):
-        """تولید هدرهای کاملاً واقعی شبیه مرورگر"""
+        """Generate fully real browser-like headers"""
         return {
             "User-Agent": self.ua.random,
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
@@ -103,13 +103,13 @@ class BrowserEmulator:
         time.sleep(delay)
 
     def fetch_with_selenium(self, url):
-        """Fetch content با Selenium (اجرای کامل JS)"""
+        """Fetch content with Selenium (full JS execution)"""
         try:
             if not self.driver:
                 self._init_selenium()
 
             self.driver.get(url)
-            time.sleep(3)  # منتظر بارگذاری کامل
+            time.sleep(3)  # Wait for full load
             html = self.driver.page_source
             cookies = self.driver.get_cookies()
 
@@ -125,7 +125,7 @@ class BrowserEmulator:
             return None
 
     def fetch_with_requests(self, url, method="GET", data=None, retries=5):
-        """Fetch content با requests + cloudscraper"""
+        """Fetch content with requests + cloudscraper"""
         proxy = self.get_random_proxy()
         proxy_dict = {"http": proxy, "https": proxy} if proxy else None
 
@@ -163,16 +163,16 @@ class BrowserEmulator:
         return None
 
     def solve_challenge(self, url):
-        """Attempt challenge solving‌های امنیتی"""
+        """Attempt security challenge solving"""
         log_info("Attempting to solve security challenge...")
 
-        # مرحله ۱: استفاده از Selenium (اجرای JS)
+        # Step 1: Use Selenium (JS execution)
         if self.use_selenium:
             result = self.fetch_with_selenium(url)
             if result:
                 return result
 
-        # مرحله ۲: استفاده از cloudscraper با تنظیمات پیشرفته
+        # Step 2: Use cloudscraper with advanced settings
         log_info("Falling back to cloudscraper with advanced settings...")
         return self.fetch_with_requests(url)
 
@@ -187,7 +187,7 @@ class BrowserEmulator:
 
         if result:
             log_success("Browser Emulator completed successfully!")
-            # تبدیل bytes به str برای JSON
+            # Convert bytes to str for JSON
             if hasattr(result, "content") and isinstance(result.content, bytes):
                 content = result.content.decode("utf-8", errors="ignore")
             elif isinstance(result, dict) and "content" in result:

@@ -54,12 +54,12 @@ class AsyncHTTPClient:
             await self.session.close()
 
     async def scan_urls(self, urls):
-        """اسکن چند URL به صورت همزمان"""
+        """Scan multiple URLs simultaneously"""
         tasks = [self.get(url) for url in urls]
         return await asyncio.gather(*tasks, return_exceptions=True)
 
     def run_async(self, urls):
-        """اجرای همزمان در یک حلقه رویداد"""
+        """Concurrent execution in an event loop"""
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:

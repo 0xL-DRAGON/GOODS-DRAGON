@@ -18,11 +18,11 @@ class OSINT:
         self.results = {}
 
     def email_search(self):
-        """Search emails‌های مرتبط با دامنه"""
+        """Search emails related to domain"""
         log_info(f"Searching emails for: {self.target}")
         emails = []
         try:
-            # جستجو در GitHub
+            # Search on GitHub
             url = f"https://api.github.com/search/code?q={self.target}+in:file+extension:py+extension:js+extension:json"
             resp = self.client.get(url)
             if resp and resp.status_code == 200:
@@ -32,7 +32,7 @@ class OSINT:
                         emails.append(item.get("html_url", ""))
                 log_success(f"Found {len(emails)} email references from GitHub")
 
-            # جستجوی ساده با Google Dorks (Simulation)
+            # Simple search with Google Dorks (Simulation)
             dorks = [
                 f'site:{self.target} "@gmail.com"',
                 f'site:{self.target} "@yahoo.com"',
@@ -47,11 +47,11 @@ class OSINT:
         return emails
 
     def domain_info(self):
-        """اطلاعات WHOIS و DNS دامنه"""
+        """Domain WHOIS and DNS info"""
         log_info(f"Getting domain info for: {self.target}")
         info = {}
         try:
-            # WHOIS (ساده)
+            # WHOIS (simple)
             resp = self.client.get(
                 f"https://api.hackertarget.com/whois/?q={self.target}"
             )
@@ -75,11 +75,11 @@ class OSINT:
         return info
 
     def phone_search(self):
-        """جستجوی شماره تلفن مرتبط (Simulation)"""
+        """Search related phone numbers (Simulation)"""
         log_info(f"Searching phone numbers for: {self.target}")
         phones = []
         try:
-            # جستجو در متن‌های عمومی (Simulation)
+            # Search public texts (Simulation)
             resp = self.client.get(
                 f"https://api.hackertarget.com/hostsearch/?q={self.target}"
             )
@@ -95,7 +95,7 @@ class OSINT:
         return phones
 
     def social_media_search(self):
-        """جستجوی پروفایل‌های شبکه‌های اجتماعی"""
+        """Search social network profiles"""
         log_info(f"Searching social media for: {self.target}")
         profiles = {}
         platforms = {

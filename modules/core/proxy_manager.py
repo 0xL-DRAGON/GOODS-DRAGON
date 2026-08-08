@@ -22,12 +22,12 @@ class ProxyManager:
         self._rotation_thread = None
 
     def fetch_free_proxies(self):
-        """دریافت پروکسی‌های رایگان از APIهای عمومی (با منابع جایگزین و قابل‌دسترس)"""
+        """Fetch free proxies from public APIs (with alternative and accessible sources)"""
         log_info("Fetching free proxies from public APIs...")
 
-        # منابع جایگزین (قابل‌دسترس در ایران)
+        # Alternative sources (accessible in Iran)
         proxy_sources = [
-            # GitHub منابع (معمولاً در دسترس هستند)
+            # GitHub sources (usually accessible)
             "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
             "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks4.txt",
             "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks5.txt",
@@ -35,7 +35,7 @@ class ProxyManager:
             "https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/socks4.txt",
             "https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/socks5.txt",
             "https://raw.githubusercontent.com/hookzof/socks5_list/master/proxy.txt",
-            # Geonode (معمولاً در دسترس است)
+            # Geonode (usually accessible)
             "https://proxylist.geonode.com/api/proxy-list?limit=100&page=1&sort_by=lastChecked&sort_type=desc",
             "https://proxylist.geonode.com/api/proxy-list?limit=100&page=2&sort_by=lastChecked&sort_type=desc",
         ]
@@ -43,7 +43,7 @@ class ProxyManager:
         all_proxies = []
         for url in proxy_sources:
             try:
-                # افزایش timeout برای GitHub
+                # Increase timeout for GitHub
                 timeout = 30 if "github" in url else 15
                 resp = requests.get(
                     url, timeout=timeout, headers={"User-Agent": "Mozilla/5.0"}
@@ -51,7 +51,7 @@ class ProxyManager:
 
                 if resp.status_code == 200:
                     if "geonode" in url:
-                        # پردازش JSON برای Geonode
+                        # Process JSON for Geonode
                         try:
                             data = resp.json()
                             for item in data.get("data", []):
@@ -72,7 +72,7 @@ class ProxyManager:
                         except:
                             pass
                     else:
-                        # پردازش لیست ساده
+                        # Process simple list
                         proxies = resp.text.strip().split("\n")
                         proxies = [
                             p.strip()
@@ -92,12 +92,12 @@ class ProxyManager:
                 if self.verbose:
                     log_warning(f"Failed from {url.split('/')[2]}: {e}")
 
-        # حذف پروکسی‌های تکراری و فرمت‌دهی
+        # Remove duplicate proxies and format
         cleaned_proxies = []
         for p in all_proxies:
             p = p.strip()
             if p and ":" in p and len(p) > 5:
-                # اگر پروکسی بدون پروتکل بود، http:// اضافه کن
+                # If proxy has no protocol, add http://
                 if not p.startswith("http://") and not p.startswith("socks"):
                     p = f"http://{p}"
                 cleaned_proxies.append(p)
@@ -114,8 +114,8 @@ class ProxyManager:
             return False
 
     def _fallback_proxies(self):
-        """لیست پروکسی‌های ثابت (در صورت عدم دسترسی به API)"""
-        # این لیست رو می‌تونی با پروکسی‌های معتبر خودت جایگزین کنی
+        """Static proxy list (if API is inaccessible)"""
+        # You can replace this list with your own valid proxies
         return [
             "http://51.75.126.130:3128",
             "http://51.75.126.130:8080",
@@ -126,7 +126,7 @@ class ProxyManager:
         ]
 
     def test_proxy(self, proxy):
-        """بررسی صحت یک پروکسی"""
+        """Check proxy validity"""
         try:
             test_url = "http://httpbin.org/ip"
             resp = requests.get(
@@ -137,7 +137,7 @@ class ProxyManager:
             return False
 
     def get_proxy(self):
-        """دریافت یک پروکسی معتبر"""
+        """Get a valid proxy"""
         with self.lock:
             if not self.proxies:
                 log_warning("No proxies available. Fetching new list...")
@@ -147,7 +147,7 @@ class ProxyManager:
                 log_warning("No proxies available. Using direct connection.")
                 return None
 
-            # چرخش پروکسی
+            # Rotate proxy
             if self.auto_rotate:
                 proxy = self.proxies[self.current_proxy_index % len(self.proxies)]
                 self.current_proxy_index += 1
@@ -156,14 +156,14 @@ class ProxyManager:
                 return random.choice(self.proxies)
 
     def remove_dead_proxy(self, proxy):
-        """Remove dead proxy از لیست"""
+        """Remove dead proxy from list"""
         with self.lock:
             if proxy in self.proxies:
                 self.proxies.remove(proxy)
                 log_warning(f"Removed dead proxy: {proxy}")
 
     def _rotate_loop(self):
-        """حلقه Auto rotate پروکسی"""
+        """Auto rotate proxy loop"""
         while not self._stop_rotation:
             time.sleep(self.rotate_interval)
             if self.proxies:
@@ -172,7 +172,7 @@ class ProxyManager:
                 self.current_proxy_index += 1
 
     def start_rotation(self):
-        """شروع Auto rotate پروکسی"""
+        """Start auto rotate proxy"""
         if self.auto_rotate and not self._rotation_thread:
             self._stop_rotation = False
             self._rotation_thread = threading.Thread(
@@ -182,7 +182,7 @@ class ProxyManager:
             log_success("Automatic proxy rotation started.")
 
     def stop_rotation(self):
-        """توقف Auto rotate پروکسی"""
+        """Stop auto rotate proxy"""
         self._stop_rotation = True
         if self._rotation_thread:
             self._rotation_thread.join(timeout=2)
@@ -190,7 +190,7 @@ class ProxyManager:
             log_info("Automatic proxy rotation stopped.")
 
     def run(self):
-        """اجرای کامل Proxy management"""
+        """Run full proxy management"""
         log_info("=== Starting Proxy Manager ===")
         self.fetch_free_proxies()
         self.start_rotation()

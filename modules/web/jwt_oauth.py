@@ -22,11 +22,11 @@ class JWTOAuthTester:
         )
 
     def extract_tokens(self, text):
-        """استخراج JWT از متن"""
+        """Extract JWT from text"""
         return self.jwt_pattern.findall(text)
 
     def decode_jwt(self, token):
-        """دیکد کردن JWT بدون بررسی امضا"""
+        """Decode JWT without signature verification"""
         try:
             header = jwt.get_unverified_header(token)
             payload = jwt.decode(token, options={"verify_signature": False})
@@ -37,7 +37,7 @@ class JWTOAuthTester:
             return None, None
 
     def test_weak_secret(self, token):
-        """ت测试 رمز ضعیف JWT"""
+        """Test weak JWT secret"""
         weak_secrets = ["secret", "password", "123456", "admin", "jwt", "key"]
         for secret in weak_secrets:
             try:
@@ -49,7 +49,7 @@ class JWTOAuthTester:
         return None
 
     def check_oauth(self):
-        """بررسی OAuth endpoints"""
+        """Check OAuth endpoints"""
         log_info("Checking OAuth endpoints...")
         endpoints = [
             "/oauth/authorize",
@@ -74,7 +74,7 @@ class JWTOAuthTester:
     def run(self):
         log_info(f"Starting JWT & OAuth Testing on: {self.target}")
 
-        # استخراج JWT از صفحه اصلی
+        # Extract JWT from main page
         resp = self.client.get(self.target)
         if resp:
             tokens = self.extract_tokens(resp.text)
@@ -92,7 +92,7 @@ class JWTOAuthTester:
                     )
                     log_success(f"Found JWT: {header.get('alg', 'unknown')}")
 
-        # بررسی OAuth
+        # Check OAuth
         oauth = self.check_oauth()
 
         log_success(f"JWT/OAuth scan completed. Found {len(self.results)} tokens.")

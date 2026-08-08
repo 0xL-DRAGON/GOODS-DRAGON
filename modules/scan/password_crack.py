@@ -15,7 +15,7 @@ class PasswordCracker:
         self.client = HTTPClient(timeout=15, retries=3, verbose=verbose)
         self.results = []
 
-        # دیکشنری پیش‌فرض
+        # دیکشنری Default
         self.passwords = [
             "password",
             "123456",
@@ -35,19 +35,19 @@ class PasswordCracker:
         ]
 
     def crack_ssh(self, ip, port=22):
-        """SSH test با دیکشنری"""
+        """SSH test with dictionary"""
         log_info(f"Testing SSH on {ip}:{port}")
         for username in ["root", "admin", "user"]:
             for password in self.passwords[:5]:
-                # Simulation (در واقعیت نیاز به paramiko داره)
+                # Simulation (in reality needs paramiko)
                 log_info(f"Trying {username}:{password}")
 
     def crack_ftp(self, ip, port=21):
-        """FTP test با دیکشنری"""
+        """FTP test with dictionary"""
         log_info(f"Testing FTP on {ip}:{port}")
 
     def crack_hash(self, hash_value, hash_type):
-        """Crack hash با hashcat یا john"""
+        """Crack hash with hashcat or john"""
         log_info(f"Attempting to crack {hash_type} hash: {hash_value[:20]}...")
         try:
             result = subprocess.run(

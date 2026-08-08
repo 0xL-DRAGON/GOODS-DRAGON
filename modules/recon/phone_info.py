@@ -17,9 +17,9 @@ class PhoneInfo:
         self.verbose = verbose
         self.results = {}
 
-        # دیتابیس کامل اپراتورهای ایران
+        # Iranian operators database
         self.iran_operators = {
-            # همراه اول (MCI)
+            # MCI (Hamrah-e-Avval)
             "0910": "Hamrahe Aval (MCI)",
             "0911": "Hamrahe Aval (MCI)",
             "0912": "Hamrahe Aval (MCI)",
@@ -30,7 +30,7 @@ class PhoneInfo:
             "0917": "Hamrahe Aval (MCI)",
             "0918": "Hamrahe Aval (MCI)",
             "0919": "Hamrahe Aval (MCI)",
-            # ایرانسل
+            # Irancell
             "0901": "Irancell",
             "0902": "Irancell",
             "0903": "Irancell",
@@ -50,29 +50,29 @@ class PhoneInfo:
             "0940": "Irancell",
             "0941": "Irancell",
             "0942": "Irancell",
-            # رایتل
+            # Rightel
             "0920": "Rightel",
             "0921": "Rightel",
             "0922": "Rightel",
             "0923": "Rightel",
             "0924": "Rightel",
-            # شاتل موبایل
+            # Shatel Mobile
             "0990": "Shatel Mobile",
             "0991": "Shatel Mobile",
             "0992": "Shatel Mobile",
             "0993": "Shatel Mobile",
             "0994": "Shatel Mobile",
-            # آپادانا
+            # Apadana
             "0995": "Apadana",
             "0996": "Apadana",
-            # سامان
+            # Saman
             "0998": "Saman",
             "0999": "Saman",
-            # تالیا
+            # Talia
             "0997": "Taliya",
         }
 
-        # پیش‌شماره‌های استان‌ها (برای خطوط ثابت)
+        # Province prefixes (for landlines)
         self.area_codes = {
             "021": "Tehran",
             "023": "Semnan",
@@ -105,7 +105,7 @@ class PhoneInfo:
             "088": "Yasuj",
         }
 
-        # پیش‌شماره‌های بین‌المللی
+        # International prefixes
         self.country_codes = {
             "98": "Iran",
             "1": "USA/Canada",
@@ -149,18 +149,18 @@ class PhoneInfo:
         }
 
     def clean_number(self, num):
-        """پاکسازی شماره و تبدیل به فرمت استاندارد"""
+        """Clean number and convert to standard format"""
         num = re.sub(r"[^0-9+]", "", str(num))
-        # اگر با 0 شروع شد، 0 رو حذف کن و 98 رو اضافه کن
+        # If starts with 0, remove 0 and add 98
         if num.startswith("0"):
             num = "98" + num[1:]
-        # اگر با + شروع شد، + رو حذف کن
+        # If starts with +, remove +
         elif num.startswith("+"):
             num = num[1:]
         return num
 
     def detect_country(self):
-        """تشخیص کشور از پیش‌شماره"""
+        """Detect country from prefix"""
         for code, country in self.country_codes.items():
             if self.phone.startswith(code):
                 self.results["country"] = country
@@ -171,9 +171,9 @@ class PhoneInfo:
         return None
 
     def detect_operator_iran(self):
-        """تشخیص اپراتور برای شماره‌های ایران"""
+        """Detect operator for Iranian numbers"""
         if self.results.get("country_code") == "98" and len(self.phone) >= 10:
-            # برای شماره‌های همراه، پیش‌شماره 4 رقمی بعد از 98
+            # For mobile, 4-digit prefix after 98
             if len(self.phone) == 11 or len(self.phone) == 10:
                 prefix = self.phone[2:6] if len(self.phone) >= 6 else None
                 if prefix and prefix in self.iran_operators:
@@ -182,9 +182,9 @@ class PhoneInfo:
         return None
 
     def get_phone_type(self):
-        """تشخیص نوع شماره (همراه، ثابت، خط ویژه)"""
+        """Detect number type (mobile, landline, special)"""
         if self.results.get("country_code") == "98":
-            # شماره‌های همراه معمولاً با 9 شروع می‌شوند بعد از کد کشور
+            # Mobile numbers usually start with 9 after country code
             if len(self.phone) == 11 and self.phone.startswith("989"):
                 self.results["type"] = "Mobile"
             elif len(self.phone) == 10 and self.phone.startswith("9"):
@@ -198,9 +198,9 @@ class PhoneInfo:
         return self.results.get("type")
 
     def detect_area(self):
-        """تشخیص منطقه برای خطوط ثابت ایران"""
+        """Detect region for Iranian landlines"""
         if self.results.get("country_code") == "98" and len(self.phone) >= 10:
-            # پیش‌شماره 3 رقمی بعد از 98
+            # 3-digit prefix after 98
             prefix = self.phone[2:5] if len(self.phone) >= 5 else None
             if prefix and prefix in self.area_codes:
                 self.results["area"] = self.area_codes[prefix]
@@ -208,7 +208,7 @@ class PhoneInfo:
         return None
 
     def format_number(self):
-        """فرمت‌بندی شماره برای نمایش"""
+        """Format number for display"""
         if self.results.get("country_code") == "98" and len(self.phone) >= 10:
             formatted = f"0{self.phone[1:]}"
             self.results["formatted"] = formatted
@@ -219,7 +219,7 @@ class PhoneInfo:
         return self.results
 
     def validate_phone(self):
-        """اعتبارسنجی شماره (ساختار و طول)"""
+        """Validate number (structure and length)"""
         if self.results.get("country_code") == "98":
             if len(self.phone) == 10:
                 self.results["valid"] = True
@@ -245,7 +245,7 @@ class PhoneInfo:
                 self.results["validation_msg"] = "Invalid phone number format"
 
     def search_truecaller(self):
-        """جستجو در Truecaller (API عمومی) - غیرفعال شده به دلیل فیلتر"""
+        """Search in Truecaller (public API) - disabled due to filtering"""
         self.results["truecaller"] = {
             "status": "disabled",
             "message": "Truecaller API is blocked in your region. Use alternative methods.",
@@ -253,7 +253,7 @@ class PhoneInfo:
         log_warning("Truecaller API is blocked. Skipping...")
 
     def search_google(self):
-        """جستجو در گوگل با Dork های ساده"""
+        """Search on Google with simple Dorks"""
         try:
             dorks = [
                 f'"{self.phone}"',
@@ -272,7 +272,7 @@ class PhoneInfo:
     def run(self):
         log_info(f"Starting Phone Info gathering for: {self.phone}")
 
-        # تحلیل شماره
+        # Analyze number
         self.detect_country()
         self.format_number()
         self.validate_phone()
@@ -280,18 +280,18 @@ class PhoneInfo:
         self.detect_operator_iran()
         self.detect_area()
 
-        # جستجوهای خارجی (اختیاری)
+        # External searches (optional)
         if self.verbose:
             self.search_truecaller()
             self.search_google()
 
-        # نتیجه نهایی
+        # Final result
         self.results["phone"] = self.phone
         self.results["scan_type"] = "phone_info"
 
         log_success("Phone info gathering completed.")
 
-        # نمایش نتایج در ترمینال
+        # Display results in terminal
         log_info("=== Phone Information ===")
         log_info(f"  Number: {self.results.get('formatted', 'N/A')}")
         log_info(f"  International: {self.results.get('international', 'N/A')}")

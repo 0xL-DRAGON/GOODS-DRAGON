@@ -15,7 +15,7 @@ class SubdomainTakeoverAdvanced:
         self.client = HTTPClient(timeout=15, retries=3, verbose=verbose)
         self.vulnerable = []
 
-        # سرویس‌های قابل تصاحب با نشانه‌های خطا
+        # Takeover-able services with error signatures
         self.services = {
             "github.io": {
                 "cname": "github.io",
@@ -53,7 +53,7 @@ class SubdomainTakeoverAdvanced:
         }
 
     def check_cname(self, subdomain):
-        """بررسی CNAME یک زیردامنه"""
+        """Check CNAME of a subdomain"""
         try:
             answers = dns.resolver.resolve(subdomain, "CNAME")
             cname = str(answers[0].target).rstrip(".")
@@ -62,14 +62,14 @@ class SubdomainTakeoverAdvanced:
             return None
 
     def check_takeover(self, subdomain):
-        """بررسی امکان تصاحب یک زیردامنه"""
+        """Check takeover possibility for a subdomain"""
         cname = self.check_cname(subdomain)
         if not cname:
             return
 
         for service, sig in self.services.items():
             if service in cname.lower():
-                # بررسی HTTP برای خطای تصاحب
+                # HTTP check for takeover error
                 try:
                     resp = self.client.get(f"http://{subdomain}")
                     if resp and sig["error"].lower() in resp.text.lower():
@@ -87,7 +87,7 @@ class SubdomainTakeoverAdvanced:
     def run(self):
         log_info(f"Starting Advanced Subdomain Takeover on: {self.domain}")
 
-        # لیست زیردامنه‌های رایج
+        # Common subdomain list
         common_subdomains = [
             "www",
             "mail",
