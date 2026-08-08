@@ -661,7 +661,7 @@ class S3Finder:
             f"sgs-{self.target}",
             f"si-{self.target}",
             f"sis-{self.target}",
-            f"sk-{self.target}",
+            "sk-" + self.target[:8],
             f"sks-{self.target}",
             f"sl-{self.target}",
             f"sls-{self.target}",
