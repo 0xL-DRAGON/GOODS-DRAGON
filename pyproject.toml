@@ -49,3 +49,5 @@ dragon = "main:main"
 
 [tool.setuptools.packages.find]
 include = ["core*", "modules*", "utils*", "webui*", "scripts*"]
+
+# Version locked to v2.0.0 until further notice
