@@ -59,7 +59,7 @@ def main():
                     issues += 1
         
         # Check for tokens in files
-        token_patterns = ["github_pat_", "pypi-", "sk-", "xoxb-", "xoxp-", "xoxr-", "xoxa-"]
+        token_patterns_list = ["github_pat_", "pypi-", "sk-", "xoxb-", "xoxp-", "xoxr-", "xoxa-"]
         for f in glob.glob("**/*", recursive=True):
             if os.path.isfile(f) and not any(x in f for x in [".git/", "__pycache__", "payloads/"]):
                 try:
