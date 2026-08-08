@@ -93,13 +93,13 @@ class AIScanner:
     def run(self):
         log_info(f"Starting AI-Powered Scanning on: {self.target}")
 
-        # ۱. AI analysis
+        # 1. AI analysis
         analysis = self.simulate_ai_analysis()
 
-        # ۲. Smart payload selection
+        # 2. Smart payload selection
         payloads = self.smart_payload_selection()
 
-        # ۳. Adaptive scan
+        # 3. Adaptive scan
         adapted = self.adaptive_scanning()
 
         self.results.update(

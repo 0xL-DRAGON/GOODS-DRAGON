@@ -15,7 +15,7 @@ class PasswordCracker:
         self.client = HTTPClient(timeout=15, retries=3, verbose=verbose)
         self.results = []
 
-        # دیکشنری Default
+        # Default dictionary
         self.passwords = [
             "password",
             "123456",
