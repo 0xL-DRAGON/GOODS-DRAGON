@@ -486,11 +486,8 @@ def main():
     web_parser.add_argument(
         "--nikto", action="store_true", help="Run Nikto-style vulnerability scanner"
     )
-    web_parser.add_argument(
-        "--smart-scan",
-        action="store_true",
-        help="Auto-detect rate limit and suggest optimal threads/delay",
-    )
+    web_parser.add_argument("--smart-scan", action="store_true", help="Auto-detect rate limit")
+    web_parser.add_argument("--chain-attack", action="store_true", help="Run Smart Compound Attack Engine")
     web_parser.add_argument(
         "--auto-advanced",
         action="store_true",
@@ -1042,7 +1039,7 @@ def main():
         from modules.web.auto_throttle import AutoThrottle
         from modules.web.broken_link import BrokenLinkChecker
         from modules.web.business_logic import BusinessLogicChecker
-        from modules.web.chained_attack import ChainedAttackScanner
+        from modules.web.chain_attack import ChainedAttackScanner
         from modules.web.cms import CMSDetector
         from modules.web.collaborator.blind_xss import BlindXSSCollaborator
         from modules.web.cors import CORSChecker
@@ -1315,7 +1312,7 @@ def main():
             race = RaceConditionDetector(args.target, args.threads, args.verbose)
             results["race_condition"] = race.run()
 
-        if args.chained_attack:
+        if args.chain_attack:
             log_info("=== Starting Chained Attack Scanner ===")
             chain = ChainedAttackScanner(args.target, args.verbose)
             results["chain_scan"] = chain.run()
@@ -1370,7 +1367,6 @@ def main():
             engine = SmartEngine(args.target, args.verbose)
             print(engine.run())
             sys.exit(0)
-            from modules.core.smart_engine import SmartEngine
             engine = SmartEngine(args.target, args.verbose)
             print(engine.run())
             sys.exit(0)
