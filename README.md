@@ -72,3 +72,6 @@ dragon
 |---|---|
 | **Team Support** | l.dragon.support@gmail.com |
 | **Personal Support** | support.zeus.z4@gmail.com |
+
+## 🔍 Keywords
+pentesting tool, bug bounty tool, vulnerability scanner, SQLi scanner, XSS scanner, OSINT tool, Kali Linux tool, Termux pentesting, chain attack, automated pentesting, web security scanner
