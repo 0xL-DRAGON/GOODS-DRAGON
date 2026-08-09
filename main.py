@@ -1370,8 +1370,6 @@ def main():
             engine = SmartEngine(args.target, args.verbose)
             print(engine.run())
             sys.exit(0)
-        
-        if args.chain_attack:
             from modules.core.smart_engine import SmartEngine
             engine = SmartEngine(args.target, args.verbose)
             print(engine.run())
