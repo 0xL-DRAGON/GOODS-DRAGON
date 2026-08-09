@@ -396,7 +396,7 @@ def main():
         "--race-condition", action="store_true", help="Detect race conditions"
     )
     web_parser.add_argument(
-        "--chained-attack", action="store_true", help="Scan for chained attacks"
+        "--chain-scan", action="store_true", help="Scan for chained attacks"
     )
     web_parser.add_argument(
         "--static-analysis", action="store_true", help="Static code analysis"
@@ -1318,7 +1318,7 @@ def main():
         if args.chained_attack:
             log_info("=== Starting Chained Attack Scanner ===")
             chain = ChainedAttackScanner(args.target, args.verbose)
-            results["chained_attack"] = chain.run()
+            results["chain_scan"] = chain.run()
 
         if args.static_analysis:
             log_info("=== Starting Static Analysis ===")
@@ -1365,6 +1365,18 @@ def main():
             if rec:
                 log_info(f"💡 {rec}")
 
+        if args.chain_attack:
+            from modules.core.smart_engine import SmartEngine
+            engine = SmartEngine(args.target, args.verbose)
+            print(engine.run())
+            sys.exit(0)
+        
+        if args.chain_attack:
+            from modules.core.smart_engine import SmartEngine
+            engine = SmartEngine(args.target, args.verbose)
+            print(engine.run())
+            sys.exit(0)
+        
         if args.smart_scan:
             log_info("=== Starting Smart Scan (Auto Throttle) ===")
             smart = AutoThrottle(args.target, args.verbose)
