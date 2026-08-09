@@ -1039,7 +1039,7 @@ def main():
         from modules.web.auto_throttle import AutoThrottle
         from modules.web.broken_link import BrokenLinkChecker
         from modules.web.business_logic import BusinessLogicChecker
-        from modules.web.chain_attack import ChainedAttackScanner
+        from modules.web.chained_attack import ChainedAttackScanner
         from modules.web.cms import CMSDetector
         from modules.web.collaborator.blind_xss import BlindXSSCollaborator
         from modules.web.cors import CORSChecker
@@ -1362,7 +1362,6 @@ def main():
             if rec:
                 log_info(f"💡 {rec}")
 
-        if args.chain_attack:
             from modules.core.smart_engine import SmartEngine
             engine = SmartEngine(args.target, args.verbose)
             print(engine.run())
