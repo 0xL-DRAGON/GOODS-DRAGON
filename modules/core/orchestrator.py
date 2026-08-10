@@ -178,7 +178,7 @@ class Orchestrator:
         print("=" * 50)
         
         # Step 1: Subdomain Enumeration
-        print("\n[1/6] Spider Crawling (finding URLs & parameters)...")
+        print("\n[1/7] Spider Crawling (finding URLs & parameters)...")
         from modules.recon.spider import Spider
         spider = Spider(self.target, max_pages=30, verbose=self.verbose)
         spider_results = spider.run()
@@ -186,27 +186,27 @@ class Orchestrator:
         if spider_results['params']:
             print(f"  📋 Parameters found: {', '.join(spider_results['params'][:10])}")
         
-        print("\n[2/6] Subdomain Enumeration...")
+        print("\n[2/7] Subdomain Enumeration...")
         alive_count = self.run_subdomain_enum()
         print(f"  ✅ Found {alive_count} active subdomains")
         
         # Step 2: Port Scan
-        print("\n[3/6] Port Scanning...")
+        print("\n[3/7] Port Scanning...")
         port_count = self.run_port_scan()
         print(f"  ✅ Found {port_count} open ports")
         
         # Step 3: Technology Detection
-        print("\n[4/6] Technology Detection...")
+        print("\n[4/7] Technology Detection...")
         tech_count = self.run_tech_detect()
         print(f"  ✅ Detected {tech_count} technologies")
         
         # Step 4: Security Headers
-        print("\n[5/6] Security Headers Check...")
+        print("\n[5/7] Security Headers Check...")
         self.run_headers_check()
         print(f"  ✅ Headers analyzed")
         
         # Step 5: Secret Scan
-        print("\n[6/6] Secret Scanning...")
+        print("\n[6/7] Secret Scanning...")
         secret_count = self.run_secret_scan()
         print(f"  ✅ Found {secret_count} potential secrets")
         
