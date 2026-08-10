@@ -24,7 +24,7 @@ class Orchestrator:
         finder = SubdomainFinder(
             domain=self.target,
             wordlist_path="wordlists/subdomains.txt",
-            threads=30,
+            threads=50,
             verbose=self.verbose
         )
         result = finder.run()
@@ -38,7 +38,7 @@ class Orchestrator:
         scanner = PortScanner(
             target=self.target,
             ports="80,443,8080,8443,3000,5000,8000,9090",
-            threads=20,
+            threads=50,
             verbose=self.verbose,
             banner=True
         )
@@ -149,6 +149,15 @@ class Orchestrator:
                 unique.append(item)
         return unique
     
+    def export_json(self):
+        """Export results as standardized JSON."""
+        import json
+        json_file = f"reports/{self.target}_results.json"
+        os.makedirs("reports", exist_ok=True)
+        with open(json_file, 'w') as f:
+            json.dump(self.results, f, indent=2, default=str)
+        return json_file
+    
     def run(self):
         """Execute full self-contained orchestration."""
         print("🐉 GOODS-DRAGON Self-Contained Orchestrator")
@@ -192,5 +201,7 @@ class Orchestrator:
         with open(report_file, 'w') as f:
             f.write(report)
         
+        json_file = self.export_json()
         print(f"✅ Full report saved: {report_file}")
+        print(f"✅ JSON results saved: {json_file}")
         return report
