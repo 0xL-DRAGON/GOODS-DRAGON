@@ -75,3 +75,5 @@ tmp/
 ehthumbs.db
 Thumbs.db
 desktop.ini
+main.py.working
+core/plugin_loader.py
