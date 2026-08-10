@@ -703,6 +703,17 @@ def main():
             sys.exit(0)
 
         # ----- OSINT -----
+        if args.dorks:
+            from modules.recon.dork_generator import DorkGenerator
+            dorks = DorkGenerator(args.target).generate()
+            print(f"\n🐉 Google Dorks for {args.target}:")
+            print("=" * 50)
+            for i, dork in enumerate(dorks, 1):
+                print(f"[{i}] {dork}")
+            print("=" * 50)
+            print("Copy these into Google to find sensitive info.\n")
+            sys.exit(0)
+        
         if args.osint:
             from modules.recon.osint import OSINT
 
@@ -983,6 +994,21 @@ def main():
             )
             results["active_scan"] = active.run()
 
+        if args.takeover_advanced:
+            from modules.recon.subdomain_takeover_advanced import AdvancedSubdomainTakeover
+            sub_list = results.get("subdomains", {}).get("subdomains", [])
+            sub_names = [s.get("subdomain", "") for s in sub_list if s.get("subdomain")]
+            if not sub_names:
+                sub_names = [args.target]
+            log_info(f"Checking {len(sub_names)} subdomains for takeover...")
+            takeover_results = AdvancedSubdomainTakeover(sub_names, args.verbose).run()
+            if takeover_results:
+                for t in takeover_results:
+                    log_success(f"🔥 {t['subdomain']} -> {t['service']} takeover possible!")
+            else:
+                log_info("No takeover vulnerabilities found.")
+            sys.exit(0)
+        
         if args.takeover:
             from modules.recon.takeover import SubdomainTakeover
 
@@ -1174,6 +1200,18 @@ def main():
             )
             results["dir_bruteforce"] = dir_bf.run()
 
+        if args.wp_enum:
+            from modules.web.wp_enumerator import WPEnumerator
+            log_info("=== Starting WordPress Enumeration ===")
+            wp = WPEnumerator(args.target, args.verbose)
+            wp_results = wp.run()
+            if wp_results:
+                for plugin in wp_results:
+                    log_success(f"Found: {plugin['plugin']} v{plugin['version']}")
+            else:
+                log_info("No WordPress plugins found.")
+            sys.exit(0)
+        
         if args.cms_detect:
             log_info("=== Starting CMS Detection ===")
             cms = CMSDetector(args.target, args.verbose)
