@@ -40,6 +40,9 @@ def show_banner():
 
 # ------- Main Entry -------
 def main():
+    import os
+    os.makedirs("reports", exist_ok=True)
+    os.makedirs("logs", exist_ok=True)
     # Ensure required directories exist
     import os
     os.makedirs("reports", exist_ok=True)
