@@ -57,29 +57,11 @@ class SecretScanner:
                 log_debug(f"Error fetching {url}: {e}")
         return None
 
-        def _is_false_positive(self, match):
-        """Filter out known false positives."""
-        # SVG path data
-        if match.startswith("PHN2Zy") or "fill-rule" in match.lower():
-            return True
-        # Base64 encoded images
-        if len(match) > 100 and match.count("/") > 5:
-            return True
-        # Smart contract addresses (blockchain)
-        if match.startswith("0x") and len(match) == 42:
-            return True
-        # Currency/token names
-        if match in ["Basic Attention", "Basic"]:
-            return True
-        return False
-    
     def scan_content(self, content, source):
         """Scan content for secrets"""
         for name, pattern in self.patterns.items():
             matches = re.findall(pattern, content, re.IGNORECASE)
             for match in matches:
-                    if self._is_false_positive(match):
-                        continue
                 # Filter out common false positives
                 if len(match) < 8 or match == "password" or match == "secret":
                     continue

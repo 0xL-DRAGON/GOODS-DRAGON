@@ -1,11 +1,16 @@
 """
-GOODS-DRAGON Smart Orchestrator v2
-Integrates with professional tools: subfinder, nuclei, httpx
+GOODS-DRAGON Self-Contained Orchestrator
+Uses internal modules—no external dependencies.
 """
-import subprocess
 import json
 import os
 from datetime import datetime
+from modules.recon.subdomain import SubdomainFinder
+from modules.web.tech_detect import TechnologyDetector
+from modules.web.headers_check import SecurityHeadersChecker
+from modules.web.secret_scanner import SecretScanner
+from modules.scan.portscan import PortScanner
+from core.logger import log_info, log_success, log_warning
 
 class Orchestrator:
     def __init__(self, target, verbose=False):
@@ -13,157 +18,179 @@ class Orchestrator:
         self.verbose = verbose
         self.results = {}
     
-    def check_tool(self, tool):
-        """Check if a tool is installed."""
-        try:
-            subprocess.run(["which", tool], capture_output=True, text=True, timeout=5)
-            return True
-        except:
-            return False
+    def run_subdomain_enum(self):
+        """Run internal SubdomainFinder."""
+        log_info("Running Subdomain Enumeration...")
+        finder = SubdomainFinder(
+            domain=self.target,
+            wordlist_path="wordlists/subdomains.txt",
+            threads=30,
+            verbose=self.verbose
+        )
+        result = finder.run()
+        self.results['subdomains'] = result.get('subdomains', [])
+        self.results['alive'] = result.get('alive', [])
+        return len(self.results['alive'])
     
-    def run_subfinder(self):
-        """Run subfinder for subdomain enumeration."""
-        if not self.check_tool("subfinder"):
-            print("[!] Subfinder not installed. Install with: pkg install subfinder")
-            return 0
-        
-        try:
-            result = subprocess.run(
-                ["subfinder", "-d", self.target, "-silent"],
-                capture_output=True, text=True, timeout=120
-            )
-            subdomains = [s for s in result.stdout.strip().split('\n') if s]
-            self.results['subdomains'] = subdomains
-            return len(subdomains)
-        except:
-            return 0
+    def run_port_scan(self):
+        """Run internal PortScanner."""
+        log_info("Running Port Scan...")
+        scanner = PortScanner(
+            target=self.target,
+            ports="80,443,8080,8443,3000,5000,8000,9090",
+            threads=20,
+            verbose=self.verbose,
+            banner=True
+        )
+        self.results['ports'] = scanner.run()
+        return len(self.results.get('ports', {}).get('open', []))
     
-    def run_httpx(self):
-        """Run httpx to probe alive subdomains."""
-        if not self.check_tool("httpx"):
-            print("[!] Httpx not installed. Install with: pkg install httpx")
-            return 0
-        
-        subs = self.results.get('subdomains', [self.target])
-        targets_file = f"reports/{self.target}_targets.txt"
-        os.makedirs("reports", exist_ok=True)
-        
-        with open(targets_file, 'w') as f:
-            f.write('\n'.join(subs))
-        
-        try:
-            result = subprocess.run(
-                ["httpx", "-l", targets_file, "-silent", "-status-code", "-title", "-tech-detect"],
-                capture_output=True, text=True, timeout=120
-            )
-            alive = [line for line in result.stdout.strip().split('\n') if line]
-            self.results['alive_hosts'] = alive
-            return len(alive)
-        except:
-            return 0
+    def run_tech_detect(self):
+        """Run internal TechnologyDetector."""
+        log_info("Running Technology Detection...")
+        detector = TechnologyDetector(
+            target=f"https://{self.target}" if not self.target.startswith('http') else self.target,
+            verbose=self.verbose
+        )
+        self.results['technologies'] = detector.run()
+        return len(self.results.get('technologies', {}).get('technologies', []))
     
-    def run_nuclei(self):
-        """Run nuclei on alive hosts."""
-        if not self.check_tool("nuclei"):
-            print("[!] Nuclei not installed. Install with: pkg install nuclei")
-            return 0
-        
-        subs = self.results.get('subdomains', [self.target])
-        targets_file = f"reports/{self.target}_targets.txt"
-        os.makedirs("reports", exist_ok=True)
-        
-        with open(targets_file, 'w') as f:
-            f.write('\n'.join(subs))
-        
-        try:
-            result = subprocess.run(
-                ["nuclei", "-l", targets_file, "-severity", "critical,high,medium",
-                 "-silent", "-json"],
-                capture_output=True, text=True, timeout=300
-            )
-            findings = []
-            for line in result.stdout.strip().split('\n'):
-                if line:
-                    findings.append(json.loads(line))
-            self.results['nuclei_findings'] = findings
-            return len(findings)
-        except:
-            return 0
+    def run_headers_check(self):
+        """Run internal SecurityHeadersChecker."""
+        log_info("Checking Security Headers...")
+        checker = SecurityHeadersChecker(
+            target=f"https://{self.target}" if not self.target.startswith('http') else self.target,
+            verbose=self.verbose
+        )
+        self.results['headers'] = checker.run()
+        return self.results.get('headers', {})
+    
+    def run_secret_scan(self):
+        """Run internal SecretScanner."""
+        log_info("Scanning for Secrets...")
+        scanner = SecretScanner(
+            target=f"https://{self.target}" if not self.target.startswith('http') else self.target,
+            verbose=self.verbose
+        )
+        self.results['secrets'] = scanner.run()
+        return len(self.results.get('secrets', {}).get('findings', []))
     
     def generate_hackerone_report(self):
-        """Generate HackerOne-style report."""
+        """Generate complete HackerOne-style report."""
         report = []
-        report.append("# 🐉 GOODS-DRAGON Automated Pentest Report")
+        report.append("# 🐉 GOODS-DRAGON Self-Contained Pentest Report")
         report.append(f"**Target:** {self.target}")
         report.append(f"**Date:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        report.append(f"**Tool:** GOODS-DRAGON v2.0.0 Orchestrator")
+        report.append(f"**Tool:** GOODS-DRAGON v2.0.0 (All Internal Modules)")
         report.append("---")
         
         # Executive Summary
         report.append("## 📋 Executive Summary")
-        sub_count = len(self.results.get('subdomains', []))
-        alive_count = len(self.results.get('alive_hosts', []))
-        vuln_count = len(self.results.get('nuclei_findings', []))
-        report.append(f"- Discovered: {sub_count} subdomains")
-        report.append(f"- Alive: {alive_count} hosts")
-        report.append(f"- Vulnerabilities: {vuln_count}")
+        subdomains = self.results.get('subdomains', [])
+        alive = [s for s in subdomains if s.get('alive')]
+        ports = self.results.get('ports', {}).get('open', [])
+        techs = self.results.get('technologies', {}).get('technologies', [])
+        secrets = self.results.get('secrets', {}).get('findings', [])
+        
+        report.append(f"- **Subdomains Discovered:** {len(alive)}")
+        report.append(f"- **Open Ports:** {len(ports)}")
+        report.append(f"- **Technologies Detected:** {len(techs)}")
+        report.append(f"- **Secrets Found:** {len(secrets)}")
+        
+        # Detailed Findings
+        if ports:
+            report.append("\n## 🌐 Open Ports")
+            for port in ports:
+                report.append(f"- **{port.get('port')}/{port.get('protocol', 'tcp')}** {port.get('service', '')} {port.get('banner', '')}")
+        
+        if techs:
+            report.append("\n## 🔧 Technologies Detected")
+            for tech in techs:
+                report.append(f"- **{tech.get('name', 'Unknown')}** ({tech.get('type', 'N/A')})")
+        
+        if secrets:
+            report.append("\n## 🔥 Secrets Found")
+            for secret in secrets:
+                report.append(f"- **{secret.get('type', 'Unknown')}** at {secret.get('url', 'N/A')}")
         
         # Subdomains
-        report.append("\n## 🌐 Discovered Subdomains")
-        for sub in self.results.get('subdomains', []):
-            report.append(f"- {sub}")
+        if alive:
+            report.append("\n## 🌍 Active Subdomains")
+            for sub in alive:
+                report.append(f"- **{sub.get('subdomain', '?')}** → {sub.get('url', '?')} [{sub.get('status', '?')}]")
         
-        # Alive Hosts
-        if self.results.get('alive_hosts'):
-            report.append("\n## 🟢 Alive Hosts")
-            for host in self.results['alive_hosts']:
-                report.append(f"- {host}")
+        # Security Headers
+        headers = self.results.get('headers', {})
+        if headers:
+            present = headers.get('present', [])
+            missing = headers.get('missing', [])
+            report.append(f"\n## 🛡️ Security Headers ({len(present)}/{len(present)+len(missing)} present)")
+            for h in missing:
+                report.append(f"- ❌ {h.get('name', '?')} missing")
+            for h in present:
+                report.append(f"- ✅ {h.get('name', '?')}: {h.get('value', '?')}")
         
-        # Vulnerabilities
-        if self.results.get('nuclei_findings'):
-            report.append("\n## 🔥 Vulnerability Findings")
-            for finding in self.results['nuclei_findings']:
-                info = finding.get('info', {})
-                report.append(f"### {info.get('name', 'Unknown')}")
-                report.append(f"- **Severity:** {info.get('severity', 'N/A')}")
-                report.append(f"- **URL:** {finding.get('matched-at', 'N/A')}")
-                report.append(f"- **Description:** {info.get('description', 'N/A')}")
-                if info.get('remediation'):
-                    report.append(f"- **Remediation:** {info['remediation']}")
-                report.append("")
-        
-        report.append("---")
-        report.append("*Report generated by GOODS-DRAGON Orchestrator*")
+        report.append("\n---")
+        report.append("*Report generated by GOODS-DRAGON Self-Contained Orchestrator*")
         report.append("*Team: L-DRAGON | Owner: 0xL-DRAGON*")
         return '\n'.join(report)
     
+    def _deduplicate(self, items, key='subdomain'):
+        """Remove duplicate entries from results."""
+        seen = set()
+        unique = []
+        for item in items:
+            if isinstance(item, dict):
+                val = item.get(key, str(item))
+            else:
+                val = str(item)
+            if val not in seen:
+                seen.add(val)
+                unique.append(item)
+        return unique
+    
     def run(self):
-        """Execute full orchestration workflow."""
-        print("🐉 Starting GOODS-DRAGON Orchestrator v2...")
-        print(f"Target: {self.target}\n")
+        """Execute full self-contained orchestration."""
+        print("🐉 GOODS-DRAGON Self-Contained Orchestrator")
+        print(f"Target: {self.target}")
+        print("=" * 50)
         
-        # Step 1: Subfinder
-        print("[1/4] Running Subfinder...")
-        sub_count = self.run_subfinder()
-        print(f"  ✅ Found {sub_count} subdomains")
+        # Step 1: Subdomain Enumeration
+        print("\n[1/5] Subdomain Enumeration...")
+        alive_count = self.run_subdomain_enum()
+        print(f"  ✅ Found {alive_count} active subdomains")
         
-        # Step 2: Httpx
-        print("[2/4] Running Httpx (probing alive hosts)...")
-        alive_count = self.run_httpx()
-        print(f"  ✅ Found {alive_count} alive hosts")
+        # Step 2: Port Scan
+        print("\n[2/5] Port Scanning...")
+        port_count = self.run_port_scan()
+        print(f"  ✅ Found {port_count} open ports")
         
-        # Step 3: Nuclei
-        print("[3/4] Running Nuclei (vulnerability scan)...")
-        vuln_count = self.run_nuclei()
-        print(f"  ✅ Found {vuln_count} vulnerabilities")
+        # Step 3: Technology Detection
+        print("\n[3/5] Technology Detection...")
+        tech_count = self.run_tech_detect()
+        print(f"  ✅ Detected {tech_count} technologies")
         
-        # Step 4: Report
-        print("[4/4] Generating HackerOne report...")
+        # Step 4: Security Headers
+        print("\n[4/5] Security Headers Check...")
+        self.run_headers_check()
+        print(f"  ✅ Headers analyzed")
+        
+        # Step 5: Secret Scan
+        print("\n[5/5] Secret Scanning...")
+        secret_count = self.run_secret_scan()
+        print(f"  ✅ Found {secret_count} potential secrets")
+        
+        # Deduplicate results
+        if self.results.get('subdomains'):
+            self.results['subdomains'] = self._deduplicate(self.results['subdomains'], 'subdomain')
+        
+        # Generate Report
+        print("\n📄 Generating HackerOne Report...")
         report = self.generate_hackerone_report()
-        report_file = f"reports/{self.target}_hackerone_report.md"
+        report_file = f"reports/{self.target}_full_report.md"
         os.makedirs("reports", exist_ok=True)
         with open(report_file, 'w') as f:
             f.write(report)
         
-        print(f"\n✅ Report saved: {report_file}")
+        print(f"✅ Full report saved: {report_file}")
         return report
