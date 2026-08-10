@@ -75,3 +75,10 @@ dragon
 
 ## 🔍 Keywords
 pentesting tool, bug bounty tool, vulnerability scanner, SQLi scanner, XSS scanner, OSINT tool, Kali Linux tool, Termux pentesting, chain attack, automated pentesting, web security scanner
+
+## 🔥 Extra Features (via dragon-extras.py)
+| Command | Description |
+|---------|-------------|
+| `python3 dragon-extras.py --dorks target.com` | Generate Google Dorks |
+| `python3 dragon-extras.py --wp-enum https://target.com` | Enumerate WordPress plugins |
+| `python3 dragon-extras.py --takeover-advanced target.com` | Advanced subdomain takeover check |
