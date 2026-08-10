@@ -3,7 +3,7 @@
 import sys
 
 if len(sys.argv) < 2:
-    print("Usage: python3 dragon-extras.py [--dorks|--wp-enum|--takeover-advanced] <target>")
+    print("Usage: python3 dragon-extras.py [--dorks|--wp-enum|--takeover-advanced|--orchestrator] <target>")
     sys.exit(1)
 
 cmd = sys.argv[1].replace("--", "")
@@ -47,6 +47,15 @@ elif cmd == "takeover-advanced":
     else:
         print("✅ No takeover vulnerabilities found.")
 
+elif cmd == "orchestrator":
+    if not target:
+        print("❌ Target required. Example: python3 dragon-extras.py --orchestrator target.com")
+        sys.exit(1)
+    from modules.core.orchestrator import Orchestrator
+    orch = Orchestrator(target, verbose=True)
+    print(orch.run())
+    sys.exit(0)
+
 else:
     print(f"❌ Unknown command: {cmd}")
-    print("Available: --dorks, --wp-enum, --takeover-advanced")
+    print("Available: --dorks, --wp-enum, --takeover-advanced, --orchestrator")
