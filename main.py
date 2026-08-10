@@ -40,13 +40,6 @@ def show_banner():
 
 # ------- Main Entry -------
 def main():
-    import os
-    os.makedirs("reports", exist_ok=True)
-    os.makedirs("logs", exist_ok=True)
-    # Ensure required directories exist
-    import os
-    os.makedirs("reports", exist_ok=True)
-    os.makedirs("logs", exist_ok=True)
     # Check for --update before anything else
     if "--version" in sys.argv or "-V" in sys.argv:
         show_banner()
@@ -150,8 +143,11 @@ def main():
         action="store_true",
         help="Active subdomain scan with HTTP/HTTPS checks",
     )
-    recon_parser.add_argument("--takeover", action="store_true", help="Check for subdomain takeover vulnerabilities")
-    recon_parser.add_argument("--takeover-advanced", action="store_true", help="Advanced subdomain takeover check (50+ services)")
+    recon_parser.add_argument(
+        "--takeover",
+        action="store_true",
+        help="Check for subdomain takeover vulnerabilities",
+    )
     recon_parser.add_argument(
         "--cloud-enum",
         action="store_true",
@@ -187,8 +183,14 @@ def main():
         action="store_true",
         help="Scan for cloud resources (AWS S3, GCP, Azure)",
     )
-    recon_parser.add_argument("--osint", action="store_true", help="OSINT: Email, Phone, Social Media search")
-    recon_parser.add_argument("--dorks", action="store_true", help="Generate Google Dorks for target")
+    recon_parser.add_argument(
+        "--osint", action="store_true", help="OSINT: Email, Phone, Social Media search"
+    )
+    recon_parser.add_argument(
+        "--email-harvest",
+        action="store_true",
+        help="Harvest emails from Google, GitHub, and web",
+    )
     recon_parser.add_argument(
         "--cloud-exploit",
         action="store_true",
@@ -394,7 +396,7 @@ def main():
         "--race-condition", action="store_true", help="Detect race conditions"
     )
     web_parser.add_argument(
-        "--chain-scan", action="store_true", help="Scan for chained attacks"
+        "--chained-attack", action="store_true", help="Scan for chained attacks"
     )
     web_parser.add_argument(
         "--static-analysis", action="store_true", help="Static code analysis"
@@ -484,9 +486,11 @@ def main():
     web_parser.add_argument(
         "--nikto", action="store_true", help="Run Nikto-style vulnerability scanner"
     )
-    web_parser.add_argument("--smart-scan", action="store_true", help="Auto-detect rate limit")
-    web_parser.add_argument("--chain-attack", action="store_true", help="Run Smart Compound Attack Engine")
-    web_parser.add_argument("--auto-exploit", action="store_true", help="Auto-suggest exploits for detected technologies")
+    web_parser.add_argument(
+        "--smart-scan",
+        action="store_true",
+        help="Auto-detect rate limit and suggest optimal threads/delay",
+    )
     web_parser.add_argument(
         "--auto-advanced",
         action="store_true",
@@ -694,17 +698,6 @@ def main():
             sys.exit(0)
 
         # ----- OSINT -----
-        if args.dorks:
-            from modules.recon.dork_generator import DorkGenerator
-            dorks = DorkGenerator(args.target).generate()
-            print(f"\n🐉 Google Dorks for {args.target}:")
-            print("=" * 50)
-            for i, dork in enumerate(dorks, 1):
-                print(f"[{i}] {dork}")
-            print("=" * 50)
-            print("Copy these into Google to find sensitive info.\n")
-            sys.exit(0)
-        
         if args.osint:
             from modules.recon.osint import OSINT
 
@@ -985,21 +978,6 @@ def main():
             )
             results["active_scan"] = active.run()
 
-        if args.takeover_advanced:
-            from modules.recon.subdomain_takeover_advanced import AdvancedSubdomainTakeover
-            sub_list = results.get("subdomains", {}).get("subdomains", [])
-            sub_names = [s.get("subdomain", "") for s in sub_list if s.get("subdomain")]
-            if not sub_names:
-                sub_names = [args.target]
-            log_info(f"Checking {len(sub_names)} subdomains for takeover...")
-            takeover_results = AdvancedSubdomainTakeover(sub_names, args.verbose).run()
-            if takeover_results:
-                for t in takeover_results:
-                    log_success(f"🔥 {t['subdomain']} -> {t['service']} takeover possible!")
-            else:
-                log_info("No takeover vulnerabilities found.")
-            sys.exit(0)
-        
         if args.takeover:
             from modules.recon.takeover import SubdomainTakeover
 
@@ -1191,18 +1169,6 @@ def main():
             )
             results["dir_bruteforce"] = dir_bf.run()
 
-        if args.wp_enum:
-            from modules.web.wp_enumerator import WPEnumerator
-            log_info("=== Starting WordPress Enumeration ===")
-            wp = WPEnumerator(args.target, args.verbose)
-            wp_results = wp.run()
-            if wp_results:
-                for plugin in wp_results:
-                    log_success(f"Found: {plugin['plugin']} v{plugin['version']}")
-            else:
-                log_info("No WordPress plugins found.")
-            sys.exit(0)
-        
         if args.cms_detect:
             log_info("=== Starting CMS Detection ===")
             cms = CMSDetector(args.target, args.verbose)
@@ -1349,10 +1315,10 @@ def main():
             race = RaceConditionDetector(args.target, args.threads, args.verbose)
             results["race_condition"] = race.run()
 
-        if args.chain_attack:
+        if args.chained_attack:
             log_info("=== Starting Chained Attack Scanner ===")
             chain = ChainedAttackScanner(args.target, args.verbose)
-            results["chain_scan"] = chain.run()
+            results["chained_attack"] = chain.run()
 
         if args.static_analysis:
             log_info("=== Starting Static Analysis ===")
@@ -1399,14 +1365,6 @@ def main():
             if rec:
                 log_info(f"💡 {rec}")
 
-            from modules.core.smart_engine import SmartEngine
-            engine = SmartEngine(args.target, args.verbose)
-            print(engine.run())
-            sys.exit(0)
-            engine = SmartEngine(args.target, args.verbose)
-            print(engine.run())
-            sys.exit(0)
-        
         if args.smart_scan:
             log_info("=== Starting Smart Scan (Auto Throttle) ===")
             smart = AutoThrottle(args.target, args.verbose)
