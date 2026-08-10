@@ -488,6 +488,7 @@ def main():
     )
     web_parser.add_argument("--smart-scan", action="store_true", help="Auto-detect rate limit")
     web_parser.add_argument("--chain-attack", action="store_true", help="Run Smart Compound Attack Engine")
+    web_parser.add_argument("--auto-exploit", action="store_true", help="Auto-suggest exploits for detected technologies")
     web_parser.add_argument(
         "--auto-advanced",
         action="store_true",
