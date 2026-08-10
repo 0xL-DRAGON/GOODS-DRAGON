@@ -150,11 +150,8 @@ def main():
         action="store_true",
         help="Active subdomain scan with HTTP/HTTPS checks",
     )
-    recon_parser.add_argument(
-        "--takeover",
-        action="store_true",
-        help="Check for subdomain takeover vulnerabilities",
-    )
+    recon_parser.add_argument("--takeover", action="store_true", help="Check for subdomain takeover vulnerabilities")
+    recon_parser.add_argument("--takeover-advanced", action="store_true", help="Advanced subdomain takeover check (50+ services)")
     recon_parser.add_argument(
         "--cloud-enum",
         action="store_true",
@@ -190,14 +187,8 @@ def main():
         action="store_true",
         help="Scan for cloud resources (AWS S3, GCP, Azure)",
     )
-    recon_parser.add_argument(
-        "--osint", action="store_true", help="OSINT: Email, Phone, Social Media search"
-    )
-    recon_parser.add_argument(
-        "--email-harvest",
-        action="store_true",
-        help="Harvest emails from Google, GitHub, and web",
-    )
+    recon_parser.add_argument("--osint", action="store_true", help="OSINT: Email, Phone, Social Media search")
+    recon_parser.add_argument("--dorks", action="store_true", help="Generate Google Dorks for target")
     recon_parser.add_argument(
         "--cloud-exploit",
         action="store_true",
