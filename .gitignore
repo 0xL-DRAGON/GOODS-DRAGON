@@ -77,3 +77,4 @@ Thumbs.db
 desktop.ini
 main.py.working
 core/plugin_loader.py
+modules/scan/password_crack.py
