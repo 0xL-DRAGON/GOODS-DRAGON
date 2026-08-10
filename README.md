@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/coverage-3%25-lightgrey?style=for-the-badge" alt="Coverage">
   <img src="https://img.shields.io/badge/coverage-3%25-lightgrey?style=for-the-badge" alt="Coverage">
 </p>
-**Advanced Pentesting & Bug Bounty Framework**
+**Bug Bounty Automation Platform — Not Just a Scanner**
 
 ---
 
