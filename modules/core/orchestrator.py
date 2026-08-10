@@ -158,6 +158,19 @@ class Orchestrator:
             json.dump(self.results, f, indent=2, default=str)
         return json_file
     
+    def _calculate_cvss(self, findings):
+        """Calculate overall CVSS score based on findings."""
+        if not findings:
+            return "0.0 (No vulnerabilities)"
+        severity_scores = {'CRITICAL': 9.5, 'HIGH': 7.5, 'MEDIUM': 5.5, 'LOW': 3.0}
+        max_score = 0
+        for f in findings:
+            sev = f.get('info', {}).get('severity', 'low').upper()
+            score = severity_scores.get(sev, 1.0)
+            max_score = max(max_score, score)
+        level = 'CRITICAL' if max_score >= 9 else 'HIGH' if max_score >= 7 else 'MEDIUM' if max_score >= 4 else 'LOW'
+        return f"{max_score} ({level})"
+    
     def run(self):
         """Execute full self-contained orchestration."""
         print("🐉 GOODS-DRAGON Self-Contained Orchestrator")
